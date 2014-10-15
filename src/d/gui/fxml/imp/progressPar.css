@@ -1,0 +1,164 @@
+
+/*******************************************************************************
+ *                                                                             *
+ * ProgressBar                                                                 *
+ *                                                                             *
+ ******************************************************************************/
+
+
+.progress-bar {
+    -fx-indeterminate-bar-length: 60;
+    -fx-indeterminate-bar-escape: true;
+    -fx-indeterminate-bar-flip: true;
+    -fx-indeterminate-bar-animation-time: 2;
+    
+	
+    
+}
+.progress-bar > .bar {
+
+	-fx-background-color: linear-gradient(from 0px .75em to .75em 0px, repeat, -fx-accent 9%,
+		-fx-accent 49%, derive(-fx-accent, 30%) 50%, derive(-fx-accent, 30%)
+		99%);
+		
+    /*-fx-background-color: linear-gradient(to bottom, derive(-fx-accent, -7%), derive(-fx-accent, 0%), derive(-fx-accent, -3%), derive(-fx-accent, -9%) );
+    
+    -fx-background-insets: 0;
+    -fx-background-radius: 8;
+    -fx-border-radius: 20px; /* 7 * /
+    -fx-border-width: 0px;
+    -fx-padding: 0.75em;
+    */
+    -fx-background-insets: 0;
+    -fx-background-radius: 0 20px 0 0;
+    -fx-border-radius: 0 20px 0 0;
+    -fx-border-width: 0px 0 1 0;
+    -fx-padding: 0.75em;
+}
+.progress-bar:indeterminate > .bar {
+    -fx-background-color: linear-gradient(to left, transparent, -fx-accent);
+}
+.progress-bar > .track {
+      -fx-background-color: white;
+      -fx-border-color:  linear-gradient(from 0px .75em to .75em 0px, repeat, red 9%,
+		red 49%, derive(red, 30%) 50%, derive(red, 30%)
+		99%);
+      /*
+          -fx-shadow-highlight-color,
+          linear-gradient(to bottom, derive(-fx-text-box-border, -fx-accent -10%), -fx-text-box-border),
+          linear-gradient(to bottom, 
+            derive(-fx-control-inner-background, -fx-accent -7%),
+            derive(-fx-control-inner-background, -fx-accent 0%),
+            derive(-fx-control-inner-background, -fx-accent -3%),
+            derive(-fx-control-inner-background, -fx-accent -9%)
+          );
+         
+    -fx-background-insets: 0, 0 0 0 0, 0 0 0 0;
+    -fx-background-radius: 8; /* 10, 9, 8 */
+    
+    -fx-background-insets: 3 3 4 3;
+    -fx-background-radius: 0 20px 0 0;
+    -fx-border-radius: 0 20px 0 0; /* 7 */
+    -fx-border-width: 0px 0 1 0;
+    /*-fx-border-color:  linear-gradient(from 0px .75em to .75em 0px, repeat, -fx-accent 9%,
+		-fx-accent 49%, derive(-fx-accent, 30%) 50%, derive(-fx-accent, 30%)
+		99%); */
+    -fx-padding: 0.50em;
+    
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * ProgressBar                                                                 *
+ *                                                                             *
+ ******************************************************************************/
+
+.progress-primary {
+	-fx-height: 20px;
+	-fx-margin-bottom: 20px;
+	-fx-overflow: hidden;
+	-fx-accent: #f7f7f7;
+	-fx-background-repeat: repeat-x;
+	-fx-border-radius: 4px;
+	-fx-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+
+.progress-primary >.bar {
+  -fx-float: left;
+  -fx-width: 0;
+  -fx-height: 100%;
+  -fx-font-size: 12px;
+  -fx-color: #ffffff;
+  -fx-text-align: center;
+  -fx-text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  -fx-accent: #0e90d2;
+  -fx-background-repeat: repeat-x;
+  -fx-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  -fx-box-sizing: border-box;
+  -fx-transition: width 0.6s ease;
+}
+
+
+
+.progress-striped >.bar {
+  -fx-accent: #149bdf;
+  -fx-background-size: 40px 40px;
+}
+
+
+.progress-danger {
+  -fx-accent: #dd514c;
+  -fx-background-repeat: repeat-x;
+}
+
+.progress-danger >.bar{
+  --fx-accent: #ee5f5b;
+}
+
+.progress-success {
+  -fx-accent: #97ea97;
+  -fx-background-repeat: repeat-x;
+}
+
+.progress-success >.bar{
+  -fx-accent: #7ddb7d;
+}
+
+.progress-success >.track{
+  -fx-accent: #62c462;
+}
+
+.progress-info {
+  -fx-accent: #4bb1cf;
+  -fx-background-repeat: repeat-x;
+}
+
+.progress-info >.bar {
+  -fx-accent: #5bc0de;
+}
+
+.progress-warning  {
+  -fx-accent: #faa732;
+  -fx-background-repeat: repeat-x;
+}
+
+.progress-warning >.bar{
+  -fx-accent: #fbb450;
+}
+
+.progress-default  {
+  -fx-accent: #9aa099;
+  -fx-background-repeat: repeat-x;
+}
+
+.progress-default >.bar{
+  -fx-accent: #9f9f99;
+}
+
+.bar-green  { -fx-accent: green;  }
+.bar-yellow { -fx-accent: yellow; }
+.bar-orange { -fx-accent: orange; }
+.bar-red    { -fx-accent: red;    }
+
+

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import d.gui.fxml.imp.*?>
+
+<AnchorPane id="1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0" stylesheets="@gui/fxml/res/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ProgressStyled id="2" fx:id="progress" layoutY="76.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="300.0" progress="0.0" style="-fx-accent: #62c462;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <ImageView id="3" fitHeight="64.0" fitWidth="64.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@logo64x64.png" />
+         </image>
+      </ImageView>
+      <Label id="4" fx:id="title" layoutX="92.0" layoutY="28.0" prefHeight="33.0" prefWidth="199.0" text="Reading saved Setting" textFill="#1aa2fa">
+         <font>
+            <Font name="Segoe UI Bold Italic" size="17.0" />
+         </font></Label>
+   </children>
+   <styleClass>
+      <String fx:value="background-white" />
+      <String fx:value="border-red" />
+   </styleClass>
+</AnchorPane>

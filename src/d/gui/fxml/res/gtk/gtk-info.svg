@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1"
+	 id="svg2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" sodipodi:docname="gtk-info.svg" inkscape:version="0.48+devel r12660"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="48px" height="48px"
+	 viewBox="0 0 48 48" enable-background="new 0 0 48 48" xml:space="preserve">
+<sodipodi:namedview  units="px" showgrid="false" inkscape:cy="28.502947" inkscape:cx="2.5350753" inkscape:zoom="8.0343727" borderopacity="1.0" bordercolor="#666666" pagecolor="#ffffff" id="base" inkscape:current-layer="layer1" inkscape:document-units="px" inkscape:pageopacity="0.0" inkscape:pageshadow="2">
+	<sodipodi:guide  orientation="30.000028,0" position="8.9999996,39.000048" id="guide3266"></sodipodi:guide>
+	<sodipodi:guide  orientation="0,30.000001" position="8.9999996,9.0000194" id="guide3268"></sodipodi:guide>
+	<sodipodi:guide  orientation="-30.000028,0" position="39.000001,9.0000194" id="guide3270"></sodipodi:guide>
+	<sodipodi:guide  orientation="0,-30.000001" position="39.000001,39.000048" id="guide3272"></sodipodi:guide>
+</sodipodi:namedview>
+<g id="layer1" transform="translate(0,-283.45333)" inkscape:label="Capa 1" inkscape:groupmode="layer">
+	<rect id="rect4224" x="9" y="292.453" fill="none" width="30" height="30"/>
+	<path id="rect3262" inkscape:connector-curvature="0" sodipodi:nodetypes="sssss" fill="#D1D1D1" d="M23.998,292.453
+		c1.833,0,3.502,1.667,3.502,3.5c0,1.833-1.669,3.5-3.502,3.5c-1.833,0-3.498-1.668-3.498-3.5
+		C20.5,294.121,22.165,292.453,23.998,292.453z"/>
+	<rect id="rect3274" x="22" y="304.453" fill="#D1D1D1" width="4" height="18"/>
+	<rect id="rect3276" x="19.5" y="319.453" fill="#D1D1D1" width="9" height="3"/>
+	<rect id="rect3278" x="18" y="304.453" fill="#D1D1D1" width="4" height="2"/>
+</g>
+</svg>

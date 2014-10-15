@@ -1,0 +1,404 @@
+
+
+
+/*====================================================================*/
+.border-none {
+	-fx-border-width: none;
+}
+
+.border-red {
+	-fx-border-style: solid;
+	-fx-border-color: #de4a45;
+	-fx-border-width: 1px;
+	-fx-border-top: null;
+}
+
+.background-white {
+	-fx-background-color: white;
+}
+
+.bg {
+	-fx-background-image: url("bg.png");
+}
+
+/*====================================================================*/
+.button-header {
+	-fx-border-color: white;
+	-fx-border-radius: 0.5px;
+	-fx-background-radius: 0;
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+}
+
+.button-header:hover {
+	-fx-border-color: #ccc;
+	-fx-border-radius: 0.5px;
+	-fx-background-color: #ccc;
+}
+
+/*====================================================================*/
+.close {
+	-fx-background-radius: 0;
+	-fx-border-style: null;
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url("./skin/close.png");
+}
+
+.close:hover {
+	-fx-background-color: #f11a60;
+	-fx-background-image: url("./skin/close.png");
+	-fx-background-repeat: no-repeat;
+}
+
+.minimize {
+	-fx-background-radius: 0;
+	-fx-border-style: null;
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url("./skin/minimize.png");
+}
+
+.minimize:hover {
+	-fx-background-color: #ccc;
+	-fx-background-image: url("./skin/minimize.png");
+	-fx-background-repeat: no-repeat;
+}
+
+.tray {
+	-fx-background-radius: 0;
+	-fx-border-style: null;
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url("./appicns_Sparrow.png");
+}
+
+.tray:hover {
+	-fx-background-color: #ccc;
+	-fx-background-image: url("./appicns_Sparrow.png");
+	-fx-background-repeat: no-repeat;
+}
+
+.tray-img {
+	-fx-background-color: #ccc;
+	-fx-image: url("./appicns_Sparrow.png");
+	-fx-background-repeat: no-repeat;
+}
+
+
+
+.maximize {
+	-fx-background-radius: 0;
+	-fx-border-style: null;
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url("./skin/maximize.png");
+}
+
+.maximize:hover {
+	-fx-border: null;
+	-fx-background-color: #ccc;
+	-fx-background-image: url("./skin/maximize.png");
+	-fx-background-repeat: no-repeat;
+}
+
+#restore {
+	-fx-background-radius: 0;
+	-fx-border-style: null;
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url("./skin/restore.png");
+}
+
+#restore:hover {
+	-fx-background-color: #ccc;
+	-fx-background-image: url("./skin/restore.png");
+	-fx-background-repeat: no-repeat;
+}
+
+.full-Screen {
+	-fx-background-radius: 0;
+	-fx-border-style: null;
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url("./skin/fullscreen.png");
+}
+
+.full-Screen:hover {
+	-fx-border: null;
+	-fx-background-color: #ccc;
+	-fx-background-image: url("./skin/fullscreen.png");
+	-fx-background-repeat: no-repeat;
+}
+
+#unfull-screen {
+	-fx-background-radius: 0;
+	-fx-border-style: null;
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url("./skin/unfullscreen.png");
+}
+
+#unfull-screen:hover {
+	-fx-background-color: #ccc;
+	-fx-background-image: url("./skin/unfullscreen.png");
+	-fx-background-repeat: no-repeat;
+}
+
+
+.close-pre {
+	-fx-background-radius: 0;
+	-fx-border-style: null;
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-image: url("./gtk/media-record.png");
+	-fx-background-image: url("./gtk/media-record.png");
+}
+
+.close-pre:hover {
+	-fx-background-color: #f11a60;
+	-fx-background-image: url("./gtk/media-record.png");
+	-fx-image: url("./gtk/media-record.png");
+	-fx-background-repeat: no-repeat;
+}
+
+
+/*******************************************************************************
+ *                                                                             *
+ * ListView and ListCell                                                       *
+ *                                                                             *
+ ******************************************************************************/
+
+/*
+.list-cell {
+	-fx-padding: 0.25em 0.583em 0.25em 0.583em; /* 3 7 3 7 * /
+}
+
+.list-cell:odd, .list-cell:even {
+	-fx-background: -fx-control-inner-background-alt;
+}
+
+*/
+
+.list-cell:odd, .list-cell:even {
+	-fx-background: -fx-control-inner-background-alt;
+	-fx-background-insets:2;
+	-fx-background-radius:5;
+}
+
+.list-view {
+	
+	/*
+	-fx-focus-color: #fff;
+	-fx-border-color: red;
+	-fx-border-style: dotted;
+	-fx-border-width: 0.04em;
+	*/
+	
+}
+
+/*
+.list-view:horizontal{
+	
+}
+
+.list-view:vertical{
+	
+}
+*/
+
+.cell{
+	-fx-background-color:white;
+}
+
+.cell:empty{
+	
+}
+
+.list-view >.cell:filled {
+	-fx-border-color: red;
+	-fx-border-style: solid;
+	-fx-border-width: 1px;
+	-fx-background-color: #ccc;
+}
+
+.cell:selected{
+	-fx-background-color:#ccc;
+}
+
+
+
+
+.scroll-bar {
+	-fx-background-color: white;
+	-fx-padding: 0.04em;
+	-fx-border-width: 0.0em;
+}
+
+.scroll-bar:vertical>.thumb, .scroll-bar:horizontal>.thumb {
+	-fx-background-color: linear-gradient(from 0px 0.75em to 0.75em 0px, repeat, #ccc 9%, #ccc 49%
+		, derive(#ccc, 30%) 50%, derive(#ccc, 30%) 99%);
+	/*-fx-background-color:#ccc; */
+}
+
+.scroll-bar>.increment-button, .scroll-bar>.decrement-button {
+	-fx-padding: 0.04em;
+	/* visibility:hidden; */
+}
+
+
+/*******************************************************************************
+ *                                                                             *
+ * Item                                                                 	   *
+ *                                                                             *
+ ******************************************************************************/
+.white-background {
+	-fx-background-color: #ffffff;
+}
+
+.border-top {
+	/* -fx-border-color: #62c462; */
+	-fx-border-color: #ccc;
+	-fx-border-style: solid;
+	-fx-border-width: 2px 0 0 0;
+}
+
+.item-background {
+	-fx-background-radius: 0;
+	-fx-border-style: null;
+	-fx-background-color: null;
+	-fx-background-repeat: repeat;
+	-fx-background-image: url("./bg-site.png");
+}
+
+.label-text {
+	/*
+	-fx-font-family: "Segoe UI Bold";
+	-fx-font-size: 14;
+	*/
+	-fx-text-fill: #1aa2fa;
+}
+
+.button-head {
+	-fx-background-radius: 0;
+	-fx-border-style: null;
+	/*-fx-background-color: -fx-focus-color;*/
+	-fx-background-color: #ccc;
+	-fx-background-repeat: no-repeat;
+}
+
+.button-head:hover {
+	-fx-background-color: #1aa2fa;
+	-fx-background-repeat: no-repeat;
+}
+
+/*==================================================================== */
+.button-item{
+	-fx-border-color: null;
+	-fx-border-radius: 0.5px;
+	-fx-background-radius: 0;
+	-fx-background-color: null;
+	-fx-background-repeat:no-repeat;
+}
+.button-item:hover,
+.button-item:focused{
+	-fx-border-color: #ccc;
+	-fx-border-radius: 0.5px;
+	-fx-background-color: #ccc;
+}
+
+
+.button-btnOpt {
+	-fx-background-radius: 0;
+	-fx-border-style: null;
+	/*-fx-background-color: -fx-focus-color;*/
+	-fx-background-color: white;
+	-fx-background-repeat: no-repeat;
+}
+
+.button-btnOpt:hover {
+	-fx-background-color: #ccc;
+	-fx-background-repeat: no-repeat;
+}
+/*====================================================================*/
+.img-viewport-sprites {
+	-fx-image: url("./sprites.png");
+}
+
+.image-setting {
+	-fx-image: url("./appicns_System-Preferences.png");
+}
+
+.image-speed {
+	-fx-image: url("./appicns_Dashboard.png");
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Icon ViewPort			                              			           *
+ *                                                                             *
+ ******************************************************************************/
+.products-icons {
+	-fx-image: url("./products-icons.png");
+}
+
+.section-icons {
+	-fx-image: url("./section-icons.png");
+}
+
+.arrow {
+	-fx-image: url("./arrow.png");
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Speed Label							                                       *
+ *                                                                             *
+ ******************************************************************************/
+ 
+ .label-speed {
+ 	/*
+ 	-fx-background-radius: 0;
+	-fx-border-style: null;
+	-fx-background-color: white;
+	-fx-background-repeat: no-repeat;
+	
+	-fx-font-family: "Segoe UI Bold";
+	*/
+	
+ }
+ /*
+ .label-speed:hover {
+ 	-fx-border-style: solid;
+ 	-fx-border-radius: 5px;
+ 	-fx-border-color: #1aa2fa;
+ 	-fx-border-width: 2px;
+ 	-fx-background-color: #1aa2fa;
+	-fx-background-repeat: no-repeat;
+	
+	-fx-font-family: "Segoe UI";
+	-fx-font-size: 14;
+	-fx-text-fill: white;
+ }
+ */
+ 
+ .image-find{
+ 	-fx-image: url("./edit-find-symbolic.png");
+ }
+ 
+ .image-close{
+ 	-fx-image: url("./24/list-remove.png");
+ }
+ 
+  .image-svg{
+ 	-fx-image: url("./gtk/checkmark.svg");
+ }
+
+ /*******************************************************************************
+ *                                                                             *
+ * Header button omg-background							                       *
+ *                                                                             *
+ ******************************************************************************/
+ 
+ 
+ 

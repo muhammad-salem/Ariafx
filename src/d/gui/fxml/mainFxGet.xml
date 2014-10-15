@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="anchorRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="810.0" stylesheets="@res/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<children><MenuBar prefHeight="25.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns:fx="http://javafx.com/fxml">
+  <menus><Menu text="Task">
+  <items>
+    <MenuItem mnemonicParsing="false" onAction="#addNewDownload" text="Add new download" /><SeparatorMenuItem mnemonicParsing="false" /><Menu mnemonicParsing="false" text="Export to">
+  <items>
+    <MenuItem mnemonicParsing="false" onAction="#exportToEF2IDM" text="*.ef2 IDM file" /><MenuItem mnemonicParsing="false" onAction="#exportToJsonFile" text="*.json FxDownload file" /><MenuItem mnemonicParsing="false" onAction="#exportToTextFile" text="*.txt file" />
+  </items>
+</Menu><Menu mnemonicParsing="false" text="Import from" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<items><MenuItem mnemonicParsing="false" onAction="#importFromEf2IDM" text="*.ef2 IDM file" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><MenuItem mnemonicParsing="false" onAction="#importFromJsonFile" text="*.json FxDownload file" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><MenuItem mnemonicParsing="false" onAction="#importFromTextFile" text="*.txt file" />
+</items>
+</Menu><SeparatorMenuItem mnemonicParsing="false" /><MenuItem mnemonicParsing="false" onAction="#closePrograme" text="Exit" />
+  </items>
+<accelerator>
+<KeyCodeCombination alt="UP" code="T" control="ANY" meta="UP" shift="UP" shortcut="UP" />
+</accelerator>
+</Menu>
+    <Menu mnemonicParsing="false" text="File">
+      <items>
+        <MenuItem mnemonicParsing="false" onAction="#startDownload" text="Download" /><MenuItem mnemonicParsing="false" onAction="#resumeDownloadFile" text="ReDownload" /><MenuItem mnemonicParsing="false" onAction="#pauseAllSelected" text="Stop Download" /><MenuItem mnemonicParsing="false" onAction="#deleteSelectedDownload" text="Remove" />
+      </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Downloads">
+      <items>
+        <MenuItem mnemonicParsing="false" onAction="#pauseAllSelected" text="Pause All Selected" /><MenuItem mnemonicParsing="false" onAction="#pauseAllDownload" text="Stop All" /><SeparatorMenuItem mnemonicParsing="false" /><MenuItem mnemonicParsing="false" onAction="#deleteAllComplete" text="Delete All Complete" /><SeparatorMenuItem mnemonicParsing="false" /><MenuItem mnemonicParsing="false" onAction="#showQueueManger" text="Queue Manger" /><Menu mnemonicParsing="false" text="Start Queue">
+  <items>
+    <MenuItem mnemonicParsing="false" onAction="#startDownloadMainQueue" text="Main Queue" /><MenuItem mnemonicParsing="false" onAction="#startDownloadSecondQueue" text="Second Queue" />
+  </items>
+</Menu><Menu mnemonicParsing="false" text="Stop Queue">
+<items><MenuItem mnemonicParsing="false" onAction="#stopDownloadMainQueue" text="Second Queue" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><MenuItem mnemonicParsing="false" onAction="#stopDownloadSecondQueue" text="Main Queue" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" />
+</items>
+</Menu><SeparatorMenuItem mnemonicParsing="false" /><MenuItem mnemonicParsing="false" onAction="#showOptionsWindows" text="Options" />
+      </items>
+    </Menu><Menu mnemonicParsing="false" text="View">
+  <items>
+    <MenuItem mnemonicParsing="false" onAction="#hideTreeView" text="Hide Category/Queue" />
+                  <MenuItem mnemonicParsing="false" onAction="#showMinimalView" text="Show Minimal View" /><Menu mnemonicParsing="false" text="Arrang fiels By :">
+  <items>
+    <MenuItem mnemonicParsing="false" text="Date Added" /><MenuItem mnemonicParsing="false" text="File Name" /><MenuItem mnemonicParsing="false" text="Size" /><MenuItem mnemonicParsing="false" text="State" /><MenuItem mnemonicParsing="false" text="Description" /><MenuItem mnemonicParsing="false" text="Save To" /><MenuItem mnemonicParsing="false" text="Referer" /><MenuItem mnemonicParsing="false" text="Downloaded" /><MenuItem mnemonicParsing="false" text="Time Left" /><MenuItem mnemonicParsing="false" text="Unspecified Action" /><MenuItem mnemonicParsing="false" text="Transfer Rate" />
+  </items>
+</Menu><Menu mnemonicParsing="false" text="Language">
+  <items><CheckMenuItem mnemonicParsing="false" selected="true" text="English" />
+  </items>
+</Menu>
+  </items>
+</Menu>
+    <Menu mnemonicParsing="false" text="Help">
+      <items>
+        <MenuItem mnemonicParsing="false" onAction="#showAboutWindows" text="About" />
+      </items>
+    </Menu>
+  </menus>
+</MenuBar>
+      <AnchorPane layoutX="14.0" layoutY="35.0" AnchorPane.leftAnchor="14.0">
+         <children>
+            <HBox fx:id="hBoxHeader" alignment="CENTER" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <Button layoutX="18.0" layoutY="18.0" mnemonicParsing="false" onAction="#addNewDownload" styleClass="button-header" text="Add URL">
+      <tooltip>
+                        <Tooltip text="add new address" />
+      </tooltip>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@res/24/insert-link.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="100.0" layoutY="18.0" mnemonicParsing="false" onAction="#resumeDownloadFile" styleClass="button-header" text="Resume">
+      <tooltip>
+                        <Tooltip text="resume download file" />
+      </tooltip>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@res/24/go-down.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="184.0" layoutY="18.0" mnemonicParsing="false" onAction="#pauseAllSelected" styleClass="button-header" text="Paused">
+      <tooltip>
+                        <Tooltip text="stop download selected file(s) from the list" />
+      </tooltip>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@res/24/media-playback-pause.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="18.0" layoutY="18.0" mnemonicParsing="false" onAction="#pauseAllDownload" styleClass="button-header" text="Stop All">
+      <tooltip>
+                        <Tooltip text="stop download all running fiels " />
+      </tooltip>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@res/24/media-playback-stop.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="deletButton" layoutX="18.0" layoutY="18.0" mnemonicParsing="false" onAction="#deleteSelectedDownload" styleClass="button-header" text="Delete">
+      <tooltip>
+                        <Tooltip text="delet selected file(s) from the list" />
+      </tooltip>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@res/24/list-remove.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="deletCompButton" layoutX="18.0" layoutY="18.0" mnemonicParsing="false" onAction="#deleteAllComplete" styleClass="button-header" text="Delete Completed" wrapText="true">
+      <tooltip>
+                        <Tooltip text="delete all complete fiels" />
+      </tooltip>
+                  </Button>
+                  <Button layoutX="18.0" layoutY="18.0" mnemonicParsing="false" onAction="#showOptionsWindows" styleClass="button-header" text="Options">
+      <tooltip>
+                        <Tooltip text="show options window" />
+      </tooltip>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@res/24/view-list-compact-symbolic.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <HBox fx:id="hBoxFind" layoutX="300.0" layoutY="2.0" styleClass="button-item" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="5.0">
+         <children>
+            <TextField fx:id="findField" layoutX="655.0" layoutY="35.0" prefHeight="25.0" prefWidth="250.0" promptText="Search downloads" styleClass="button-item" />
+            <ImageView fx:id="findIcon" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="image-find">
+               <HBox.margin>
+                  <Insets left="2.0" top="5.0" />
+               </HBox.margin>
+            </ImageView>
+         </children>
+      </HBox>
+      <TreeView fx:id="treeState" editable="true" layoutX="10.0" layoutY="75.0" prefHeight="130.0" prefWidth="150.0" showRoot="false" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="76.0">
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </TreeView>
+<TreeView fx:id="treeView" editable="true" layoutX="10.0" layoutY="215.0" prefHeight="250.0" prefWidth="150.0" showRoot="false" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="215.0">
+	<contextMenu>
+		<ContextMenu fx:id="contextMenuTree">
+		  <items>
+		    <MenuItem mnemonicParsing="false" onAction="#browseSelectedCategory" text="Browse Category" /><MenuItem mnemonicParsing="false" onAction="#showSelectedCategoryInManger" text="Properties" /><SeparatorMenuItem mnemonicParsing="false" /><MenuItem mnemonicParsing="false" onAction="#deleteSelectedCategory" text="Delete This Category" /><MenuItem mnemonicParsing="false" onAction="#addNewCategory" text="Add New Category" />
+		    <MenuItem mnemonicParsing="false" onAction="#startDownloadSelectedQueue" text="Start Now" /><MenuItem mnemonicParsing="false" onAction="#stopDownloadSelectedQueue" text="Stop" /><SeparatorMenuItem mnemonicParsing="false" /><MenuItem mnemonicParsing="false" onAction="#showSelectedQueueInManger" text="Edit queue" /><MenuItem mnemonicParsing="false" onAction="#deleteSelectedQueue" text="Delete Queue" /><MenuItem mnemonicParsing="false" onAction="#addNewQueue" text="Create New Queue" />
+		  </items>
+		</ContextMenu>
+	</contextMenu>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+</TreeView>
+      <ListView fx:id="list" layoutX="170.0" layoutY="75.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="630.0" AnchorPane.bottomAnchor="25.0" AnchorPane.topAnchor="75.0" />
+      <AnchorPane AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Label fx:id="labelMessages" textFill="BLUE" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+         </children>
+      </AnchorPane>
+</children>
+   <styleClass>
+      <String fx:value="background-white" />
+      <String fx:value="border-red" />
+   </styleClass></AnchorPane>
