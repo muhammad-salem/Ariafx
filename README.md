@@ -7,32 +7,30 @@ A multithreading download manager program with pure Java/JavaFx,
 used lib: HttpClient, GSON.
 It is open source.
 
-Options availbe now :
+Options available now :
   - add link
-  - choose streaming or parrlel download (untile 8-thread)
+  - choose streaming or parallel download (until 8-thread)
   - choose category and queue
-  - can change referer
-  - can chane save file path and file name
-  - can the last minute for graph spped
+  - can change referrer
+  - can change save file path and file name
+  - can the last minute for graph speed
   - copy url
    
   - start/pause/stop download link(s)
   - delete selected/complete downloads
    
-  - save date in json formate (new categories/queues/ and all links)
+  - save date in json format (new categories/queues/ and all links)
   - save changes on close
-  - keep saved data uptodate in every  3 minute 
+  - keep saved data updated in every  3 minute 
   - keep history of links that had been added
-  - export/import links to/from [IDM(.ef2) file formate], [Aria(.aria/json) formate file]
+  - export/import links to/from [IDM(.ef2) file format], [Aria(.aria/json) format file], [text (.txt) link list]
    
-  - switch between  normal and minmial view
-  - the download bininding that apper when start download 
-  - by states can show All/Active/Queueing/Finished/Failed downloads
+  - switch between  normal and minimal view
+  - the download binding that appear when start download 
+  - by states can show All/Active/Queuing/Finished/Failed downloads
   - can add/edit categories and queue 
   
-  - download files into cache dir then copy it to the save dir then clear cache
+  - download files into cache directory then copy it to the save directory then clear cache
   
   - can search for downloads
   - have itself decoration and fixed size stage
-
-
