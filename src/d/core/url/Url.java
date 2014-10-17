@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -81,7 +80,6 @@ public class Url {
 				return false;
 			}
 		});
-		System.out.println(Arrays.toString(list.toArray()));
 		
 		int i = 0;
 		do {
@@ -101,7 +99,28 @@ public class Url {
 			}
 			
 		} while (true);
-		System.out.println(Arrays.toString(urls.toArray()));
+	   return urls;
+	}
+	
+	public static List<Url> fromTextFile(File file) {
+		List<Url> urls = new ArrayList<Url>();
+		
+		List<String> list;
+		try {
+			list = FileUtils.readLines(file);
+		} catch (IOException e) {
+			return new ArrayList<Url>();
+		}
+		
+		for (int i = 0; i < list.size(); i++) {
+			try {
+				Url url = new Url(list.get(i));
+				urls.add(url);
+			} catch (Exception e) {
+				continue;
+			}
+		}
+		
 	   return urls;
 	}
 	
