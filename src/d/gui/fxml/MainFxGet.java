@@ -29,6 +29,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -36,6 +37,7 @@ import javafx.util.Duration;
 
 import org.apache.commons.io.FileUtils;
 
+import d.about.About;
 import d.core.download.Download;
 import d.core.download.ItemReady;
 import d.core.download.Link;
@@ -49,6 +51,8 @@ import d.gui.fxml.control.AddQueue;
 import d.gui.fxml.control.FeatchURL;
 import d.gui.manager.DownList;
 import d.opt.R;
+import d.opt.TempItems;
+import d.opt.Utils;
 
 public class MainFxGet implements Initializable {
 
@@ -234,18 +238,21 @@ public class MainFxGet implements Initializable {
 					list.setItems(DownList.getAnchor(obvDown));
 				});
 	}
-
+	
+	FileChooser chooser = new FileChooser();
+	DirectoryChooser dirChooser = new DirectoryChooser();
 	@FXML
 	void exportToEF2IDM(ActionEvent event) {
 		
 		ObservableList<AnchorPane> list = getSelectedItems();
 		if(list.isEmpty()) return;
-		FileChooser chooser = new FileChooser();
+		
 		chooser.setInitialDirectory(new File(R.UserHome));
 		chooser.setInitialFileName("links.ef2");
 		chooser.setSelectedExtensionFilter(new ExtensionFilter("IDM Url", "ef2"));
-		chooser.setTitle("Save Links to IDM formate file");
+		chooser.setTitle("Save Links to IDM (.ef2) file");
 		File file = chooser.showSaveDialog(null);
+		if(file == null) return;
 		String data = "";
 		for (AnchorPane anchorPane : list) {
 			int i = DownList.AnchorList.indexOf(anchorPane);
@@ -263,23 +270,89 @@ public class MainFxGet implements Initializable {
 
 	@FXML
 	void exportToJsonFile(ActionEvent event) {
-
+		ObservableList<AnchorPane> list = getSelectedItems();
+		if(list.isEmpty()) return;
+		
+		chooser.setInitialDirectory(new File(R.UserHome));
+		chooser.setInitialFileName("links.aria");
+		chooser.setSelectedExtensionFilter(new ExtensionFilter("Aria File", ".json", ".aria"));
+		chooser.setTitle("Export Links to file");
+		File file = chooser.showSaveDialog(stage);
+		if(file != null) {
+			Item[] data = new Item[list.size()];
+			int j = 0;
+			for (AnchorPane anchorPane : list) {
+				int i = DownList.AnchorList.indexOf(anchorPane);
+				Link link = DownList.DownloadList.get(i);
+//				link.toJsonItem(file.getPath() + File.separator 
+//						+ link.getFilename() +  "-"+ link.getAdded() + ".aria");
+				data[j++] = link.getItem();
+			}
+			TempItems tempItems = new TempItems(data);
+			Utils.toJsonFile(file.getPath(), tempItems);
+		}
 	}
+	
+	
+	/*
+	 * @FXML
+	void exportToJsonFile(ActionEvent event) {
+		ObservableList<AnchorPane> list = getSelectedItems();
+		if(list.isEmpty()) return;
+		
+		dirChooser.setInitialDirectory(new File(R.UserHome));
+		dirChooser.setTitle("Export Links to file");
+		File file = dirChooser.showDialog(stage);
+		if(file != null) {
+//			Link[] data = new Link[list.size()];
+//			int j = 0;
+			for (AnchorPane anchorPane : list) {
+				int i = DownList.AnchorList.indexOf(anchorPane);
+				Link link = DownList.DownloadList.get(i);
+				link.toJsonItem(file.getPath() + File.separator 
+						+ link.getFilename() +  "-"+ link.getAdded() + ".aria");
+//				data[j++] = link;
+			}
+//			Utils.toJsonFile(file.getPath(), data);
+		}
+		
+	}
+	 * 
+	 */
 
 	@FXML
 	void exportToTextFile(ActionEvent event) {
-
+		ObservableList<AnchorPane> list = getSelectedItems();
+		if(list.isEmpty()) return;
+		
+		chooser.setInitialDirectory(new File(R.UserHome));
+		chooser.setInitialFileName("links.txt");
+		chooser.setSelectedExtensionFilter(new ExtensionFilter("Text Links", ".txt"));
+		chooser.setTitle("Save Links to Text file");
+		File file = chooser.showSaveDialog(null);
+		if(file == null) return;
+		String data = "";
+		for (AnchorPane anchorPane : list) {
+			int i = DownList.AnchorList.indexOf(anchorPane);
+			Link link = DownList.DownloadList.get(i);
+			data +=link.getUrl().getURL() + "\n";
+		}
+		
+		try {
+			FileUtils.writeStringToFile(file, data);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	
 	
 	@FXML
 	void importFromEf2IDM(ActionEvent event) {
-		FileChooser chooser = new FileChooser();
 		chooser.setInitialDirectory(new File(R.UserHome));
 		chooser.setInitialFileName("links.ef2");
 		chooser.setSelectedExtensionFilter(new ExtensionFilter("IDM Url", "ef2"));
-		chooser.setTitle("Open Links from IDM formate file");
+		chooser.setTitle("Open Links from IDM file");
 		File file = chooser.showOpenDialog(null);
 		if(file != null) {
 			
@@ -305,19 +378,71 @@ public class MainFxGet implements Initializable {
 					};
 				}
 			}.start();
-			
 		}
 		
 	}
 
 	@FXML
 	void importFromJsonFile(ActionEvent event) {
+		chooser.setInitialDirectory(new File(R.UserHome));
+		chooser.setInitialFileName("links.txt");
+		chooser.setSelectedExtensionFilter(new ExtensionFilter("Aria File", ".json", ".aria"));
+		chooser.setTitle("Open Links from Aria (.json/.aria) file");
+		File file = chooser.showOpenDialog(null);
+		if(file != null) {
+			
+			new Service<Void>() {
 
+				@Override
+				protected Task<Void> createTask() {
+					return new Task<Void>() {
+						
+						@Override
+						protected Void call() throws Exception {
+							TempItems items = Utils.fromJson(file.getPath(), TempItems.class);
+							for (Item item: items.items) {
+								Download download = new Download(item);
+								DownList.initGUI(download);
+							}
+							return null;
+						}
+					};
+				}
+			}.start();
+		}
 	}
 
 	@FXML
 	void importFromTextFile(ActionEvent event) {
+		chooser.setInitialDirectory(new File(R.UserHome));
+		chooser.setInitialFileName("links.txt");
+		chooser.setSelectedExtensionFilter(new ExtensionFilter("Text file", ".txt"));
+		chooser.setTitle("Open Links from Text file");
+		File file = chooser.showOpenDialog(null);
+		if(file != null) {
+			
+			new Service<Void>() {
 
+				@Override
+				protected Task<Void> createTask() {
+					return new Task<Void>() {
+						
+						@Override
+						protected Void call() throws Exception {
+							List<Url> urls = Url.fromTextFile(file);
+							for (Url url : urls) {
+								Item item = new Item(url.url);
+								ItemReady ready = new ItemReady(item);
+								item = ready.initItem();
+								Download download = new Download(item);
+								DownList.initGUI(download);
+							}
+							return null;
+						}
+					};
+				}
+			}.start();
+		}
 	}
 
 	public ObservableList<AnchorPane> getSelectedItems() {
@@ -475,7 +600,7 @@ public class MainFxGet implements Initializable {
 
 	@FXML
 	void showAboutWindows(ActionEvent event) {
-
+		About.showAbout();
 	}
 
 	@FXML
@@ -533,4 +658,5 @@ public class MainFxGet implements Initializable {
 		stage.close();
 	}
 
+	
 }
