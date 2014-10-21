@@ -1,0 +1,98 @@
+
+@font-face {
+    font-family: 'Roboto Medium';
+    src: url('Roboto-Medium.ttf');
+}
+@font-face {
+    font-family: 'Roboto Black';
+    src: url('Roboto-Black.ttf');
+} 
+@font-face {
+    font-family: 'Roboto Black Italic';
+    src: url('Roboto-BlackItalic.ttf');
+}
+@font-face {
+    font-family: 'Roboto Bold';
+    src: url('Roboto-Bold.ttf');
+}
+@font-face {
+    font-family: 'Roboto BoldItalic';
+    src: url('Roboto-BoldItalic.ttf');
+}
+@font-face {
+    font-family: 'RobotoCondensed Bold';
+    src: url('RobotoCondensed-Bold.ttf');
+}
+@font-face {
+    font-family: 'RobotoCondensed BoldItalic';
+    src: url('RobotoCondensed-BoldItalic.ttf');
+}
+@font-face {
+    font-family: 'RobotoCondensed Italic';
+    src: url('RobotoCondensed-Italic.ttf');
+}
+@font-face {
+    font-family: 'RobotoCondensed Light';
+    src: url('RobotoCondensed-Light.ttf');
+}
+@font-face {
+    font-family: 'RobotoCondensedLightItalic';
+    src: url('RobotoCondensed-LightItalic.ttf');
+}
+@font-face {
+    font-family: 'RobotoCondensed Regular';
+    src: url('RobotoCondensed-Regular.ttf');
+}
+@font-face {
+    font-family: 'Roboto Italic';
+    src: url('Roboto-Italic.ttf');
+}
+@font-face {
+    font-family: 'Roboto Light';
+    src: url('Roboto-Light.ttf');
+}
+@font-face {
+    font-family: 'Roboto LightItalic';
+    src: url('Roboto-LightItalic.ttf');
+}
+@font-face {
+    font-family: 'Roboto Medium';
+    src: url('Roboto-Medium.ttf');
+}
+@font-face {
+    font-family: 'Roboto MediumItalic';
+    src: url('Roboto-MediumItalic.ttf');
+}
+@font-face {
+    font-family: 'Roboto Regular';
+    src: url('Roboto-Regular.ttf');
+}
+@font-face {
+    font-family: 'Roboto Thin';
+    src: url('Roboto-Thin.ttf');
+}
+@font-face {
+    font-family: 'Roboto ThinItalic';
+    src: url('Roboto-ThinItalic.ttf');
+}
+
+
+.text {
+    -fx-font-family: "Roboto Regular";
+}
+
+.font-Roboto-Medium-indigo5 {
+	-fx-font-family: "Roboto Medium";
+	-fx-text-fill: #3f51b5;
+}
+
+.font-javafx-indigo5 {
+	-fx-font-size:20;
+	-fx-font-family: "Roboto Medium";
+	-fx-text-fill: #3f51b5;
+}
+
+.font-Roboto-ThinItalic-indigo7 {
+	-fx-font-family: "Roboto ThinItalic";
+	-fx-text-fill: #303f9f;
+}

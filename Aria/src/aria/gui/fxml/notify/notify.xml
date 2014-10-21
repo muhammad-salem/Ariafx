@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane layoutX="400.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="400.0">
+         <children>
+            <Label fx:id="title" layoutX="82.0" prefHeight="15.0" prefWidth="280.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <ListView fx:id="list" layoutX="82.0" layoutY="27.0" prefHeight="45.0" prefWidth="280.0" />
+            <ImageView fx:id="image" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="18.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

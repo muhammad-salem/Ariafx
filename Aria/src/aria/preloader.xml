@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import aria.gui.fxml.imp.*?>
+
+<AnchorPane id="1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" style="-fx-background-color: #c5cae9;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="300.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true" />
+      <ProgressStyled id="2" fx:id="progress" layoutY="76.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="300.0" progress="0.0" style="-fx-accent: #3d5afe;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <ImageView id="3" fitHeight="256.0" fitWidth="256.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@appicns_Sparrow.png" />
+         </image>
+      </ImageView>
+      <Label id="4" fx:id="title" layoutX="293.0" layoutY="261.0" prefWidth="200.0" styleClass="font-Roboto-Medium-indigo5" text="Reading saved Setting" />
+      <Text fill="#3f51b5" fontSmoothingType="LCD" layoutX="286.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Roboto ThinItalic;" text="A ria">
+         <font>
+            <Font size="96.0" />
+         </font>
+      </Text>
+      <Text fill="#f50057" fontSmoothingType="LCD" layoutX="318.0" layoutY="102.0" rotate="70.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="font-javafx-indigo5" text="javafx" />
+   </children>
+   <stylesheets>
+      <URL value="@gui/fxml/res/main.css" />
+      <URL value="@Roboto/font.css" />
+   </stylesheets>
+</AnchorPane>
