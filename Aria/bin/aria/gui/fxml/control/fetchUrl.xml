@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="700.0" stylesheets="@../res/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox fx:id="vBox" prefHeight="345.0" prefWidth="700.0">
+         <children>
+            <AnchorPane fx:id="anchorVB1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="700.0" stylesheets="@../res/main.css">
+               <children>
+                  <Label layoutX="22.0" layoutY="23.0" text="Link" AnchorPane.leftAnchor="22.0" AnchorPane.topAnchor="23.0" />
+                  <Label layoutY="47.0" text="Referer" AnchorPane.leftAnchor="22.0" AnchorPane.topAnchor="55.0" />
+                  <TextField fx:id="link1" layoutX="92.0" layoutY="18.0" prefHeight="25.0" prefWidth="533.0" promptText="insert link her" styleClass="button-item" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="18.0" />
+                  <TextField fx:id="referer" layoutY="45.0" prefHeight="25.0" prefWidth="533.0" promptText="insert link her" styleClass="button-item" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="50.0" />
+                  <CheckBox fx:id="authrization" layoutX="18.0" layoutY="52.0" mnemonicParsing="false" prefHeight="25.0" text="Login" AnchorPane.leftAnchor="18.0" AnchorPane.topAnchor="80.0" />
+                  <TextField fx:id="user" disable="true" layoutX="90.0" layoutY="52.0" prefHeight="25.0" prefWidth="275.0" promptText="User" styleClass="button-item" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="80.0" />
+                  <PasswordField fx:id="pass" disable="true" layoutX="394.0" layoutY="52.0" prefHeight="25.0" prefWidth="275.0" promptText="Password" styleClass="button-item" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="80.0" />
+                  <CheckBox fx:id="stream" layoutX="18.0" layoutY="91.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="123.0" selected="true" text="as Streaming" textFill="#1aa2fa" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="18.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <tooltip>
+                        <Tooltip text="help in Streaming video from web. (watch while downloading)." />
+                     </tooltip>
+                  </CheckBox>
+                  <Button defaultButton="true" layoutX="493.0" layoutY="104.0" mnemonicParsing="false" onAction="#fetchInfo" styleClass="button-item" text="Add URL" textFill="#1aa2fa" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="50.0" />
+                  <ChoiceBox fx:id="parallelThread" disable="true" layoutX="319.0" layoutY="113.0" prefHeight="27.0" prefWidth="62.0" styleClass="button-head">
+                     <tooltip>
+                        <Tooltip text="For Streaming prefere to choise 1." />
+                     </tooltip></ChoiceBox>
+                  <Label layoutX="149.0" layoutY="119.0" text="Num. of Parallel Threads:" />
+                  <Label fx:id="message" contentDisplay="RIGHT" layoutX="393.0" layoutY="90.0" prefHeight="24.0" text="Wrong URL Formate" textFill="RED" visible="false" AnchorPane.bottomAnchor="5.0">
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../res/gtk/media-record.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" />
+               </padding>
+            </AnchorPane>
+            <AnchorPane fx:id="anchorVB2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="700.0" stylesheets="@../res/main.css">
+               <children>
+                  <ImageView fitHeight="44.0" fitWidth="63.0" layoutX="472.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="53.0">
+                     <image>
+                        <Image url="@../res/folders.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="iconFile" fitHeight="64.0" fitWidth="64.0" layoutX="613.0" layoutY="52.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fitHeight="45.0" fitWidth="50.0" layoutX="392.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="125.0">
+                     <image>
+                        <Image url="@../res/sand-clock.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="14.0" layoutY="25.0" text="Link" textFill="BLUE" AnchorPane.leftAnchor="14.0" />
+                  <Label layoutX="14.0" layoutY="85.0" text="Category" textFill="BLUE" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="60.0" />
+                  <Label layoutX="14.0" layoutY="120.0" text="Save To" textFill="BLUE" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="95.0" />
+                  <Label layoutX="14.0" layoutY="159.0" text="Queue" textFill="BLUE" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="135.0" />
+                  <Label fx:id="itemLength" alignment="CENTER" layoutX="599.0" layoutY="95.0" prefHeight="20.0" prefWidth="86.0" textAlignment="CENTER" textFill="BLUE" wrapText="true" />
+                  <TextField fx:id="linkUrl" editable="false" focusTraversable="false" layoutX="107.0" layoutY="35.0" prefHeight="27.0" prefWidth="517.0" styleClass="button-item" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="78.0" AnchorPane.topAnchor="20.0" />
+                  <ChoiceBox fx:id="category" layoutX="105.0" layoutY="80.0" prefHeight="25.0" prefWidth="224.0" styleClass="button-item" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="55.0" />
+                  <Button layoutX="349.2275390625" layoutY="79.5" mnemonicParsing="false" onAction="#addCategory" styleClass="button-head" text="+" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="55.0" />
+                  <TextField fx:id="editSavePath" layoutX="105.0" layoutY="115.0" prefHeight="25.0" prefWidth="431.0" styleClass="button-item" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="90.0" />
+                  <Button layoutX="544.0" layoutY="115.0" mnemonicParsing="false" onAction="#changeSaveTo" prefHeight="25.0" prefWidth="20.0" styleClass="button-head" text="..." AnchorPane.rightAnchor="125.0" AnchorPane.topAnchor="90.0" />
+                  <ChoiceBox fx:id="queue" layoutX="105.0" layoutY="154.0" prefHeight="25.0" prefWidth="224.0" styleClass="button-item" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="130.0" />
+                  <Button layoutX="349.0" layoutY="154.0" mnemonicParsing="false" onAction="#addQueue" styleClass="button-head" text="+" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="130.0" />
+                  <Button layoutX="120.0" layoutY="180.0" mnemonicParsing="false" onAction="#downLater" prefHeight="25.0" prefWidth="139.0" styleClass="button-item" text="Start Later" />
+                  <Button cancelButton="true" layoutX="320.0" layoutY="180.0" mnemonicParsing="false" onAction="#close" prefHeight="25.0" prefWidth="139.0" styleClass="button-item" text="Cancel " />
+                  <Button defaultButton="true" layoutX="520.0" layoutY="180.0" mnemonicParsing="false" onAction="#downloadNow" prefHeight="25.0" prefWidth="139.0" styleClass="button-item" text="Start Download" textFill="#1aa2fa" />
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+      <HBox spacing="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button layoutX="925.0" layoutY="-1.0" mnemonicParsing="false" onAction="#minimize" prefHeight="32.0" prefWidth="32.0" styleClass="minimize" />
+            <Button cancelButton="true" layoutX="994.0" layoutY="-1.0" mnemonicParsing="false" onAction="#close" prefHeight="32.0" prefWidth="32.0" styleClass="close" />
+         </children>
+      </HBox>
+   </children>
+   <styleClass>
+      <String fx:value="background-white" />
+      <String fx:value="border-red" />
+   </styleClass>
+</AnchorPane>

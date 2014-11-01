@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1"
+	 id="svg3760" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" sodipodi:docname="button-cancel.svg" inkscape:version="0.48+devel r12660"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="48px" height="48px"
+	 viewBox="0 0 48 48" enable-background="new 0 0 48 48" xml:space="preserve">
+<sodipodi:namedview  fit-margin-left="0" fit-margin-top="0" showgrid="false" inkscape:cy="24.597552" inkscape:cx="44.254312" inkscape:zoom="5.6811594" borderopacity="1.0" bordercolor="#666666" pagecolor="#ffffff" id="base" inkscape:window-maximized="1" inkscape:window-y="30" inkscape:window-x="0" inkscape:window-height="714" inkscape:window-width="1366" inkscape:current-layer="layer1" inkscape:document-units="px" inkscape:pageopacity="0.0" fit-margin-right="0" fit-margin-bottom="0" inkscape:pageshadow="2">
+	<sodipodi:guide  orientation="30,0" position="8.9999856,39.000012" id="guide3280"></sodipodi:guide>
+	<sodipodi:guide  orientation="0,30" position="8.9999856,9.0000118" id="guide3282"></sodipodi:guide>
+	<sodipodi:guide  orientation="-30,0" position="38.999986,9.0000118" id="guide3284"></sodipodi:guide>
+	<sodipodi:guide  orientation="0,-30" position="38.999986,39.000012" id="guide3286"></sodipodi:guide>
+</sodipodi:namedview>
+<g id="layer1" transform="translate(-550.28572,-582.6479)" inkscape:label="Capa 1" inkscape:groupmode="layer">
+	<path id="path3272" inkscape:connector-curvature="0" fill="#DCDCDC" d="M574.278,591.648c-3.927,0-7.829,1.616-10.604,4.393
+		s-4.389,6.681-4.389,10.607s1.614,7.829,4.389,10.605s6.676,4.394,10.604,4.395s7.833-1.618,10.611-4.395s4.396-6.678,4.396-10.605
+		s-1.618-7.831-4.396-10.607S578.205,591.648,574.278,591.648z M574.28,595.648c2.88,0,5.744,1.184,7.781,3.221
+		s3.225,4.899,3.225,7.779s-1.187,5.741-3.225,7.777s-4.901,3.223-7.781,3.223s-5.74-1.186-7.775-3.223s-3.219-4.898-3.219-7.777
+		s1.184-5.741,3.219-7.777C568.539,596.834,571.4,595.648,574.28,595.648z"/>
+	
+		<rect id="rect3282" x="562.286" y="604.648" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 1409.3318 629.5314)" fill="#DCDCDC" width="24" height="4"/>
+</g>
+</svg>

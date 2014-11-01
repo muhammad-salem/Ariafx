@@ -1,0 +1,20 @@
+
+.text {
+    -fx-font-family: "Roboto Regular";
+}
+
+.font-Roboto-Medium-indigo5 {
+	-fx-font-family: "Roboto Medium";
+	-fx-text-fill: #3f51b5;
+}
+
+.font-javafx-indigo5 {
+	-fx-font-size:20;
+	-fx-font-family: "Roboto Medium";
+	-fx-text-fill: #3f51b5;
+}
+
+.font-Roboto-ThinItalic-indigo7 {
+	-fx-font-family: "Roboto ThinItalic";
+	-fx-text-fill: #303f9f;
+}
