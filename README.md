@@ -35,7 +35,7 @@ Options available now :
   - can search for downloads
   - have itself decoration and fixed size stage
   
-  - integreted with firefox with flashgot [cli] :
+  - add support to firefox by flashgot [cli] :
 	[--url=URL] [--http-referer=REFERER] [--file-name=FNAME] 
 	[--user-agent=UA] [--cookie=COOKIE] [--cookie-file=CFILE] [--input-file=UFILE]
 
