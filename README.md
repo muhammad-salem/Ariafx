@@ -41,11 +41,18 @@ Options available now :
 
 
 ## Screenshot 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria01.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria02.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria03.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria04.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria05.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria06.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria07.png) 
+	- the main window
+![screenshot](https://github.com/salemebo/aria/blob/master/img/aria01.png)
+	- add link
+![screenshot](https://github.com/salemebo/aria/blob/master/img/aria02.png)
+	- setup seting for link 
+![screenshot](https://github.com/salemebo/aria/blob/master/img/aria03.png)
+	- the normal view
+![screenshot](https://github.com/salemebo/aria/blob/master/img/aria04.png)
+	- the minimal view
+![screenshot](https://github.com/salemebo/aria/blob/master/img/aria05.png)
+	- separeted download window
+![screenshot](https://github.com/salemebo/aria/blob/master/img/aria06.png)
+![screenshot](https://github.com/salemebo/aria/blob/master/img/aria07.png)
+	- the speed graph
 ![screenshot](https://github.com/salemebo/aria/blob/master/img/aria08.png) 
