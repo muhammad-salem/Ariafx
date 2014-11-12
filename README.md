@@ -39,5 +39,13 @@ Options available now :
 	[--url=URL] [--http-referer=REFERER] [--file-name=FNAME] 
 	[--user-agent=UA] [--cookie=COOKIE] [--cookie-file=CFILE] [--input-file=UFILE]
 
- 
 
+## Screenshot 
+![screenshot](https://github.com/salemebo/aria/blob/master/img/aria01.png) 
+![screenshot](https://github.com/salemebo/aria/blob/master/img/aria02.png) 
+![screenshot](https://github.com/salemebo/aria/blob/master/img/aria03.png) 
+![screenshot](https://github.com/salemebo/aria/blob/master/img/aria04.png) 
+![screenshot](https://github.com/salemebo/aria/blob/master/img/aria05.png) 
+![screenshot](https://github.com/salemebo/aria/blob/master/img/aria06.png) 
+![screenshot](https://github.com/salemebo/aria/blob/master/img/aria07.png) 
+![screenshot](https://github.com/salemebo/aria/blob/master/img/aria08.png) 
