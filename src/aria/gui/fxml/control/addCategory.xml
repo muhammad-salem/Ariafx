@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="600.0" stylesheets="@../res/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="d.gui.fxml.control.AddCategory">
+	<children>
+		<Label layoutX="45.0" layoutY="26.0" prefHeight="25.0" text="Name:" textFill="#1aa2fa">
+         <font>
+            <Font name="System Bold Italic" size="13.0" />
+         </font></Label>
+		<Label layoutX="45.0" layoutY="69.0" text="Default download directory for this categery :" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" />
+		<Label layoutX="45.0" layoutY="125.0" text="Automaticely put in this category this fiels formate :" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" />
+		<Label layoutX="83.0" layoutY="180.0" opacity="0.7" prefHeight="15.0" prefWidth="477.0" text="** Note: type the file extionastion separeted by space ( eg. mp3 avi )" textFill="#fe0000" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" />
+		<TextField fx:id="name" layoutX="100.0" layoutY="26.0" prefHeight="27.0" prefWidth="340.0" promptText="...type name of the category" styleClass="button-item" />
+		<TextField fx:id="saveDir" layoutX="100.0" layoutY="92.0" prefHeight="25.0" prefWidth="433.0" promptText="...where to save the files belong to this category" styleClass="button-item" />
+		<Button layoutX="543.0" layoutY="92.0" mnemonicParsing="false" onAction="#browseSaveToPath" prefHeight="25.0" styleClass="button-head" text="..." />
+		<TextField fx:id="extension" layoutX="100.0" layoutY="146.0" prefHeight="25.0" prefWidth="433.0" promptText="...considered extension " styleClass="button-item" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" />
+		<Button defaultButton="true" layoutX="419.0" layoutY="202.0" mnemonicParsing="false" onAction="#addNewCategoryAction" prefHeight="25.0" styleClass="button-item" text="Add Catogrey" textFill="#1aa2fa">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
+		<Button cancelButton="true" layoutX="318.0" layoutY="204.0" mnemonicParsing="false" onAction="#cancelAction" prefHeight="25.0" styleClass="button-item" text="Cancel" />
+		<ImageView fitHeight="48.0" fitWidth="48.0" layoutX="462.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
+			<image>
+			<Image url="@../res/gtk/tag-new.png" />
+			</image>
+		</ImageView>
+      <HBox layoutX="530.0" layoutY="4.0" spacing="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button layoutX="925.0" layoutY="-1.0" mnemonicParsing="false" onAction="#minimizePrograme" prefHeight="32.0" prefWidth="32.0" styleClass="minimize" />
+            <Button cancelButton="true" layoutX="994.0" layoutY="-1.0" mnemonicParsing="false" onAction="#cancelAction" prefHeight="32.0" prefWidth="32.0" styleClass="close" />
+         </children>
+      </HBox>
+	</children>
+   <styleClass>
+      <String fx:value="background-white" />
+      <String fx:value="border-light-blue" />
+   </styleClass>
+</AnchorPane>

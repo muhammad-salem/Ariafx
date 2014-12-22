@@ -1,0 +1,102 @@
+
+/*******************************************************************************
+ *                                                                             *
+ * Item                                                                 	   *
+ *                                                                             *
+ ******************************************************************************/
+
+.white-background {
+    -fx-background-color: #fff;
+
+}
+
+
+
+.border-top{
+	-fx-border-color: #62c462;
+	-fx-border-style: solid;
+	-fx-border-width: 2px 0 0 0;
+}
+
+.item-background{
+	-fx-background-radius: 0;
+	-fx-border-style: null;
+	-fx-background-color: null;
+	-fx-background-repeat:repeat;
+	-fx-background-image:url("./bg-site.png");
+}
+
+.label-text{
+	-fx-font-family: "Segoe UI";
+	-fx-font-size: 14;
+	-fx-text-fill: #1aa2fa;
+}
+
+.button-head{
+	-fx-background-radius: 0;
+	-fx-border-style: null;
+	-fx-background-color: null;
+	-fx-background-repeat:no-repeat;
+}
+
+
+.button-head:hover{
+    -fx-background-color: #ccc;
+    -fx-background-repeat:no-repeat;
+}
+
+/*====================================================================*/
+.button-item{
+	-fx-border-color: white;
+	-fx-border-radius: 0.5px;
+	-fx-background-radius: 0;
+	-fx-background-radius: 0;
+	-fx-background-color: null;
+	-fx-background-repeat:no-repeat;
+}
+.button-item:hover{
+	-fx-border-color: #ccc;
+	-fx-border-radius: 0.5px;
+	-fx-background-color: #ccc;
+}
+/*====================================================================*/
+
+
+.img-viewport-sprites{
+	-fx-image:url("./sprites.png");
+}
+
+.image-setting{
+	-fx-image:url("./appicns_System-Preferences.png");
+}
+
+
+.image-speed{
+	-fx-image:url("./appicns_Dashboard.png");
+}
+
+.products-icons{
+	 -fx-background-image:url("./products-icons.png");
+ }
+ 
+.section-icons{
+	 -fx-background-image:url("./section-icons.png");
+ }
+ 
+.arrow{
+	 -fx-background-image:url("./arrow.png");
+ }
+
+ .test{
+ color: #2C001E;
+ color: #b3b3b3;
+ color: #EE1D00;
+ color: #204a87;
+ color: #e6e6e6;
+ color: #dfdfdf;
+ color: #3465a4;
+ color: #1a1aa2;
+ color: #a2fafa;
+ }
+ 
+ 

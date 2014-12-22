@@ -1,0 +1,7 @@
+Go to 'https://flashgot.net/' with your Firefox browser, OR, search for it . Install the 'FlashGot' extension.
+After finish install, from 'Open menu', open 'Add-ons', OR go to'about:addon'
+Click on FlashGot 'Preferences', click 'Add'
+Type 'ariafx'.
+Then, go to '/opt/ariafx' folder and choose 'ariafx' file
+In the 'Command line arguments template' add [--url=URL] [--http-referer=REFERER] [--file-name=FNAME]  [--user-agent=UA] [--cookie=COOKIE] [--cookie-file=CFILE] [--input-file=UFILE]
+Go to 'FlashGot Media' tab choose 'ariafx' to enable Aria to download all your media files.

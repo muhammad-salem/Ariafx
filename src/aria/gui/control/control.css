@@ -1,0 +1,49 @@
+
+
+.main-background{
+	-fx-background-color: #E1F5FE;
+}
+
+.sidebar{
+	-fx-background-color: #69F0AE;
+}
+
+.button-bar{
+	-fx-background-color: #00000000;
+}
+
+.button-bar:hover{
+	-fx-background-color: #F48FB1;
+}
+
+.close {
+	-fx-background-image: url("./icon/close.png");
+}
+
+.minimize {
+	-fx-background-image: url("./icon/minimize.png");
+}
+
+.browser{
+	-fx-background-image: url("./icon/browser.png");
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: 4;
+}
+
+.google{
+	-fx-background-image: url("./icon/product_logo_48.png");
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: 8;
+}
+
+.firefox{
+	-fx-background-image: url("./icon/default48.png");
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: 8;
+}
+
+.tweak{
+	-fx-background-image: url("./icon/unity-tweak-tool.png");
+	-fx-background-repeat: no-repeat;
+}
+

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import aria.gui.fxml.imp.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="245.0" prefWidth="540.0" stylesheets="@../res/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<children>
+      <VBox prefHeight="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox prefHeight="30.0" spacing="10.0">
+               <children>
+                  <Label fx:id="filename" prefHeight="30.0" prefWidth="250.0" text="File Name" />
+                  <Label fx:id="panename" prefHeight="30.0" prefWidth="100.0" text="State" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="15.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+            <AnchorPane>
+               <children>
+                  <HBox>
+                     <children>
+          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="540.0">
+      <children>
+                              <Label fx:id="labelAddress" layoutX="14.0" layoutY="10.0" prefHeight="24.0" prefWidth="332.0" text="Link" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="180.0" />
+                              <Label fx:id="labelStatus" layoutX="25.0" layoutY="40.0" text="Complete" textFill="#1aa2fa" />
+                              <Separator layoutX="14.0" layoutY="60.0" prefWidth="300.0" />
+                              <VBox layoutX="25.0" layoutY="70.0" spacing="5.0">
+                                 <children>
+                                    <Label layoutX="25.0" layoutY="75.0" text="File size :" />
+                                    <Label layoutX="25.0" layoutY="93.0" text="Downloaded :" />
+                                    <Label layoutX="45.0" layoutY="110.0" text="Transfer rate:" />
+                                    <Label layoutX="45.0" layoutY="127.0" text="Time left :" AnchorPane.leftAnchor="45.0" />
+                                    <Label layoutX="45.0" layoutY="145.0" text="Resume capability:" AnchorPane.leftAnchor="45.0" />
+                                 </children>
+                              </VBox>
+                              <VBox layoutX="160.0" layoutY="70.0" prefHeight="95.0" prefWidth="175.0" spacing="5.0">
+                                 <children>
+                                    <Label fx:id="labelFileSize" layoutX="175.0" layoutY="75.0" text="100 MB" AnchorPane.leftAnchor="200.0" />
+                                    <Label fx:id="labelDownloaded" layoutX="175.0" layoutY="93.0" text="10 MB (10%)" AnchorPane.leftAnchor="200.0" />
+                                    <Label fx:id="labelTransferRate" layoutX="175.0" layoutY="110.0" text="0.0 KB/Sec" AnchorPane.leftAnchor="200.0" />
+                                    <Label fx:id="labelTimeLeft" layoutX="175.0" layoutY="127.0" text="10 sec" AnchorPane.leftAnchor="200.0" />
+                                    <Label fx:id="labelResume" layoutX="175.0" layoutY="145.0" text="Yes" AnchorPane.leftAnchor="200.0" />
+                                 </children>
+                              </VBox>
+      </children>
+                        </AnchorPane>
+          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="540.0">
+      <children>
+                              <Label layoutX="45.0" layoutY="14.0" text="Transfer rate:" AnchorPane.leftAnchor="45.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" />
+                              <Label fx:id="labelTransferRate2" layoutX="175.0" layoutY="14.0" text="0 Bytes/sec" AnchorPane.leftAnchor="150.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" />
+                              <CheckBox fx:id="checkUseSpeedLimit" layoutX="45.0" layoutY="50.0" mnemonicParsing="false" onAction="#useSpeedLimter" text="Use speed limter" AnchorPane.leftAnchor="45.0" />
+                              <Label layoutX="45.0" layoutY="75.0" text="Maximum download speed" AnchorPane.leftAnchor="45.0" />
+                              <TextField fx:id="textMaxLimit" alignment="CENTER_RIGHT" layoutX="45.0" layoutY="95.0" prefWidth="129.0" styleClass="button-item" text="10" AnchorPane.leftAnchor="45.0" />
+                              <Label layoutX="183.0048828125" layoutY="100.5" text="KByte/sec" />
+                              <CheckBox fx:id="checkRememberLimit" alignment="TOP_LEFT" disable="true" layoutX="45.0" layoutY="125.0" mnemonicParsing="false" onAction="#rememberSpeedLimter" prefHeight="40.0" prefWidth="304.0" text="Remember Speed Limter setting for this file on download stop/pause" wrapText="true" AnchorPane.leftAnchor="45.0" />
+      </children>
+                        </AnchorPane>
+          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="540.0">
+      <children>
+                              <Label layoutX="45.0" layoutY="15.0" text="Save to :" />
+                              <Label fx:id="labelSaveTo" layoutX="120.0" layoutY="15.0" text="local hard drive" AnchorPane.leftAnchor="120.0" />
+                              <CheckBox fx:id="showCompleteDialoge" layoutX="45.0" layoutY="35.0" mnemonicParsing="false" onAction="#showDownloadCompleteDialoge" selected="true" text="Show download complete dialog" AnchorPane.leftAnchor="45.0" />
+                              <Separator layoutX="35.0" layoutY="57.0" prefWidth="300.0" AnchorPane.leftAnchor="35.0" />
+                              <VBox layoutX="55.0" layoutY="68.0" spacing="10.0">
+                                 <children>
+                                    <CheckBox fx:id="checkHangUpModem" disable="true" layoutX="55.0" layoutY="68.0" mnemonicParsing="false" onAction="#hangUpModem" text="Hang up modem when complete." />
+                                    <CheckBox fx:id="checkExitProgram" disable="true" layoutX="55.0" layoutY="95.0" mnemonicParsing="false" onAction="#CloseProgrameAfterDone" text="Close Program when Complete.." wrapText="true" />
+                                    <CheckBox fx:id="checkTurnOff" disable="true" layoutX="55.0" layoutY="125.0" mnemonicParsing="false" onAction="#shutDownOS" text="Turn Off Computer when Complete." />
+                                 </children>
+                              </VBox>
+      </children>
+                        </AnchorPane>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+      <HBox layoutX="498.0" spacing="2.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" styleClass="tray">
+               <graphic>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="tray-img" />
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#minimize" prefHeight="32.0" prefWidth="32.0" styleClass="minimize" />
+            <Button cancelButton="true" layoutX="33.0" mnemonicParsing="false" onAction="#cancel" prefHeight="32.0" prefWidth="32.0" styleClass="close" />
+         </children>
+      </HBox>
+      <HBox layoutX="200.0" layoutY="210.0" spacing="5.0">
+         <children>
+            <CheckBox fx:id="graph" mnemonicParsing="false" prefHeight="27.0" text="Show Speed Graph" />
+      <Button mnemonicParsing="false" onAction="#checkLink" styleClass="button-item" text="Pause" AnchorPane.rightAnchor="145.0" />
+      <Button cancelButton="true" mnemonicParsing="false" onAction="#cancel" styleClass="button-item" text="Cancel" AnchorPane.rightAnchor="25.0" />
+         </children>
+      </HBox>
+      <ProgressCircle fx:id="progress" layoutX="350.0" layoutY="35.0" prefHeight="170.0" prefWidth="170.0" progress="0.15" /><LineChart fx:id="chart" alternativeRowFillVisible="false" createSymbols="false" horizontalZeroLineVisible="false" layoutY="240.0" prefHeight="175.0" verticalZeroLineVisible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+  <xAxis>
+    <NumberAxis autoRanging="false" forceZeroInRange="false" minorTickVisible="false" nodeOrientation="RIGHT_TO_LEFT" side="BOTTOM" tickLabelsVisible="false" upperBound="60.0" fx:id="xAxis" />
+  </xAxis>
+  <yAxis>
+    <NumberAxis fx:id="yAxis" animated="false" forceZeroInRange="false" minorTickVisible="false" side="LEFT" tickLength="2.0" tickMarkVisible="false" />
+  </yAxis>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+</LineChart>
+
+</children>
+   <styleClass>
+      <String fx:value="background-white" />
+      <String fx:value="border-light-blue" />
+   </styleClass>
+</AnchorPane>

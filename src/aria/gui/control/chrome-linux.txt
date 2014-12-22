@@ -1,0 +1,4 @@
+Open google chrome then go to 'chrome://extensions', then enable 'Developer mode', click on 'Load unpacked extension...'
+Go to directory '/opt/ariafx/chrome', click 'Open'
+Now, you have 'Aria Port' extension installed on your google chrome browser, click on 'Developer mode' again to unable it.
+    
