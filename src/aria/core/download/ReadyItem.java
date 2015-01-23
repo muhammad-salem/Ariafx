@@ -15,6 +15,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 
 import aria.core.url.Item;
+import aria.opt.R;
 
 public class ReadyItem {
 
@@ -23,7 +24,7 @@ public class ReadyItem {
 	HttpGet httpGet;
 	HttpResponse response;
 	HttpEntity entity;
-
+	
 	public ReadyItem(Item item) {
 		this.item = item;
 	}
@@ -35,6 +36,7 @@ public class ReadyItem {
 	public void setItem(Item item) {
 		this.item = item;
 	}
+	
 
 	/***
 	 * Suppose to get the length of the file and get the default file name
@@ -82,7 +84,8 @@ public class ReadyItem {
 			Header content = response.getFirstHeader("Content-Disposition");
 			
 			if(content != null){
-				System.out.printf("%s %s\n", content.getName(), content.getValue());
+				//System.out.printf("%s %s\n", content.getName(), content.getValue());
+				R.cout(content.getName() +" "+ content.getValue());
 				name = content.getValue();
 				int x = 0;
 				if( (x = name.indexOf("=\"")) == -1){
@@ -119,7 +122,8 @@ public class ReadyItem {
 					.concat(File.separator).concat(name));
 			
 			
-			System.out.println(response.toString());
+			R.cout(response.toString());
+//			System.out.println(response.toString());
 			
 			item.setLength(response.getEntity().getContentLength());
 			
@@ -138,12 +142,15 @@ public class ReadyItem {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			R.cout(e.getMessage());
 			item.length = -1;
 			item.setUnknowLength();
 			item.setChunksNum(1);
-			System.err.println("ItemReady.initItem() " + e.getMessage() + "\n"
+			R.cout("ItemReady.initItem() " + e.getMessage() + "\n"
 					+ item.getURL());
+//			System.err.println("ItemReady.initItem() " + e.getMessage() + "\n"
+//					+ item.getURL());
 			return item;
 		}finally{
 			httpGet.releaseConnection();
@@ -161,7 +168,6 @@ public class ReadyItem {
 		}
 
 		// System.err.println(item.length);
-
 		return item;
 	}
 

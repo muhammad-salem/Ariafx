@@ -27,6 +27,7 @@ import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 
 import aria.core.url.Item;
+import aria.opt.R;
 
 public class Chunk extends Service<Number> {
 
@@ -41,7 +42,8 @@ public class Chunk extends Service<Number> {
 	public RandomAccessFile file;
 	public boolean stop = false;
 	private Item item;
-
+	
+	
 //	public Chunk(int id, String url, String saveFile, Header[] headers,
 //			long[] range) {
 //		super();
@@ -101,8 +103,10 @@ public class Chunk extends Service<Number> {
 		// this.saveFile = item.getSaveto();
 		this.cachedFile = item.getCacheFile();
 		this.range = item.ranges[id];
-
+		
+		
 	}
+	
 	
 	private void closeConnection() {
 		if(httpClient != null){
@@ -175,8 +179,7 @@ public class Chunk extends Service<Number> {
 		try {
 			FileUtils.forceMkdir(new File(cachedFile).getParentFile());
 		} catch (IOException e) {
-			System.err.println("couldn't make dir file");
-			e.printStackTrace();
+			R.cout("couldn't make dir file");
 		}
 	}
 
@@ -202,13 +205,15 @@ public class Chunk extends Service<Number> {
 				}
 				HttpClientContext context = HttpClientContext.create();
 				HttpResponse response = httpClient.execute(httpGet, context);
-
-				System.out.println( "-> " + response.toString());
+				//System.out.println("-> " + response.toString());
+				R.cout("-> " + response.toString());
 
 				if (response.getStatusLine().getStatusCode() / 100 != 2) {
-					System.out.println("id:" + id
+					String strLog = "id:" + id
 							+ " process canceld \"state code\":"
-							+ response.getStatusLine().getStatusCode());
+							+ response.getStatusLine().getStatusCode();
+					//System.out.println(strLog);
+					R.cout(strLog);
 					cancel();
 					return 0;
 				}
@@ -238,7 +243,7 @@ public class Chunk extends Service<Number> {
 						file.write(bytes, 0, read);
 						range[2] += read;
 						Platform.runLater(() -> {
-							if (item.isUnknowLength()) {
+							if (item.isUnknowLength() ) {
 								updateProgress(range[2], range[2]);
 								item.downloaded = range[2];
 							} else {
@@ -255,14 +260,15 @@ public class Chunk extends Service<Number> {
 					
 					
 				} else {
-					System.out.println("Download failed!");
+					//System.out.println("Download failed!");
+					R.cout("download failed");
 				}
 
 				/* how to update the chunk progress */
 				// updateProgress(range[2] , range[1]-range[0]); // for now
 				updateValue(range[2]);
 				stop = true;
-				return 0;
+				return 1;
 			}
 		};
 	}

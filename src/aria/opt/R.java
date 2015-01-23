@@ -1,7 +1,12 @@
 package aria.opt;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
@@ -27,7 +32,7 @@ public class R {
 	}
 
 	public static String separator = File.separator;
-	public static String app_name = "aria";
+	public static String app_name = "ariafx";
 	public static String UserHome = System.getProperty("user.home");
 	public static String DefaultPath = UserHome + separator + "Downloads" 
 						+ separator + app_name;
@@ -40,6 +45,7 @@ public class R {
 	
 	public static String LockFile = CachePath + separator + "lock";
 	public static String NewLink = ConfigPath + separator + "newLink";
+	public static String TempDir = "/tmp/";
 	
 	static{
 		String str = "";
@@ -48,6 +54,7 @@ public class R {
 					+ separator + "Roaming" + separator + app_name + separator;
 			CachePath  = str + "cache";
 			ConfigPath = str + "config";
+			
 		} else if(PlatformUtil.isWindows()){
 			DefaultPath = UserHome + separator + "Documents" + separator +  "Downloads" 
 					+ separator + app_name;
@@ -55,6 +62,14 @@ public class R {
 					+ separator + app_name + separator;
 			CachePath  = str + "cache";
 			ConfigPath = str + "config";
+			
+		} else if(PlatformUtil.isMac()){ // Library/Application Support/
+			str = UserHome +  separator + "Library" + separator + "Application Support" 
+					+ separator + app_name + separator;
+			
+			CachePath  = str + "cache";
+			ConfigPath = str + "config";
+			TempDir = UserHome + "/Library/Caches/TemporaryItems/";
 		}
 		
 		LockFile = CachePath + separator + "lock";
@@ -257,6 +272,29 @@ public class R {
 //			System.out.println("Delete File : " + file.getAbsolutePath());
 		}
 	}
+	
+	public static void openInProcess(String str){
+		List<String> list = new ArrayList<String>();
+		
+		if(PlatformUtil.isLinux()){
+			list.add("xdg-open");
+			list.add(str);
+		}else if (PlatformUtil.isWindows()) {
+			list.add("start");
+			list.add(str);
+		}else if (PlatformUtil.isMac()) {
+			list.add("open");
+			list.add(str);
+		}
+		ProcessBuilder builder = new ProcessBuilder(list);
+		try {
+			builder.start();
+		} catch (IOException e) {
+			R.cout("error in open ");
+			R.cout(e.getMessage());
+		}
+		
+	}
 
 	public static void SAVE_CHANGES() {
 		DownList.pauseAllDownload();
@@ -268,7 +306,8 @@ public class R {
 		SaveQueues();
 		SaveCategores();
 		
-		releaseLockFile();
+//		releaseLockFile();
+		CloseLodgger();
 	}
 
 	public static void releaseLockFile(){
@@ -283,6 +322,40 @@ public class R {
 		}
 	}
 	
+
+	private static FileOutputStream logger;
+	public static void InitLodgger() {
+		try {
+			File logfile = new File(CachePath + separator + "logger.log");
+			logger = new FileOutputStream(logfile, true);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void cout(String strLog) {
+		try {
+			logger.write(String.valueOf(new Date()+ "\t").getBytes());
+			logger.write(strLog.getBytes());
+			logger.write(String.valueOf("\n").getBytes());
+			logger.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private static void CloseLodgger() {
+		try {
+			logger.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	
 	public static void Save_Changes_Progress() {
 		Setting.updateSetting();
 		SaveSetting();
@@ -290,10 +363,11 @@ public class R {
 
 	public static void INIT_CHANGES() {
 		InitiDirs();
+		InitLodgger();
 		ReadSetting();
 		
 		
-		initFileLock();
+//		initFileLock();
 		
 		InitNewCategores();
 		InitNewQueue();

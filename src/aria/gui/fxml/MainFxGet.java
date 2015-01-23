@@ -21,6 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
@@ -68,7 +69,10 @@ public class MainFxGet implements Initializable {
 			FXML = getClass().getResource("mainFxGet.xml");
 		this.stage = stage;
 	}
-
+	
+	@FXML
+	public MenuBar menu;
+	
 	@FXML
 	public HBox hBoxHeader, hBoxFind;
 
@@ -101,7 +105,8 @@ public class MainFxGet implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
+		//menu.setUseSystemMenuBar(true);
+		
 		initTreeView();
 		initSelectTreeProperty();
 

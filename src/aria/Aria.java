@@ -30,29 +30,38 @@ import aria.gui.fxml.MainFxGet;
 import aria.gui.fxml.imp.MovingStage;
 import aria.gui.manager.DownList;
 import aria.gui.manager.ParameterToLink;
+import aria.nativemessaging.Chrome;
+import aria.nativemessaging.ChromeMSG;
+import aria.opt.AppInstance;
 import aria.opt.Parameter;
 import aria.opt.R;
 import aria.opt.Setting;
 
 public class Aria extends Application {
+	
 
 	static String[] param;  
 	@Override
 	public void init() throws Exception {
-		// R.INIT_CHANGES();
+//		 R.INIT_CHANGES();
 	}
 
 	public static void main(String[] args) throws Exception {
-		File file = new File(R.LockFile);
-		if(file.exists()){
+		
+		if(args.length != 0 && args[0].contains(Chrome.extensions_id)){
+			String str = Chrome.readMessage();
+			ChromeMSG msg = ChromeMSG.CreateMessage(str.trim());
+			args = msg.toArgs();
+		}
+		
+		if(AppInstance.isAppInstanceExists()){
 			if(args.length != 0){
 				/*Parameter parameter =*/ new Parameter(args);
-//				System.out.println(Arrays.toString(args));
-//				System.out.println(parameter.toString());
+				//System.out.println(Arrays.toString(args));
+				//System.out.println(parameter.toString());
 			}
 			Platform.exit();
 		}else{
-			
 			param = args;
 			launch(args);
 		}
@@ -199,6 +208,7 @@ public class Aria extends Application {
 			e.printStackTrace();
 		}
 	}
-
+	
+	
 
 }

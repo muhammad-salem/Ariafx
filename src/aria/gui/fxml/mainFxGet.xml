@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane fx:id="anchorRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="810.0" stylesheets="@res/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-<children><MenuBar prefHeight="25.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns:fx="http://javafx.com/fxml">
+<children><MenuBar fx:id="menu" prefHeight="25.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns:fx="http://javafx.com/fxml">
   <menus><Menu text="Task">
   <items>
     <MenuItem mnemonicParsing="false" onAction="#addNewDownload" text="Add new download" /><SeparatorMenuItem mnemonicParsing="false" /><Menu mnemonicParsing="false" text="Export to">

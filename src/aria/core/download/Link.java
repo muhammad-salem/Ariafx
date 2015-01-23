@@ -20,6 +20,7 @@ import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 
 import aria.core.url.Item;
 import aria.core.url.Url;
+import aria.opt.R;
 
 public class Link extends Download {
 	
@@ -175,6 +176,8 @@ public class Link extends Download {
 	}
 
 	public void retrieveInfo() {
+		//initLodgger();
+		
 		HttpClientBuilder  builder = HttpClients.custom();
 		CookieStore store = null;
 		if (haveCookie()) {
@@ -219,8 +222,9 @@ public class Link extends Download {
 			HttpResponse response = httpClient.execute(httpGet, context);
 			
 			if (response.getStatusLine().getStatusCode() / 100 != 2) {
-				System.out.println(
-						  " process canceld \"state code\":"
+				//System.out.println( " process canceld \"state code\":"
+				//		+ response.getStatusLine().getStatusCode());
+				R.cout( " process canceld \"state code\":"
 						+ response.getStatusLine().getStatusCode());
 				return;
 			}
@@ -257,7 +261,8 @@ public class Link extends Download {
 						.concat(File.separator).concat(name));
 			}
 			setLength(response.getEntity().getContentLength());
-			System.out.println(response.toString());
+//			System.out.println(response.toString());
+			R.cout(response.toString());
 			if(getLength() == -1){
 				Header range = response.getFirstHeader(HttpHeaders.CONTENT_RANGE);
 				if(range != null){
@@ -268,12 +273,13 @@ public class Link extends Download {
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			R.cout(e.getMessage());
+			//e.printStackTrace();
 		}finally{
 			httpGet.releaseConnection();
 		}
 		
-//		System.err.println(item);
+//		R.cout(item);
 	}
 
 	public CookieStore getCookieStore() {

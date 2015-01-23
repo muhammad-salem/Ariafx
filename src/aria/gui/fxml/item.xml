@@ -62,7 +62,23 @@
                                  <contextMenu>
                                     <ContextMenu>
                                       <items>
+                                          <MenuItem mnemonicParsing="false" onAction="#addLink" text="New Link" />
                                         <MenuItem mnemonicParsing="false" onAction="#copyURL" text="Copy URL" />
+                                          <SeparatorMenuItem mnemonicParsing="false" />
+                                          <MenuItem mnemonicParsing="false" onAction="#startDownload" text="Start Download" />
+                                          <MenuItem mnemonicParsing="false" onAction="#pauseDownload" text="Stop Download" />
+                                          <SeparatorMenuItem mnemonicParsing="false" />
+                                          <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open File" />
+                                          <MenuItem mnemonicParsing="false" onAction="#openFolder" text="Open Folder" />
+                                          <MenuItem mnemonicParsing="false" onAction="#deleteFile" text="Delete File" />
+                                          <SeparatorMenuItem mnemonicParsing="false" />
+                                          <Menu fx:id="categoryMenu" mnemonicParsing="false" text="Move to Category">
+                                             <items>
+                                                <CheckMenuItem mnemonicParsing="false" text="Default" />
+                                             </items>
+                                          </Menu>
+                                          <SeparatorMenuItem mnemonicParsing="false" />
+                                          <MenuItem mnemonicParsing="false" onAction="#showProperties" text="Properties" />
                                       </items>
                                     </ContextMenu>
                                  </contextMenu></Label>

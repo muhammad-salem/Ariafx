@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -80,37 +81,39 @@ public class Preloader extends Application {
 					protected Void call() throws Exception {
 						R.InitiDirs();
 						pre.setProgress(0.2);
-						pre.setTitle("Makeing Directory");
+						pre.sendMessage("Makeing Directory");
 						Thread.sleep(350);
 
 						R.ReadSetting();
 						pre.setProgress(0.44);
-						pre.setTitle("Reading saved Setting");
+						pre.sendMessage("Reading saved Setting");
 						Thread.sleep(350);
 						
-						R.initFileLock();
+//						R.initFileLock();
 						pre.setProgress(0.50);
-						pre.setTitle("Init File Lock");
+						pre.sendMessage("Init File Lock");
 						Thread.sleep(450);
 						
 						R.InitNewCategores();
+						R.InitLodgger();
 						pre.setProgress(0.55);
-						pre.setTitle("Adding new Categoryes");
+						pre.sendMessage("Adding new Categoryes");
+						pre.sendMessage("Init Logger");
 						Thread.sleep(450);
 
 						R.InitNewQueue();
 						pre.setProgress(0.73);
-						pre.setTitle("Adding new queues");
+						pre.sendMessage("Adding new queues");
 						Thread.sleep(350);
 
 						// R.ReadDownloads(); //need fx thread
 						pre.setProgress(0.84);
-						pre.setTitle("Links Initialization");
+						pre.sendMessage("Links Initialization");
 						Thread.sleep(350);
 
 						R.LoadTreeItems();
 						pre.setProgress(1.0);
-						pre.setTitle("Start " + About.App_Name + "....");
+						pre.sendMessage("Start " + About.App_Name + "....");
 						Thread.sleep(350);
 
 						return null;
@@ -132,13 +135,16 @@ public class Preloader extends Application {
 		private ProgressStyled progress;
 		@FXML
 		private Label title;
+		@FXML
+		private Text appVersion;
 
 		@Override
 		public void initialize(URL location, ResourceBundle resources) {
-			setTitle("initialization process");
+			sendMessage("initialization process");
+			appVersion.setText(About.App_Version);
 		}
 
-		public void setTitle(String str) {
+		public void sendMessage(String str) {
 			animation = new Transition() {
 
 				{

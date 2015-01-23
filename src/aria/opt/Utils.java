@@ -9,10 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
 
@@ -80,18 +77,20 @@ public class Utils {
         if (str.startsWith("http://") || str.startsWith("https://")
                 || str.startsWith("ftp://")) {
             // Verify format of URL.
-            URL verifiedUrl = null;
+            //URL verifiedUrl = null;
             try {
-                verifiedUrl = new URL(fileURL);
+              /*  verifiedUrl = */ new URL(fileURL);
             } catch (MalformedURLException e) {
                 System.err.println("not valid url");
                 return false;
             }
 
+            /*
             // Make sure URL specifies a file.
             if (verifiedUrl.getFile().length() < 9) {
                 return false;
             }
+            */
 //             System.out.println(verifiedUrl.toString() + " >>");
         }else{
         	return false;
@@ -183,14 +182,12 @@ public class Utils {
 		return fileLengthUnite(progress*length);
 	}
 	
-	
-	static DateFormat format = 
-//			DateFormat.getTimeInstance(DateFormat.LONG);
-			new SimpleDateFormat("DD:HH:mm:ss:SS");
-	public static String calcTimeLeft(long date){
-//		format.setTimeZone(TimeZone.getTimeZone("GMT"));
-		
-		
-        return format.format(new Date(date));
+	public static String getTimeLeft(long date){
+		long rmnd = 0;
+		long ss = date % 60; rmnd = date / 60; 	// minute
+		long mm = rmnd % 60; rmnd /= 60;		// hours
+		long hh = rmnd % 60; rmnd /= 60;		// days
+		long dd = rmnd % 24; 
+        return dd +":" + hh +":" + mm +":" + ss ;
 	}
 }

@@ -15,6 +15,8 @@ import java.util.function.Predicate;
 
 import org.apache.commons.io.FileUtils;
 
+import aria.opt.Utils;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -46,7 +48,7 @@ public class Url {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(verifyURL(url)){
+		if(Utils.verifyURL(url)){
 			this.url = url;
 			this.referer = "";
 		} else {
@@ -163,7 +165,7 @@ public class Url {
 		}
 		return url;
 	}
-	
+	/*
     public static boolean verifyURL(String fileURL) {
 
         String str = fileURL.toLowerCase();
@@ -180,6 +182,7 @@ public class Url {
             }
 
             // Make sure URL specifies a file.
+           
             if (verifiedUrl.getFile().length() < 9) {
                 return false;
             }
@@ -190,6 +193,8 @@ public class Url {
         return true;
 
     }
+    */
+
 
 	public boolean setURL(String link) {
 		try {
@@ -203,7 +208,7 @@ public class Url {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(verifyURL(link)){
+		if(Utils.verifyURL(link)){
 			url = link;
 			return true;
 		}
@@ -237,7 +242,7 @@ public class Url {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(verifyURL(link)){
+		if(Utils.verifyURL(link)){
 			referer = link;
 			return true;
 		}
