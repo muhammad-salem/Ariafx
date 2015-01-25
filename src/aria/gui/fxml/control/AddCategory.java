@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 
 import aria.core.url.type.Category;
 import aria.core.url.type.Type;
-import aria.gui.fxml.MainFxGet;
+import aria.gui.fxml.AriafxMainGUI;
 import aria.gui.fxml.imp.MovingStage;
 import aria.opt.R;
 import aria.opt.Setting;
@@ -89,7 +89,7 @@ public class AddCategory {
             	R.LoadTreeItems();
             	Setting.updateSetting();
             	stage.close();
-            	MainFxGet.category.getChildren().add(new TreeItem<Type>(category));
+            	AriafxMainGUI.category.getChildren().add(new TreeItem<Type>(category));
     		} catch (Exception e) {
     			System.err.println(4);
     			Popup popup = new Popup();

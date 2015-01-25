@@ -18,7 +18,12 @@
             <HBox prefHeight="30.0" spacing="10.0">
                <children>
                   <Label fx:id="filename" prefHeight="30.0" prefWidth="250.0" text="File Name" />
-                  <Label fx:id="panename" prefHeight="30.0" prefWidth="100.0" text="State" />
+                  <MenuButton focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" styleClass="button-item" text="State">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Speed Limtter" />
+                      <MenuItem mnemonicParsing="false" text="On Finish" />
+                    </items>
+                  </MenuButton>
                </children>
                <padding>
                   <Insets bottom="5.0" left="15.0" right="5.0" top="5.0" />

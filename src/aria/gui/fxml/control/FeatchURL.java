@@ -35,7 +35,7 @@ import aria.core.url.type.Category;
 import aria.core.url.type.DownState;
 import aria.core.url.type.Queue;
 import aria.gui.fxml.Item2Gui;
-import aria.gui.fxml.MainFxGet;
+import aria.gui.fxml.AriafxMainGUI;
 import aria.gui.fxml.imp.MovingStage;
 import aria.gui.manager.DownList;
 import aria.gui.manager.DownManager;
@@ -372,7 +372,7 @@ public class FeatchURL implements Initializable {
 		try {
 			gui = new Item2Gui(link);
 			FXMLLoader loader;
-			if(MainFxGet.isMinimal){
+			if(AriafxMainGUI.isMinimal){
 				loader = new FXMLLoader(Item2Gui.FXMLmin);
 			}else {
 				loader= new FXMLLoader(Item2Gui.FXML);

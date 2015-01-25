@@ -11,7 +11,6 @@ import java.util.ResourceBundle;
 import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,23 +24,17 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import aria.core.download.Link;
 import aria.core.url.type.Category;
-import aria.core.url.type.DownState;
 import aria.core.url.type.Queue;
-import aria.gui.fxml.control.FeatchURL;
-import aria.gui.fxml.control.LinkProperties;
 import aria.gui.fxml.imp.ProgressStyled;
 import aria.gui.fxml.imp.ProgressStyled.StyleProgress;
 import aria.gui.manager.DownList;
@@ -358,84 +351,6 @@ public class Item2Gui implements Initializable {
 	@FXML
 	void toMin(ActionEvent event) {
 		fromItem2Min();
-	}
-
-	/*** Context Menu ***/
-
-	@FXML
-	void addLink(ActionEvent event) {
-		FeatchURL.AddURL();
-	}
-
-	@FXML
-	void copyURL(ActionEvent event) {
-		final ClipboardContent content = new ClipboardContent();
-		content.putString(url.getText());
-		Clipboard.getSystemClipboard().setContent(content);
-	}
-
-	@FXML
-	void startDownload(ActionEvent event) {
-		 if(link.isRunning()){
-			 return ;
-		 }
-		
-		if (link.getState() == State.READY) {
-			link.start();
-		} else if (link.getState() == State.FAILED) {
-			link.restart();
-		} else if (link.getState() == State.CANCELLED) {
-			link.restart();
-		} else if (link.getState() == State.SUCCEEDED) {
-			if (link.getDownloaded() < link.getLength())
-				link.restart();
-			 else if(link.getDownState() == DownState.Failed){
-				 link.restart();
-			 }
-
-		} else if (link.getState() == State.RUNNING) {
-			// link.start();
-		}
-	}
-
-	@FXML
-	void pauseDownload(ActionEvent event) {
-		if (link.isRunning()) {
-			link.cancel();
-		}
-	}
-
-	@FXML
-	void openFile(ActionEvent event) {
-		File file = new File(link.getSaveto());
-		if(file.exists()){
-			R.openInProcess(file.getAbsolutePath());
-		}else{
-			R.cout("file not exists yet.");
-			// show message for user
-		}
-		
-	}
-
-	@FXML
-	void openFolder(ActionEvent event) {
-		File file = new File(link.getSaveto());
-		R.openInProcess(file.getParent());
-	}
-
-	@FXML
-	void deleteFile(ActionEvent event) {
-		FileUtils.deleteQuietly(new File(link.getSaveto()));
-	}
-
-	LinkProperties prop;
-	@FXML
-	void showProperties(ActionEvent event) { 
-		if(prop == null){
-			prop = new LinkProperties(link);
-			prop.initLink();
-		}
-		prop.show();
 	}
 	
 	

@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 
 import aria.core.url.type.Queue;
 import aria.core.url.type.Type;
-import aria.gui.fxml.MainFxGet;
+import aria.gui.fxml.AriafxMainGUI;
 import aria.gui.fxml.imp.MovingStage;
 import aria.opt.R;
 import aria.opt.Setting;
@@ -79,7 +79,7 @@ public class AddQueue {
     				closeAtEnd.isSelected(), shutDownOS.isSelected());
     		Queue.add(queue);
     		R.LoadTreeItems();
-    		MainFxGet.queue.getChildren().add(new TreeItem<Type>(queue));
+    		AriafxMainGUI.queue.getChildren().add(new TreeItem<Type>(queue));
     		Setting.updateSetting();
     		stage.close();
     	}

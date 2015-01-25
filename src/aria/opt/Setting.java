@@ -8,7 +8,7 @@ import java.util.Arrays;
 import aria.core.url.Item;
 import aria.core.url.type.Category;
 import aria.core.url.type.Queue;
-import aria.gui.fxml.MainFxGet;
+import aria.gui.fxml.AriafxMainGUI;
 import aria.gui.manager.DownList;
 
 /**
@@ -38,7 +38,7 @@ public class Setting {
 		queues = Queue.getNewQueues();
 		items = DownList.getItems();
 		time_to_save_in_minutes = 3.0;
-		isMinimal = MainFxGet.isMinimal;
+		isMinimal = AriafxMainGUI.isMinimal;
 	}
 	
 	

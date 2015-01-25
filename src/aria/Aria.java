@@ -26,7 +26,7 @@ import org.apache.commons.io.monitor.FileAlterationObserver;
 
 import aria.about.About;
 import aria.core.download.Link;
-import aria.gui.fxml.MainFxGet;
+import aria.gui.fxml.AriafxMainGUI;
 import aria.gui.fxml.imp.MovingStage;
 import aria.gui.manager.DownList;
 import aria.gui.manager.ParameterToLink;
@@ -44,6 +44,7 @@ public class Aria extends Application {
 	@Override
 	public void init() throws Exception {
 //		 R.INIT_CHANGES();
+		
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -80,7 +81,9 @@ public class Aria extends Application {
 			preloader.close();
 			tryCtrl(stage);
 			Platform.runLater(() -> {
+				// R.ReadDownloads();
 				saveStateTimeLine();
+				initMonitor();
 			});
 		});
 		
@@ -90,8 +93,8 @@ public class Aria extends Application {
 
 		try {
 
-			MainFxGet fxGet = new MainFxGet(stage);
-			FXMLLoader loader = new FXMLLoader(MainFxGet.FXML);
+			AriafxMainGUI fxGet = new AriafxMainGUI(stage);
+			FXMLLoader loader = new FXMLLoader(AriafxMainGUI.FXML);
 			loader.setController(fxGet);
 			AnchorPane pane = loader.load();
 
@@ -107,7 +110,7 @@ public class Aria extends Application {
 	}
 
 	public void saveStateTimeLine() {
-		// R.ReadDownloads();
+		
 		Timeline line = new Timeline(new KeyFrame(Duration.minutes(Setting
 				.getTime_to_save()), (e) -> {
 
@@ -119,7 +122,6 @@ public class Aria extends Application {
 		line.setCycleCount(Animation.INDEFINITE);
 		line.play();
 		
-		initMonitor();
 	}
 	
 	FileAlterationMonitor monitor;

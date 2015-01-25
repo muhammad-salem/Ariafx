@@ -16,7 +16,7 @@ import aria.core.url.type.DownState;
 import aria.core.url.type.Queue;
 import aria.core.url.type.Type;
 import aria.gui.fxml.Item2Gui;
-import aria.gui.fxml.MainFxGet;
+import aria.gui.fxml.AriafxMainGUI;
 import aria.opt.Utils;
 
 public final class DownList {
@@ -58,7 +58,7 @@ public final class DownList {
 		try {
 			Item2Gui gui = new Item2Gui(link);
 			FXMLLoader loader;
-			if(MainFxGet.isMinimal){
+			if(AriafxMainGUI.isMinimal){
 				loader = new FXMLLoader(Item2Gui.FXMLmin);
 			}else {
 				loader= new FXMLLoader(Item2Gui.FXML);

@@ -13,30 +13,7 @@
 
 <AnchorPane fx:id="root" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="41.0" prefWidth="600.0" style="-fx-border-width: 1px, 0px, 0px, 0px; -fx-border-color: #ccc; -fx-border-style: solid;" styleClass="white-background" stylesheets="@res/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="title" prefHeight="10.0" prefWidth="320.0" styleClass="label-text" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="1.0">
-         <contextMenu>
-            <ContextMenu>
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#addLink" text="New Link" />
-                  <MenuItem mnemonicParsing="false" onAction="#copyURL" text="Copy URL" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" onAction="#startDownload" text="Start Download" />
-                  <MenuItem mnemonicParsing="false" onAction="#pauseDownload" text="Stop Download" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open File" />
-                  <MenuItem mnemonicParsing="false" onAction="#openFolder" text="Open Folder" />
-                  <MenuItem mnemonicParsing="false" onAction="#deleteFile" text="Delete File" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <Menu fx:id="categoryMenu" mnemonicParsing="false" text="Move to Category">
-                     <items>
-                        <CheckMenuItem mnemonicParsing="false" text="Default" />
-                     </items>
-                  </Menu>
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" onAction="#showProperties" text="Properties" />
-               </items>
-            </ContextMenu>
-         </contextMenu></Label>
+      <Label fx:id="title" prefHeight="10.0" prefWidth="320.0" styleClass="label-text" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="1.0"></Label>
       <Label fx:id="state" alignment="CENTER" prefHeight="10.0" prefWidth="150.0" styleClass="label-text" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="1.0" />
       <Button fx:id="buttonSetting" alignment="CENTER" ellipsisString="" focusTraversable="false" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" styleClass="button-head" AnchorPane.rightAnchor="0.0">
          <graphic>

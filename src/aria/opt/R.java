@@ -15,7 +15,7 @@ import aria.core.url.Item;
 import aria.core.url.type.Category;
 import aria.core.url.type.Queue;
 import aria.core.url.type.Type;
-import aria.gui.fxml.MainFxGet;
+import aria.gui.fxml.AriafxMainGUI;
 import aria.gui.manager.DownList;
 import aria.gui.manager.DownManager;
 
@@ -146,7 +146,7 @@ public class R {
 	public static void ReadSetting() {
 		Setting setting = Utils.fromJson(SettingPath, Setting.class);
 		Setting.setSetting(setting);
-		MainFxGet.isMinimal = Setting.getMinimal();
+		AriafxMainGUI.isMinimal = Setting.getMinimal();
 		DefaultPath = Setting.getDefaultPath();
 		
 	}
