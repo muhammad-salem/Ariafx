@@ -47,5 +47,5 @@ Options available now :
 ![screenshot](https://github.com/salemebo/aria/blob/master/img/aria04.png) 
 ![screenshot](https://github.com/salemebo/aria/blob/master/img/aria05.png) 
 ![screenshot](https://github.com/salemebo/aria/blob/master/img/aria06.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria07.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria08.png) 
+![screenshot](https://github.com/salemebo/aria/blob/master/img/google-chrome.png) 
+![screenshot](https://github.com/salemebo/aria/blob/master/img/d4.png) 

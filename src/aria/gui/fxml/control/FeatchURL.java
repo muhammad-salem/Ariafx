@@ -34,8 +34,8 @@ import aria.core.url.Item;
 import aria.core.url.type.Category;
 import aria.core.url.type.DownState;
 import aria.core.url.type.Queue;
-import aria.gui.fxml.Item2Gui;
 import aria.gui.fxml.AriafxMainGUI;
+import aria.gui.fxml.Item2Gui;
 import aria.gui.fxml.imp.MovingStage;
 import aria.gui.manager.DownList;
 import aria.gui.manager.DownManager;
@@ -195,7 +195,7 @@ public class FeatchURL implements Initializable {
 		});
 		
 		ObservableList<Integer> listNum 
-			= FXCollections.observableArrayList(1,2,4,8);
+			= FXCollections.observableArrayList(1,2,4,8,10,16,20,24,32);
 		parallelThread.setItems(listNum);
 		parallelThread.getSelectionModel().select(Integer.valueOf(1));
 		

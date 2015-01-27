@@ -13,10 +13,19 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.ProgressBarTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import aria.core.download.Chunk;
 import aria.core.download.Link;
 import aria.gui.fxml.imp.MovingStage;
 import aria.gui.fxml.imp.ProgressCircle;
@@ -100,21 +109,49 @@ public class DownUi implements Initializable {
 			
 		});
 		
+		ToggleGroup toggle = new ToggleGroup();
+		graph.setToggleGroup(toggle);
+		chunksButton.setToggleGroup(toggle);
+		
+		chunksButton.selectedProperty().addListener((obv, pld, value)->{
+			if(value){
+				addonsBox.setLayoutX(0);
+//				chunksTable.getItems().clear();
+//				chunksTable.getItems().addAll(link.getChunks());
+			}
+			chunksTable.getItems().clear();
+			chunksTable.getItems().addAll(link.getChunks());
+		});
+		
 		graph.selectedProperty().addListener((obv, pld, value)->{
 			if(value){
-//				anchor.setPrefHeight(415);
-				stage.setHeight(415);
+				addonsBox.setLayoutX(-540);
 				link.canCollectSpeedData();
-			}else{
-//				anchor.setPrefHeight(245);
-				stage.setHeight(245);
+			}
+			else{
 				link.stopCollectSpeedData();
 			}
 		});
 		
 		
+		initTable();
+		//chunksTable.getItems().addAll(link.getChunks());
+		
 		ItemBinding.bindItem(link, this);
 		MovingStage.pikeToMoving(stage, anchor);
+	}
+	
+	void initTable(){
+		chunkDone.setCellValueFactory(new PropertyValueFactory<Chunk, String>( "done"));
+		chunkSize.setCellValueFactory(new PropertyValueFactory<Chunk, String>( "size"));
+		chunkStateCode.setCellValueFactory(new PropertyValueFactory<Chunk, String>( "stateCode"));
+		chunkID.setCellValueFactory(new PropertyValueFactory<Chunk, Integer>( "id"));
+		chunkProgress.setCellValueFactory(new PropertyValueFactory<Chunk, Double>( "progress"));
+		
+		chunkProgress.setCellFactory( ProgressBarTableCell.<Chunk> forTableColumn());
+		
+		chunksTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		
 	}
 
 	/**-----------------------------@FXML--------------------------**/
@@ -123,8 +160,32 @@ public class DownUi implements Initializable {
 
     @FXML
     public TextField textMaxLimit;
+    
+    @FXML
+    private HBox addonsBox;
+    
+    @FXML
+    private TableView<Chunk> chunksTable;
+    
+    @FXML
+    private TableColumn<Chunk, String> chunkStateCode;
 
+    @FXML
+    private TableColumn<Chunk, Double> chunkProgress;
+    
+    @FXML
+    private TableColumn<Chunk, String> chunkSize;
+    
+    @FXML
+    private TableColumn<Chunk, String> chunkDone;
 
+    @FXML
+    private TableColumn<Chunk, Integer> chunkID;
+    
+    
+    @FXML
+    private RadioButton graph, chunksButton;
+    
     @FXML
     public Label panename, labelTransferRate, 
     	labelAddress, labelTransferRate2, labelSaveTo,
@@ -132,7 +193,7 @@ public class DownUi implements Initializable {
     	labelResume, filename, labelTimeLeft;
 
     @FXML
-    public CheckBox checkUseSpeedLimit, graph, 
+    public CheckBox checkUseSpeedLimit, 
     		showCompleteDialoge, checkExitProgram, 
     		checkHangUpModem, checkTurnOff,
     		checkRememberLimit;

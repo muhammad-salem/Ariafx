@@ -106,7 +106,7 @@ public class Download extends Service<Number> {
 					creatChunks();
 					callRange();
 				}
-
+				
 				boolean[] temp = new boolean[item.getChunksNum()];
 				Arrays.fill(temp, true);
 
@@ -500,6 +500,10 @@ public class Download extends Service<Number> {
 
 	public long getContentLengthFromContentRange(String range) {
 		return item.getContentLengthFromContentRange(range);
+	}
+	
+	public Chunk[] getChunks(){
+		return chunks;
 	}
 	
 }

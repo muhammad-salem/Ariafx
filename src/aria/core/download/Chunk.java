@@ -6,6 +6,10 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
@@ -27,11 +31,12 @@ import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 
 import aria.core.url.Item;
+import aria.gui.fxml.control.ChunkUI;
 import aria.opt.R;
+import aria.opt.Utils;
 
-public class Chunk extends Service<Number> {
+public class Chunk extends Service<Number> implements ChunkUI{
 
-	public int id;
 	public CloseableHttpClient httpClient;
 	public HttpGet httpGet;
 	public Header[] headers;
@@ -42,6 +47,11 @@ public class Chunk extends Service<Number> {
 	public RandomAccessFile file;
 	public boolean stop = false;
 	private Item item;
+	
+	public SimpleIntegerProperty id = new SimpleIntegerProperty(this, "id", -1);
+	public SimpleStringProperty stateCode = new SimpleStringProperty(this, "stateCode", "");
+	public SimpleStringProperty size = new SimpleStringProperty(this, "size", "");
+	public SimpleStringProperty done = new SimpleStringProperty(this, "done", "");
 	
 	
 //	public Chunk(int id, String url, String saveFile, Header[] headers,
@@ -97,14 +107,12 @@ public class Chunk extends Service<Number> {
 
 	public Chunk(int id, Item item) {
 		super();
-		this.id = id;
+		this.id.set(id);
 		this.item = item;
 		this.url = item.getURL();
 		// this.saveFile = item.getSaveto();
 		this.cachedFile = item.getCacheFile();
 		this.range = item.ranges[id];
-		
-		
 	}
 	
 	
@@ -207,9 +215,12 @@ public class Chunk extends Service<Number> {
 				HttpResponse response = httpClient.execute(httpGet, context);
 				//System.out.println("-> " + response.toString());
 				R.cout("-> " + response.toString());
-
+				
+				stateCode.set(response.getStatusLine().getReasonPhrase());
+				setSize(Utils.fileLengthUnite(range[1] - range[0]));
+				
 				if (response.getStatusLine().getStatusCode() / 100 != 2) {
-					String strLog = "id:" + id
+					String strLog = "id:" + id.get()
 							+ " process canceld \"state code\":"
 							+ response.getStatusLine().getStatusCode();
 					//System.out.println(strLog);
@@ -252,6 +263,7 @@ public class Chunk extends Service<Number> {
 							// updateTitle(response.getStatusLine().toString() +
 							// " State: " + getState());
 							updateValue(range[2]);
+							setDone(Utils.fileLengthUnite(range[2]));
 						});
 					}
 					file.close();
@@ -272,5 +284,28 @@ public class Chunk extends Service<Number> {
 			}
 		};
 	}
+
+
+	@Override
+	public StringProperty stateCodeProperty() {
+		return stateCode;
+	}
+	
+	@Override
+	public IntegerProperty idProperty() {
+		return id;
+	}
+	@Override
+	public StringProperty sizeProperty() {
+		return size;
+	}
+	@Override
+	public StringProperty doneProperty() {
+		return done;
+	}
+	
+	
+	
+	
 
 }
