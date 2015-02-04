@@ -34,7 +34,7 @@
          <font>
             <Font name="Source Code Pro Medium" size="13.0" />
          </font></Text>
-      <Text fx:id="appVersion" fill="#3f51b5" fontSmoothingType="LCD" layoutX="412.0" layoutY="289.0" strokeType="OUTSIDE" strokeWidth="0.0" text="V.0.0115.20">
+      <Text fx:id="appVersion" fill="#3f51b5" fontSmoothingType="LCD" layoutX="412.0" layoutY="280.0" strokeType="OUTSIDE" strokeWidth="0.0" text="V.0.0115.20">
          <font>
             <Font name="Source Code Pro Medium" size="12.0" />
          </font>

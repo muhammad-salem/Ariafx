@@ -1,0 +1,86 @@
+/*******************************************************************************
+ *                                                                             *
+ * ListView and ListCell                                                       *
+ *                                                                             *
+ ******************************************************************************/
+
+/*
+.list-cell {
+	-fx-padding: 0.25em 0.583em 0.25em 0.583em; /* 3 7 3 7 * /
+}
+
+.list-cell:odd, .list-cell:even {
+	-fx-background: -fx-control-inner-background-alt;
+}
+
+*/
+
+.list-cell:odd, .list-cell:even {
+	-fx-background: -fx-control-inner-background-alt;
+	-fx-background-insets:2;
+	-fx-background-radius:5;
+}
+
+.list-view {
+	
+	/*
+	-fx-focus-color: #fff;
+	-fx-border-color: red;
+	-fx-border-style: dotted;
+	-fx-border-width: 0.04em;
+	*/
+	
+}
+
+/*
+.list-view:horizontal{
+	
+}
+
+.list-view:vertical{
+	
+}
+*/
+
+
+.cell{
+	-fx-background-color:white;
+}
+
+.cell:empty{
+	
+}
+
+.list-view >.cell:filled {
+	-fx-border-color: red;
+	-fx-border-style: solid;
+	-fx-border-width: 1px;
+	-fx-background-color: #ccc;
+}
+
+.cell:selected{
+	-fx-background-color:#ccc;
+}
+
+
+
+
+.scroll-bar {
+	-fx-background-color: white;
+	-fx-padding: 0.04em;
+	-fx-border-width: 0.0em;
+	-fx-marign: 0.01em;
+}
+
+
+.scroll-bar:vertical>.thumb, .scroll-bar:horizontal>.thumb {
+	-fx-background-color: linear-gradient(from 0px 0.75em to 0.75em 0px, repeat, #ccc 9%, #ccc 49%
+		, derive(#ccc, 30%) 50%, derive(#ccc, 30%) 99%);
+	/*-fx-background-color:#ccc; */
+}
+
+.scroll-bar>.increment-button, .scroll-bar>.decrement-button {
+	-fx-padding: 0.04em;
+	/* visibility:hidden; */
+}
+

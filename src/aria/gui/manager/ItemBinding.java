@@ -234,7 +234,7 @@ public class ItemBinding {
 		 }});
 		ui.labelTimeLeft.textProperty().bind(link.lefttimeProperty);
 		
-		ui.labelSaveTo.textProperty().bind(Bindings.concat(link.getSaveto()));
+		ui.textSaveTo.textProperty().bind(Bindings.concat(link.getSaveto()));
 		
 		
 	}

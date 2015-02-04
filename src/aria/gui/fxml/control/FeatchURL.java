@@ -62,7 +62,7 @@ public class FeatchURL implements Initializable {
 	/**-------------------------0-----------------------------**/
 
 	@FXML
-	private CheckBox authrization, stream;
+	private CheckBox authrization;
 
 	@FXML
 	private VBox vBox;
@@ -183,14 +183,6 @@ public class FeatchURL implements Initializable {
 			} else {
 				user.setDisable(true);
 				pass.setDisable(true);
-			}
-		});
-		
-		stream.selectedProperty().addListener((obv, old, newV) -> {
-			if (newV) {
-				parallelThread.setDisable(true);
-			} else {
-				parallelThread.setDisable(false);
 			}
 		});
 		
@@ -332,13 +324,11 @@ public class FeatchURL implements Initializable {
 				item = new Item(str);
 				item.setReferer(referer.getText());
 				
-				item.isStreaming = stream.isSelected();
-				if(item.isStreaming){
-					item.setChunksNum(1);
-				}else{
-					Integer i = parallelThread.getValue();
-					item.setChunksNum(i);
-				}
+				
+				Integer i = parallelThread.getValue();
+				item.isStreaming = (i == 1);
+				item.setChunksNum(i);
+				
 				
 				item.setState(DownState.InitDown);
 				

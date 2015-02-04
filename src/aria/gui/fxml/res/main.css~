@@ -252,13 +252,12 @@
 	-fx-marign: 0.01em;
 }
 
-*/
 .scroll-bar:vertical>.thumb, .scroll-bar:horizontal>.thumb {
 	-fx-background-color: linear-gradient(from 0px 0.75em to 0.75em 0px, repeat, #ccc 9%, #ccc 49%
 		, derive(#ccc, 30%) 50%, derive(#ccc, 30%) 99%);
 	/*-fx-background-color:#ccc; */
 }
-
+*/
 .scroll-bar>.increment-button, .scroll-bar>.decrement-button {
 	-fx-padding: 0.04em;
 	/* visibility:hidden; */

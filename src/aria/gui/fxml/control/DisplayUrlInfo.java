@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -54,8 +53,7 @@ public class DisplayUrlInfo implements Initializable {
 	
 	/**-------------------------0-----------------------------**/
 
-	@FXML
-	private CheckBox stream;
+	
 
 	@FXML
 	private ImageView iconFile;
@@ -101,14 +99,6 @@ public class DisplayUrlInfo implements Initializable {
 
 	// anchorVB1
 	void initAnchorVB1() {
-		
-		stream.selectedProperty().addListener((obv, old, newV) -> {
-			if (newV) {
-				parallelThread.setDisable(true);
-			} else {
-				parallelThread.setDisable(false);
-			}
-		});
 		
 		ObservableList<Integer> listNum 
 			= FXCollections.observableArrayList(1,2,4,8,10,16,20,24,32);
@@ -241,15 +231,9 @@ public class DisplayUrlInfo implements Initializable {
 	/**-------------------------5-----------------------------**/
 	
 	private Item2Gui bindILink2Gui(){
-		if(stream.isSelected()){
-			link.setStreaming();
-		}
-		if(link.isStreaming()){
-			link.setChunksNum(1);
-		}else{
-			Integer i = parallelThread.getValue();
-			link.setChunksNum(i);
-		}
+		Integer parl = parallelThread.getValue();
+		if(parl == 1) link.setStreaming();
+		link.setChunksNum(parl);
 		
 		link.setDownState(DownState.InitDown);
 		

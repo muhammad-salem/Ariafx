@@ -107,12 +107,13 @@ public class Chunk extends Service<Number> implements ChunkUI{
 
 	public Chunk(int id, Item item) {
 		super();
-		this.id.set(id);
+		setId(id+1);
 		this.item = item;
 		this.url = item.getURL();
 		// this.saveFile = item.getSaveto();
 		this.cachedFile = item.getCacheFile();
 		this.range = item.ranges[id];
+		
 	}
 	
 	
@@ -270,6 +271,9 @@ public class Chunk extends Service<Number> implements ChunkUI{
 					inputStream.close();
 					httpGet.releaseConnection();
 					
+					if(!isCancelled() && !stop){
+						setStateCode("Done");
+					}
 					
 				} else {
 					//System.out.println("Download failed!");
@@ -284,7 +288,8 @@ public class Chunk extends Service<Number> implements ChunkUI{
 			}
 		};
 	}
-
+	
+	
 
 	@Override
 	public StringProperty stateCodeProperty() {
@@ -303,6 +308,7 @@ public class Chunk extends Service<Number> implements ChunkUI{
 	public StringProperty doneProperty() {
 		return done;
 	}
+	
 	
 	
 	

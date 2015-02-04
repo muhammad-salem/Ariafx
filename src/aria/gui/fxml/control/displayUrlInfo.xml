@@ -43,16 +43,8 @@
             </HBox>
             <HBox layoutX="10.0" layoutY="181.0" spacing="5.0">
                <children>
-                  <CheckBox fx:id="stream" layoutX="18.0" layoutY="91.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="123.0" selected="true" text="as Streaming" textFill="#1aa2fa" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="18.0">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <tooltip>
-                        <Tooltip text="help in Streaming video from web. (watch while downloading)." />
-                     </tooltip>
-                  </CheckBox>
                   <Label layoutX="149.0" layoutY="119.0" prefHeight="25.0" text="Num. of Parallel Threads:" />
-                  <ChoiceBox fx:id="parallelThread" disable="true" layoutX="319.0" layoutY="113.0" prefHeight="25.0" prefWidth="62.0" styleClass="button-head">
+                  <ChoiceBox fx:id="parallelThread" layoutX="319.0" layoutY="113.0" prefHeight="25.0" prefWidth="62.0" styleClass="button-head">
                      <tooltip>
                         <Tooltip text="For Streaming prefere to choise 1." />
                      </tooltip>

@@ -31,7 +31,7 @@ public class About  {
 	
 	static Stage  stage;
 	public static String App_Name = "Ariafx";
-	public static String App_Version = "V.0.0115.20";
+	public static String App_Version = "V 0.1502.04";
 	public static String App_Description = "Download Manager 2014-2015";
 	public static String Code_Name = "ن";
 	public static String about = "";
@@ -56,9 +56,9 @@ public class About  {
 		loader.setController(fx);
 		
 		try {
-                    AnchorPane pane = loader.load();
-                    Scene scene = new Scene(pane, Color.TRANSPARENT);
-                    stage.setScene(scene);
+			AnchorPane pane = loader.load();
+			Scene scene = new Scene(pane, Color.TRANSPARENT);
+			stage.setScene(scene);
 			
 		} catch (IOException e) {
                     e.printStackTrace();

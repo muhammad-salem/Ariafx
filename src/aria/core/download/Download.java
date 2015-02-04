@@ -76,10 +76,14 @@ public class Download extends Service<Number> {
 						(item.length == -1) ? item.downloaded : item.length);
 				updateValue(item.downloaded);
 				updateMessage("Updated.");
-				init = false;
+				//init = false;
 				return 1;
 			}
 		};
+		
+		taskInit.setOnSucceeded((e)->{
+			init = false;
+		});
 
 		Task<Number> taskDown = new Task<Number>() {
 
@@ -156,14 +160,14 @@ public class Download extends Service<Number> {
 			if (item.downloaded == item.length) {
 				setDownState(DownState.Complete);
 				if (!item.isCopied){
-					copyFile();
+					moveFileAfterDownload();
 				}
 			} else if (item.downloaded > item.length) {
 				if (item.isUnknowLength()) {
 					setDownState(DownState.Pause);
 				} else {
 					setDownState(DownState.Complete);
-					copyFile();
+					moveFileAfterDownload();
 				}
 			} else {
 				setDownState(DownState.Pause);
@@ -182,7 +186,12 @@ public class Download extends Service<Number> {
 		});
 		setOnRunning((e) -> {
 			timeline.play();
-			setDownState(DownState.Downloading);
+			if(isInitState()){
+				setDownState(DownState.Pause);
+			}else{
+				setDownState(DownState.Downloading);
+			}
+			
 
 		});
 		setOnFailed((e) -> {
@@ -190,7 +199,7 @@ public class Download extends Service<Number> {
 //			setDownState(DownState.Failed);
 			if (item.isUnknowLength()) {
 				setDownState(DownState.Complete);
-				copyFile();
+				moveFileAfterDownload();
 				
 			} else {
 				setDownState(DownState.Failed);
@@ -200,7 +209,7 @@ public class Download extends Service<Number> {
 
 	}
 
-	private void copyFile() {
+	private void moveFileAfterDownload() {
 
 		new Thread(new Task<Void>() {
 			@Override

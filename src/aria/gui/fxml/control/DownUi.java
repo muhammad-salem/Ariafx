@@ -13,20 +13,21 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.ProgressBarTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import aria.core.download.Chunk;
 import aria.core.download.Link;
+import aria.core.url.type.DownState;
 import aria.gui.fxml.imp.MovingStage;
 import aria.gui.fxml.imp.ProgressCircle;
 import aria.gui.manager.ItemBinding;
@@ -98,6 +99,7 @@ public class DownUi implements Initializable {
 				}else{
 					cancel(null);
 				}
+				
 			}
 //			else if( link.canStartCopy()){
 //				if(value || link.getState() == State.CANCELLED ){
@@ -109,28 +111,43 @@ public class DownUi implements Initializable {
 			
 		});
 		
-		ToggleGroup toggle = new ToggleGroup();
-		graph.setToggleGroup(toggle);
-		chunksButton.setToggleGroup(toggle);
-		
-		chunksButton.selectedProperty().addListener((obv, pld, value)->{
-			if(value){
-				addonsBox.setLayoutX(0);
+		link.downStateProperty().addListener((obv, old, value)->{
+			if(!link.isInitState()){
+				if (value == DownState.Downloading){
+					chunksTable.getItems().clear();
+					chunksTable.getItems().addAll(link.getChunks());
+					show();
+				}
+			}
+			
+		});
+//		link.stateProperty().addListener((obv, old, value)->{
+//			if (value == State.RUNNING){
 //				chunksTable.getItems().clear();
 //				chunksTable.getItems().addAll(link.getChunks());
-			}
-			chunksTable.getItems().clear();
-			chunksTable.getItems().addAll(link.getChunks());
+//			}
+//		});
+		
+		subprocess.setOnAction((e)->{
+			addonsBox.setLayoutX(0);
+			link.stopCollectSpeedData();
 		});
 		
-		graph.selectedProperty().addListener((obv, pld, value)->{
-			if(value){
-				addonsBox.setLayoutX(-540);
-				link.canCollectSpeedData();
-			}
-			else{
-				link.stopCollectSpeedData();
-			}
+		speed.setOnAction((e)->{
+			addonsBox.setLayoutX(-540);
+			link.canCollectSpeedData();
+		});
+		
+		toggleState.setOnAction((e)->{
+			displayBox.setLayoutX(0);
+		});
+		
+		toggleLimite.setOnAction((e)->{
+			displayBox.setLayoutX(-540);
+		});
+		
+		toggleFinish.setOnAction((e)->{
+			displayBox.setLayoutX(-1080);
 		});
 		
 		
@@ -153,6 +170,10 @@ public class DownUi implements Initializable {
 		chunksTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		
 	}
+	
+//	public void initFinish() {
+//		textSaveTo.setText(link.getSaveto());
+//	}
 
 	/**-----------------------------@FXML--------------------------**/
 	@FXML
@@ -162,7 +183,7 @@ public class DownUi implements Initializable {
     public TextField textMaxLimit;
     
     @FXML
-    private HBox addonsBox;
+    private HBox addonsBox, displayBox;
     
     @FXML
     private TableView<Chunk> chunksTable;
@@ -184,14 +205,20 @@ public class DownUi implements Initializable {
     
     
     @FXML
-    private RadioButton graph, chunksButton;
+    private ToggleButton subprocess,  speed;
+    
+    @FXML
+    private ToggleButton toggleState, toggleLimite, toggleFinish;
     
     @FXML
     public Label panename, labelTransferRate, 
-    	labelAddress, labelTransferRate2, labelSaveTo,
+    	labelAddress, labelTransferRate2, 
     	labelStatus, labelDownloaded, labelFileSize, 
     	labelResume, filename, labelTimeLeft;
-
+    
+    @FXML
+    public Text textSaveTo;
+    
     @FXML
     public CheckBox checkUseSpeedLimit, 
     		showCompleteDialoge, checkExitProgram, 
@@ -260,7 +287,7 @@ public class DownUi implements Initializable {
     	Button button = (Button) event.getSource();
     	if(link.isRunning()){
     		link.cancel();
-    		button.setText("Start");
+    		button.setText("Resume");
     	}else{
     		link.restart();
     		button.setText("Pause");

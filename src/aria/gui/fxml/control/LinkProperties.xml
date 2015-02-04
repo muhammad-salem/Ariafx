@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import aria.gui.fxml.imp.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="600.0" stylesheets="@../res/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<children>
+      <Text fx:id="name" fontSmoothingType="LCD" layoutX="23.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="474.0" /><Label layoutX="26.0" layoutY="42.0" text="Address " textFill="BLUE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><Label layoutX="20.0" layoutY="85.0" text="Catogree" textFill="BLUE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><Label layoutX="29.0" layoutY="120.0" text="Save To" textFill="BLUE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><Label layoutX="34.0" layoutY="162.0" text="Queue" textFill="BLUE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><Label layoutX="25.0" layoutY="214.0" text="Date Added" textFill="BLUE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><Label layoutX="336.0" layoutY="214.0" text="Last Modified" textFill="BLUE" /><Label layoutX="22.0" layoutY="306.0" text="Referer" textFill="BLUE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><TextField fx:id="textFieldAddress" editable="false" layoutX="115.0" layoutY="38.0" prefHeight="25.0" prefWidth="470.0" styleClass="button-item" AnchorPane.leftAnchor="115.0" AnchorPane.rightAnchor="50.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><ChoiceBox fx:id="choicBoxCatogree" layoutX="115.0" layoutY="83.0" prefHeight="25.0" prefWidth="224.0" styleClass="button-item" AnchorPane.leftAnchor="115.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><Button layoutX="359.0" layoutY="83.0" mnemonicParsing="false" onAction="#addNewCatogree" styleClass="button-item" text="+" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><TextField fx:id="textFieldSaveFileTo" layoutX="115.0" layoutY="118.0" prefHeight="25.0" prefWidth="431.0" styleClass="button-item" AnchorPane.leftAnchor="115.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><Button layoutX="554.0" layoutY="118.0" mnemonicParsing="false" onAction="#changeSaveFileTo" prefHeight="25.0" prefWidth="20.0" styleClass="button-item" text="..." xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><ChoiceBox fx:id="choicBoxQueue" layoutX="115.0" layoutY="157.0" prefHeight="25.0" prefWidth="224.0" styleClass="button-item" AnchorPane.leftAnchor="115.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><Button layoutX="359.0" layoutY="157.0" mnemonicParsing="false" onAction="#addNewQueue" styleClass="button-item" text="+" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><Separator layoutX="50.0" layoutY="195.0" prefWidth="500.0" /><ImageView fitHeight="64.0" fitWidth="64.0" layoutX="518.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><ImageView fitHeight="64.0" fitWidth="64.0" layoutX="427.0" layoutY="73.0" pickOnBounds="true" preserveRatio="true" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<image>
+<Image url="@../res/folders.png" />
+</image>
+</ImageView>
+      <Text fx:id="dateAdd" fontSmoothingType="LCD" layoutX="120.0" layoutY="228.0" strokeType="OUTSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="120.0">
+         <font>
+            <Font size="11.0" />
+         </font></Text>
+      <Text fx:id="dateModified" fontSmoothingType="LCD" layoutX="442.0" layoutY="228.0" strokeType="OUTSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="442.0">
+         <font>
+            <Font size="11.0" />
+         </font></Text><Label fx:id="labelFileSize" layoutX="120.0" layoutY="241.0" prefHeight="15.0" prefWidth="435.0" text="0 MB" textFill="BLUE" wrapText="true" AnchorPane.leftAnchor="120.0">
+         <font>
+            <Font size="11.0" />
+         </font></Label><ProgressStyled fx:id="progressBarDownloaded" layoutX="120.0" layoutY="260.0" prefHeight="20.0" prefWidth="525.0" progress="0.0" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="55.0" /><Hyperlink fx:id="hyperLinkReferer" layoutX="115.0" layoutY="302.0" text="Hyperlink">
+         <font>
+            <Font size="11.0" />
+         </font></Hyperlink><Separator layoutX="50.0" layoutY="289.5" prefWidth="500.0" /><TextField fx:id="textFieldReferer" layoutX="120.0" layoutY="325.0" prefHeight="25.0" prefWidth="525.0" styleClass="button-item" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="61.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+         <font>
+            <Font size="11.0" />
+         </font></TextField><Separator layoutX="50.0" layoutY="360.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="119.0" layoutX="45.0" layoutY="373.0" stroke="#1cfeff" strokeType="INSIDE" width="517.0" /><CheckBox fx:id="checkBoxUseAuthorization" layoutX="94.22216796875" layoutY="390.25" mnemonicParsing="false" text="use authorization" textFill="BLUE" /><TextField fx:id="textFieldLogin" layoutX="281.0" layoutY="417.0" prefHeight="25.0" prefWidth="224.0" styleClass="button-item" /><PasswordField fx:id="passwordFieldPassword" layoutX="281.0" layoutY="453.0" prefHeight="25.0" prefWidth="224.0" styleClass="button-item" /><Label layoutX="196.0" layoutY="422.0" text="Login" textFill="BLUE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><Label layoutX="170.0" layoutY="458.0" text="Password" textFill="BLUE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><Button defaultButton="true" layoutX="472.0" layoutY="507.0" mnemonicParsing="false" onAction="#closeStage" prefHeight="25.0" prefWidth="91.0" styleClass="button-item" text="Close" /><Button layoutX="333.0" layoutY="507.0" mnemonicParsing="false" onAction="#openFolder" prefHeight="26.0" prefWidth="116.0" styleClass="button-item" text="Open Folder" />
+      <HBox layoutX="595.0" spacing="2.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#minimizePrograme" prefHeight="32.0" prefWidth="32.0" styleClass="minimize" />
+            <Button layoutX="33.0" mnemonicParsing="false" onAction="#closeStage" prefHeight="32.0" prefWidth="32.0" styleClass="close" />
+         </children>
+      </HBox>
+</children>
+   <styleClass>
+      <String fx:value="background-white" />
+      <String fx:value="border-red" />
+   </styleClass></AnchorPane>

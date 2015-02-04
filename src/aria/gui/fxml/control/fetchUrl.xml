@@ -20,20 +20,12 @@
                   <CheckBox fx:id="authrization" layoutX="18.0" layoutY="52.0" mnemonicParsing="false" prefHeight="25.0" text="Login" AnchorPane.leftAnchor="18.0" AnchorPane.topAnchor="80.0" />
                   <TextField fx:id="user" disable="true" layoutX="90.0" layoutY="52.0" prefHeight="25.0" prefWidth="275.0" promptText="User" styleClass="button-item" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="80.0" />
                   <PasswordField fx:id="pass" disable="true" layoutX="394.0" layoutY="52.0" prefHeight="25.0" prefWidth="275.0" promptText="Password" styleClass="button-item" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="80.0" />
-                  <CheckBox fx:id="stream" layoutX="18.0" layoutY="91.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="123.0" selected="true" text="as Streaming" textFill="#1aa2fa" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="18.0">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <tooltip>
-                        <Tooltip text="help in Streaming video from web. (watch while downloading)." />
-                     </tooltip>
-                  </CheckBox>
                   <Button defaultButton="true" layoutX="493.0" layoutY="104.0" mnemonicParsing="false" onAction="#fetchInfo" styleClass="button-item" text="Add URL" textFill="#1aa2fa" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="50.0" />
-                  <ChoiceBox fx:id="parallelThread" disable="true" layoutX="319.0" layoutY="113.0" prefHeight="27.0" prefWidth="62.0" styleClass="button-head">
+                  <ChoiceBox fx:id="parallelThread" layoutX="191.0" layoutY="113.0" prefHeight="27.0" prefWidth="62.0" styleClass="button-head">
                      <tooltip>
                         <Tooltip text="For Streaming prefere to choise 1." />
                      </tooltip></ChoiceBox>
-                  <Label layoutX="149.0" layoutY="119.0" text="Num. of Parallel Threads:" />
+                  <Label layoutX="21.0" layoutY="119.0" text="Num. of Parallel Threads:" />
                   <Label fx:id="message" contentDisplay="RIGHT" layoutX="393.0" layoutY="90.0" prefHeight="24.0" text="Wrong URL Formate" textFill="RED" visible="false" AnchorPane.bottomAnchor="5.0">
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
@@ -73,7 +65,7 @@
                   <Button layoutX="544.0" layoutY="115.0" mnemonicParsing="false" onAction="#changeSaveTo" prefHeight="25.0" prefWidth="20.0" styleClass="button-head" text="..." AnchorPane.rightAnchor="125.0" AnchorPane.topAnchor="90.0" />
                   <ChoiceBox fx:id="queue" layoutX="105.0" layoutY="154.0" prefHeight="25.0" prefWidth="224.0" styleClass="button-item" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="130.0" />
                   <Button layoutX="349.0" layoutY="154.0" mnemonicParsing="false" onAction="#addQueue" styleClass="button-head" text="+" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="130.0" />
-                  <Button layoutX="120.0" layoutY="180.0" mnemonicParsing="false" onAction="#downLater" prefHeight="25.0" prefWidth="139.0" styleClass="button-item" text="Start Later" />
+                  <Button layoutX="120.0" layoutY="180.0" mnemonicParsing="false" onAction="#downLater" prefHeight="25.0" prefWidth="139.0" styleClass="button-item" text="Download Later" />
                   <Button cancelButton="true" layoutX="320.0" layoutY="180.0" mnemonicParsing="false" onAction="#close" prefHeight="25.0" prefWidth="139.0" styleClass="button-item" text="Cancel " />
                   <Button defaultButton="true" layoutX="520.0" layoutY="180.0" mnemonicParsing="false" onAction="#downloadNow" prefHeight="25.0" prefWidth="139.0" styleClass="button-item" text="Start Download" textFill="#1aa2fa" />
                </children>
