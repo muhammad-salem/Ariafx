@@ -41,6 +41,15 @@ Options available now :
 
 
 ## Screenshot 
+
+![screenshot](https://github.com/salemebo/aria/blob/master/img/fx24.png)
+
+![screenshot](https://github.com/salemebo/aria/blob/master/img/fx21.png)
+
+![screenshot](https://github.com/salemebo/aria/blob/master/img/fx22.png)
+
+![screenshot](https://github.com/salemebo/aria/blob/master/img/fx23.png)
+
 ![screenshot](https://github.com/salemebo/aria/blob/master/img/aria01.png) 
 ![screenshot](https://github.com/salemebo/aria/blob/master/img/aria02.png) 
 ![screenshot](https://github.com/salemebo/aria/blob/master/img/aria03.png) 
@@ -48,4 +57,4 @@ Options available now :
 ![screenshot](https://github.com/salemebo/aria/blob/master/img/aria05.png) 
 ![screenshot](https://github.com/salemebo/aria/blob/master/img/aria06.png) 
 ![screenshot](https://github.com/salemebo/aria/blob/master/img/google-chrome.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/d4.png) 
+![screenshot](https://github.com/salemebo/aria/blob/master/img/d4.png)
