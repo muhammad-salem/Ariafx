@@ -28,6 +28,7 @@ import aria.about.About;
 import aria.core.download.Link;
 import aria.gui.fxml.AriafxMainGUI;
 import aria.gui.fxml.imp.MovingStage;
+import aria.gui.fxml.notify.Notifier;
 import aria.gui.manager.DownList;
 import aria.gui.manager.ParameterToLink;
 import aria.nativemessaging.Chrome;
@@ -36,17 +37,44 @@ import aria.opt.AppInstance;
 import aria.opt.Parameter;
 import aria.opt.R;
 import aria.opt.Setting;
+import aria.tray.TrayUtile;
 
-public class Aria extends Application {
+public class Ariafx extends Application {
 	
 
-	static String[] param;  
+	static String[] param;
+	public static Stage ui;
+	public static boolean silentStartup = false;
+	public static Thread shutdownHookThread;
+	
 	@Override
 	public void init() throws Exception {
-//		 R.INIT_CHANGES();
-		
+		if(silentStartup) R.INIT_CHANGES();
+	}
+	
+	public void initAfterFX() {
+		Platform.runLater(() -> {
+			// R.ReadDownloads();
+			saveStateTimeLine();
+			initMonitor();
+			// init tray icon
+			TrayUtile.InitTray();
+			Platform.setImplicitExit(false);
+		});
 	}
 
+	/**
+	 * [--url=URL] 
+	 * [--http-referer=REFERER] 
+	 * [--file-name=FNAME]  
+	 * [--user-agent=UA] 
+	 * [--cookie=COOKIE] 
+	 * [--cookie-file=CFILE] 
+	 * [--input-file=UFILE]
+	 * [--fileSize=int]
+	 * [--silent]
+	 * @return
+	 */
 	public static void main(String[] args) throws Exception {
 		
 		if(args.length != 0 && args[0].contains(Chrome.extensions_id)){
@@ -63,6 +91,9 @@ public class Aria extends Application {
 			}
 			Platform.exit();
 		}else{
+			if(args.length != 0 && args[0].contains("--silent")){
+				silentStartup = true;
+			}
 			param = args;
 			launch(args);
 		}
@@ -74,35 +105,50 @@ public class Aria extends Application {
 	public void start(Stage stage) throws Exception {
 		stage.getIcons().add(
 				new Image(getClass().getResource("aria.png").openStream()));
-		Preloader preloader = new Preloader();
-		preloader.start(new Stage());
-		preloader.service.start();
-		preloader.setOnSucceeded((e) -> {
-			preloader.close();
-			tryCtrl(stage);
-			Platform.runLater(() -> {
-				// R.ReadDownloads();
-				saveStateTimeLine();
-				initMonitor();
+		if(silentStartup){
+			initUI(stage);
+			initAfterFX();
+			R.ReadDownloads();
+		}else{
+			Notifier.NotifyNative("Lunch Ariafx", "");
+			Preloader preloader = new Preloader();
+			preloader.start(new Stage());
+			preloader.service.start();
+			preloader.setOnSucceeded((e) -> {
+				preloader.close();
+				initUI(stage);
+				initAfterFX();
+				Notifier.NotifyUser("Ariafx is running", "Download Manager");
 			});
-		});
+		}
+		ui = stage;
 		
+		shutdownHookThread = new Thread(){
+			@Override
+			public void run() {
+				R.Save_Changes_Progress();
+			}
+		};
+		Runtime.getRuntime().addShutdownHook(shutdownHookThread);
 	}
 
-	public void tryCtrl(final Stage stage) {
+	public void initUI(final Stage stage) {
 
 		try {
 
-			AriafxMainGUI fxGet = new AriafxMainGUI(stage);
+			AriafxMainGUI mainGUI = new AriafxMainGUI(stage);
 			FXMLLoader loader = new FXMLLoader(AriafxMainGUI.FXML);
-			loader.setController(fxGet);
+			loader.setController(mainGUI);
 			AnchorPane pane = loader.load();
-
+			
 			stage.initStyle(StageStyle.UNDECORATED);
 			stage.setTitle(About.App_Name);
 			stage.setScene(new Scene(pane));
-			stage.show();
+			
 			MovingStage.pikeToMoving(stage, pane);
+			if(!silentStartup){
+				stage.show();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -124,11 +170,12 @@ public class Aria extends Application {
 		
 	}
 	
-	FileAlterationMonitor monitor;
+	static FileAlterationMonitor monitor;
 	@Override
 	public void stop() throws Exception {
-		stopMonitor();
-		R.SAVE_CHANGES();
+//		stopMonitor();
+//		R.SAVE_CHANGES();
+		Exit();
 	}
 	
 	public void initMonitor() {
@@ -164,7 +211,7 @@ public class Aria extends Application {
 								Parameter param = Parameter.fromJson(file);
 //								System.out.println(param);
 								ParameterToLink.initLink(param);
-//						param.clear();
+//								param.clear();
 								return null;
 							}
 						};
@@ -203,14 +250,39 @@ public class Aria extends Application {
 		
 	}
 
-	public void stopMonitor() {
+	public static void StopMonitor() {
 		try {
+			
 			monitor.stop();
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+			System.out.println("falid stop mointor... or it had been stoped ealiary");
 		}
 	}
 	
+	public static void showUI() {
+		ui.show();
+		ui.setAlwaysOnTop(true);
+		ui.setIconified(false);
+		ui.setAlwaysOnTop(false);
+	}
 	
+	public static void hideUI() {
+		ui.hide();
+		ui.setIconified(true);
+	}
+	
+	public static void hideUITray() {
+		ui.hide();
+	}
+	
+	public static void Exit() {
+		StopMonitor();
+		R.SAVE_CHANGES();
+		Runtime.getRuntime().removeShutdownHook(shutdownHookThread);
+		Platform.setImplicitExit(true);
+		Platform.exit();
+		System.exit(0);
+	}
 
 }

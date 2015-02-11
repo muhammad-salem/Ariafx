@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
@@ -328,7 +329,9 @@ public class Item2Gui implements Initializable {
 						link.getLength())
 						+ " "
 						+ Utils.fileLengthUnite(link.getDownloaded())
-						+ " of " + Utils.fileLengthUnite(link.getLength()));
+						+ " of " + Utils.fileLengthUnite(link.getLength())
+						+ ((link.getRetry() == 0)? "" : " ("+ link.getRetry() + ")")
+					);
 			}
 		});
 
@@ -342,6 +345,7 @@ public class Item2Gui implements Initializable {
 		// Utils.calTimeLeft(link.getTimeLeft()));
 		// }});
 		timeLeft.textProperty().bind(link.lefttimeProperty);
+		timeLeft.setAlignment(Pos.CENTER_RIGHT);
 
 		// hide timeleft
 		timeLeft.setVisible(false);

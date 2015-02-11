@@ -1,29 +1,127 @@
 package aria.gui.fxml.notify;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import javafx.animation.TranslateTransition;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.paint.Color;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Duration;
+
+import org.controlsfx.control.Notifications;
+
+import aria.opt.R;
+
+import com.sun.javafx.PlatformUtil;
 
 public class Notifier {
+	
+	static String notify_icon = null;
+	static Image image = null;
+	
+	public static boolean stopNotify = false;
+	public static boolean darkStyle = false;
+	public static Pos pos = Pos.TOP_RIGHT;
+	
+	public static boolean isNativeNotification() {
+		if(PlatformUtil.isLinux()){
+			File file = new File("/usr/bin/notify-send");
+			if(file.exists()){
+//				return true;
+				return false;
+			}
+		}else if(PlatformUtil.isWindows()) {
+			// not supported yet!!
+			return false;
+		}else if(PlatformUtil.isMac()) {
+			// not supported yet!!
+			return false;
+		}
+		return false;
+	}
+	
+	public static void NotifyUser(String  title, String body){
+		if(stopNotify){ return; }
+		if(isNativeNotification()){
+			NotifyNative(title, body);
+		}else{
+			Notify(title, body);
+		}
+	}
+	public static void NotifyNative(String  title, String body){
+		List<String> list = new ArrayList<String>();
+		if(notify_icon == null){
+			notify_icon = new File(R.ConfigPath, "notify.png").getAbsolutePath();
+		}else if (PlatformUtil.isWindows()) {
+//			list.add("start");
+		}else if (PlatformUtil.isMac()) {
+//			list.add("open");
+		}
+		
+		if(PlatformUtil.isLinux()){
+			list.add("notify-send");
+			
+			list.add("-i");
+			list.add(notify_icon);
+			
+			/*
+			list.add("-t");
+			list.add("10");
+			
+			list.add("-c");
+			list.add("Network");
+			
+			list.add("-u");
+			list.add("low");
+			*/
+			
+			list.add(title);
+			list.add(body);
+			
+			ProcessBuilder builder = new ProcessBuilder(list);
+			try {
+				builder.start();
+			} catch (IOException e) {
+				R.cout("error in open " + e.getMessage());
+			}
+		}
+		else if (PlatformUtil.isWindows()) {
+//			list.add("start");
+		}else if (PlatformUtil.isMac()) {
+//			list.add("open");
+		}
+		
+		
+		
+	}
+	
+	static Notifications note;
+	public static void Notify(String  title, String body){
+		if(note == null) note = Notifications.create();
+		if(image == null) {
+			image = new Image(Notifier.class
+					.getResourceAsStream("notify.png"));
+			note.graphic(new ImageView(image));
+		}
+		
+		
+		note.title(title);
+		note.text(body);
+		note.position(pos);
+		if(darkStyle) note.darkStyle();
+		
+		
+		
+		Platform.runLater(()->{
+			// need fx thread
+			note.show();
+		});
+	}
+	
+	
+	/*
 	Stage stage;
 	AnchorPane pane;
 	Notify notify;
@@ -98,5 +196,6 @@ public class Notifier {
 		}
 		
 	}
+	*/
 
 }

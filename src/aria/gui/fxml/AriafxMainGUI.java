@@ -41,6 +41,7 @@ import javafx.util.Duration;
 
 import org.apache.commons.io.FileUtils;
 
+import aria.Ariafx;
 import aria.about.About;
 import aria.core.download.Download;
 import aria.core.download.Link;
@@ -338,7 +339,7 @@ public class AriafxMainGUI implements Initializable {
 
 		chooser.setInitialDirectory(new File(R.UserHome));
 		chooser.setInitialFileName("links.aria");
-		chooser.setSelectedExtensionFilter(new ExtensionFilter("Aria File",
+		chooser.setSelectedExtensionFilter(new ExtensionFilter("Ariafx File",
 				".json", ".aria"));
 		chooser.setTitle("Export Links to file");
 		File file = chooser.showSaveDialog(stage);
@@ -444,9 +445,9 @@ public class AriafxMainGUI implements Initializable {
 	void importFromJsonFile(ActionEvent event) {
 		chooser.setInitialDirectory(new File(R.UserHome));
 		chooser.setInitialFileName("links.txt");
-		chooser.setSelectedExtensionFilter(new ExtensionFilter("Aria File",
+		chooser.setSelectedExtensionFilter(new ExtensionFilter("Ariafx File",
 				".json", ".aria"));
-		chooser.setTitle("Open Links from Aria (.json/.aria) file");
+		chooser.setTitle("Open Links from Ariafx (.json/.aria) file");
 		File file = chooser.showOpenDialog(null);
 		if (file == null)
 			return;
@@ -716,6 +717,11 @@ public class AriafxMainGUI implements Initializable {
 	@FXML
 	void closePrograme(ActionEvent event) {
 		stage.close();
+	}
+	
+	@FXML
+	void exitPrograme(ActionEvent event) {
+		Ariafx.Exit();
 	}
 	
 	/*** Context Menu ***/

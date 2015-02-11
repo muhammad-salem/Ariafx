@@ -20,7 +20,7 @@
 </Menu><Menu mnemonicParsing="false" text="Import from" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 <items><MenuItem mnemonicParsing="false" onAction="#importFromEf2IDM" text="*.ef2 IDM file" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><MenuItem mnemonicParsing="false" onAction="#importFromJsonFile" text="*.json FxDownload file" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" /><MenuItem mnemonicParsing="false" onAction="#importFromTextFile" text="*.txt file" />
 </items>
-</Menu><SeparatorMenuItem mnemonicParsing="false" /><MenuItem mnemonicParsing="false" onAction="#closePrograme" text="Exit" />
+</Menu><SeparatorMenuItem mnemonicParsing="false" /><MenuItem mnemonicParsing="false" onAction="#exitPrograme" text="Exit" />
   </items>
 <accelerator>
 <KeyCodeCombination alt="UP" code="T" control="ANY" meta="UP" shift="UP" shortcut="UP" />

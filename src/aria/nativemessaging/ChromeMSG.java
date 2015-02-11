@@ -42,6 +42,7 @@ public class ChromeMSG {
 	 * [--cookie=COOKIE] 
 	 * [--cookie-file=CFILE] 
 	 * [--input-file=UFILE]
+	 * [--fileSize=int]
 	 * @return
 	 */
 	public String[] toArgs() {

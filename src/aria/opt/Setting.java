@@ -22,7 +22,7 @@ public class Setting {
 	 */
 	
 
-	double time_to_save_in_minutes  = 3;
+	double time_to_save_in_minutes  = 2;
 	boolean isMinimal;
 	String[] paths;
 	Category[] categories;
@@ -37,7 +37,7 @@ public class Setting {
 		categories = Category.getNewCatArray();
 		queues = Queue.getNewQueues();
 		items = DownList.getItems();
-		time_to_save_in_minutes = 3.0;
+		time_to_save_in_minutes = 2.0;
 		isMinimal = AriafxMainGUI.isMinimal;
 	}
 	

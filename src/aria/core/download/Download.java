@@ -5,6 +5,8 @@ import java.util.Arrays;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringExpression;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -21,6 +23,7 @@ import org.apache.commons.io.FilenameUtils;
 import aria.core.url.Item;
 import aria.core.url.Url;
 import aria.core.url.type.DownState;
+import aria.gui.fxml.notify.Notifier;
 import aria.opt.Utils;
 
 public class Download extends Service<Number> {
@@ -150,7 +153,6 @@ public class Download extends Service<Number> {
 	void stopAndPause() {
 		timeline.stop();
 		setDownState(DownState.Pause);
-
 	}
 
 	public void initStateLine() {
@@ -161,22 +163,27 @@ public class Download extends Service<Number> {
 				setDownState(DownState.Complete);
 				if (!item.isCopied){
 					moveFileAfterDownload();
+					Notifier.NotifyUser("Download Complete", item.getFilename());
 				}
+				
 			} else if (item.downloaded > item.length) {
 				if (item.isUnknowLength()) {
 					setDownState(DownState.Pause);
 				} else {
+					// in case of somthig wrong
 					setDownState(DownState.Complete);
 					moveFileAfterDownload();
 				}
 			} else {
 				setDownState(DownState.Pause);
+				checkRetry();
 			}
 
 		});
 		setOnCancelled((e) -> {
 			stopChunks();
 			stopAndPause();
+			resetRetry();
 		});
 		setOnReady((e) -> {
 			stopAndPause();
@@ -192,8 +199,8 @@ public class Download extends Service<Number> {
 				setDownState(DownState.Downloading);
 			}
 			
-
 		});
+		
 		setOnFailed((e) -> {
 			timeline.stop();
 //			setDownState(DownState.Failed);
@@ -203,10 +210,39 @@ public class Download extends Service<Number> {
 				
 			} else {
 				setDownState(DownState.Failed);
+				checkRetry();
 			}
 			
 		});
 
+	}
+	
+	private int retry = 0;
+	public static int MAX_Retry = 99;
+	public void checkRetry(){
+		if(isInitState()){
+			return;
+		}
+		if(!Utils.isAnyNetWorkInterfaceUp()){
+			return;
+		}
+		if(++retry < MAX_Retry){
+			restart();
+//			System.out.println("retry:"+ retry);
+		}
+	}
+	
+	public void resetRetry(){
+		retry = 0;
+	}
+	
+	public int getRetry(){
+		return retry;
+	}
+	
+	public StringExpression retryProperty() {
+		return Bindings.concat(retry);
+				
 	}
 
 	private void moveFileAfterDownload() {

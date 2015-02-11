@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ import aria.core.url.type.Category;
 import aria.core.url.type.Queue;
 import aria.core.url.type.Type;
 import aria.gui.fxml.AriafxMainGUI;
+import aria.gui.fxml.notify.Notifier;
 import aria.gui.manager.DownList;
 import aria.gui.manager.DownManager;
 
@@ -138,7 +140,15 @@ public class R {
 			creator = new File(p);
 			creator.mkdir();
 		}
-
+		
+		URL source = Notifier.class.getResource("notify.png");
+		File destination = new File(new File(ConfigPath), "notify.png");
+		try {
+			FileUtils.copyURLToFile(source, destination);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/* ========================================================================= */
@@ -323,8 +333,11 @@ public class R {
 	}
 	
 
-	private static FileOutputStream logger;
+	private static FileOutputStream logger = null;
 	public static void InitLodgger() {
+		if(logger != null){
+			return;
+		}
 		try {
 			File logfile = new File(CachePath + separator + "logger.log");
 			logger = new FileOutputStream(logfile, true);
@@ -335,6 +348,9 @@ public class R {
 	}
 	
 	public static void cout(String strLog) {
+		if(logger == null){
+			InitLodgger();
+		}
 		try {
 			logger.write(String.valueOf(new Date()+ "\t").getBytes());
 			logger.write(strLog.getBytes());

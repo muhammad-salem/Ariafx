@@ -132,6 +132,7 @@ public class Parameter {
 				hasKnowSize = true;
 			}
 			
+			
 
 			else if (str.contains("=")) {
 				for (int j = 0; j < str.length(); j++) {
@@ -154,7 +155,7 @@ public class Parameter {
 				}
 
 			} else {
-				map.put("unknown", args[i]);
+				map.put( args[i], "unknown");
 			}
 		}
 		

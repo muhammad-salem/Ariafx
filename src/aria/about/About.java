@@ -21,6 +21,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import aria.gui.fxml.imp.MovingStage;
+import aria.opt.R;
+
 
 
 public class About  {
@@ -31,12 +33,13 @@ public class About  {
 	
 	static Stage  stage;
 	public static String App_Name = "Ariafx";
-	public static String App_Version = "V 0.1502.04";
+	public static String App_Version = "V 0.1502.10";
 	public static String App_Description = "Download Manager 2014-2015";
 	public static String Code_Name = "ن";
 	public static String about = "";
 	public static String GithubLink = "https://github.com/salemebo/aria";
 	public static String FacebookPage = "https://github.com/salemebo/aria";
+	
 	public void show(){
 		stage = new Stage(StageStyle.TRANSPARENT);
 		stage.initModality(Modality.APPLICATION_MODAL);
@@ -89,7 +92,6 @@ public class About  {
 		return file;
 	}
 	
-	
 	public class AboutFX implements Initializable{
 		public URL xml;
 		public AboutFX(){
@@ -122,11 +124,20 @@ public class About  {
 			githupLink.setOnAction((e)-> {
 				try {
 //					Desktop.getDesktop().browse(new URI(github_link));
+					R.openInProcess(GithubLink);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 			});
 			
+			facebookLink.setOnAction((e)-> {
+				try {
+//					Desktop.getDesktop().browse(new URI(github_link));
+					R.openInProcess(FacebookPage);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			});
 			
 		}
 		

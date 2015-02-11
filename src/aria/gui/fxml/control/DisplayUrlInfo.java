@@ -103,7 +103,7 @@ public class DisplayUrlInfo implements Initializable {
 		ObservableList<Integer> listNum 
 			= FXCollections.observableArrayList(1,2,4,8,10,16,20,24,32);
 		parallelThread.setItems(listNum);
-		parallelThread.getSelectionModel().select(Integer.valueOf(1));
+		parallelThread.getSelectionModel().select(Integer.valueOf(4));
 		
 	}
 

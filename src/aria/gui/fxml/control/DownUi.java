@@ -31,6 +31,7 @@ import aria.core.url.type.DownState;
 import aria.gui.fxml.imp.MovingStage;
 import aria.gui.fxml.imp.ProgressCircle;
 import aria.gui.manager.ItemBinding;
+import aria.tray.TrayUtile;
 
 public class DownUi implements Initializable {
 
@@ -72,7 +73,9 @@ public class DownUi implements Initializable {
 	}
 	
 	public void show() {
+//		TrayUtile.removeFromTray(this);
 		stage.show();
+		stage.setIconified(false);
 //		MovingStage.pikeToMoving(stage, anchor);
 	}
 	
@@ -82,6 +85,9 @@ public class DownUi implements Initializable {
 
 	public Link getLink() {
 		return link;
+	}
+	public String getFilename() {
+		return link.getFilename();
 	}
 
 	public void setLink(Link link) {
@@ -117,14 +123,14 @@ public class DownUi implements Initializable {
 					chunksTable.getItems().clear();
 					chunksTable.getItems().addAll(link.getChunks());
 					show();
+					TrayUtile.addTListTray(this);
 				}
 			}
 			
 		});
 //		link.stateProperty().addListener((obv, old, value)->{
-//			if (value == State.RUNNING){
-//				chunksTable.getItems().clear();
-//				chunksTable.getItems().addAll(link.getChunks());
+//			if ( value == State.CANCELLED){
+//		    	TrayUtile.removeFromListTray(this);
 //			}
 //		});
 		
@@ -156,6 +162,8 @@ public class DownUi implements Initializable {
 		
 		ItemBinding.bindItem(link, this);
 		MovingStage.pikeToMoving(stage, anchor);
+
+//    	TrayUtile.addTListTray(this);
 	}
 	
 	void initTable(){
@@ -272,6 +280,12 @@ public class DownUi implements Initializable {
     void minimize(ActionEvent event) {
     	stage.setIconified(true);
     }
+    
+    @FXML
+    void hideToTray(ActionEvent event) {
+    	stage.hide();
+    	TrayUtile.addTListTray(this);
+    }
 
     @FXML
     void cancel(ActionEvent event) {
@@ -280,6 +294,8 @@ public class DownUi implements Initializable {
     	}
     	link.stopCollectSpeedData();
     	stage.close();
+    	
+    	TrayUtile.removeFromListTray(this);
     }
 
     @FXML

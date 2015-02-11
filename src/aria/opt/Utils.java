@@ -8,8 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.Enumeration;
 
 import org.apache.commons.io.FileUtils;
 
@@ -189,5 +192,35 @@ public class Utils {
 		long hh = rmnd % 60; rmnd /= 60;		// days
 		long dd = rmnd % 24; 
         return dd +":" + hh +":" + mm +":" + ss ;
+	}
+	
+	public static boolean isAnyNetWorkInterfaceUp () {
+		try {
+			Enumeration<NetworkInterface> networks = NetworkInterface.getNetworkInterfaces();
+			while (networks.hasMoreElements()) {
+				NetworkInterface networkInterface = networks.nextElement();
+				if(networkInterface.isUp()){
+					if(networkInterface.isLoopback()){
+						continue;
+					}
+					if(networkInterface.getName().contains("pan")){
+						continue;
+					}
+//					System.out.println(networkInterface);
+					return true;
+				}
+			}
+		} catch (SocketException e) {
+			R.cout("Can't get Nerwork Interfaces");
+		}
+		return false;
+	}
+	
+	public static <T> InputStream getResourceAsStream(Class<T> class1, String res){
+		return class1.getResourceAsStream(res);
+	}
+	
+	public static <T> URL getResourcem(Class<T> class1, String res){
+		return class1.getResource(res);
 	}
 }

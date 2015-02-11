@@ -161,8 +161,8 @@
             <TableView fx:id="chunksTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="175.0" prefWidth="530.0" stylesheets="@../res/ThemeDark.css">
               <columns>
                   <TableColumn fx:id="chunkID" editable="false" maxWidth="-1.0" minWidth="40.0" prefWidth="50.0" sortable="false" text="Id" />
-                <TableColumn fx:id="chunkSize" editable="false" minWidth="65.0" prefWidth="65.0" sortable="false" text="Size" />
-                  <TableColumn fx:id="chunkDone" editable="false" minWidth="65.0" prefWidth="65.0" sortable="false" text="Done" />
+                <TableColumn fx:id="chunkSize" editable="false" prefWidth="75.0" sortable="false" text="Size" />
+                  <TableColumn fx:id="chunkDone" editable="false" prefWidth="75.0" sortable="false" text="Done" />
                 <TableColumn fx:id="chunkStateCode" editable="false" minWidth="90.0" prefWidth="90.0" sortable="false" text="State" />
                   <TableColumn fx:id="chunkProgress" editable="false" minWidth="100.0" prefWidth="100.0" sortable="false" text="Progress %" />
               </columns>

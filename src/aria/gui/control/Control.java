@@ -61,7 +61,7 @@ public class Control  {
 		
 		stage.setScene(new Scene(pane));
 		stage.setAlwaysOnTop(true);
-		stage.setTitle("Aria .. Control ...");
+		stage.setTitle("Ariafx .. Control ...");
 		MovingStage.pikeToMoving(stage, pane);
 //		stage.show();
 	}

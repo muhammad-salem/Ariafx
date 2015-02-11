@@ -6,24 +6,22 @@ import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import aria.Aria;
-import aria.about.About;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import aria.Ariafx;
+import aria.about.About;
+import aria.tray.mouse.MouseListenerFX;
 
 
 public class FxTray extends Application{
@@ -33,9 +31,10 @@ public class FxTray extends Application{
 	TrayIcon main;
 	TrayIcon list;
 	
-	Stage stage;
 	Context mainContext;
-	ContextMenu context;
+	ContextMenu contextMenuMain;
+	
+	ContextMenu contextMenuList;
 
 	Image mainImg;
 	Image listImg;
@@ -48,32 +47,35 @@ public class FxTray extends Application{
 		if(!SystemTray.isSupported()) return;
 		
 		
-		mainImg = toolkit.getImage(Aria.class.getResource("./gui/fxml/res/24/view-list-compact-symbolic.png"));
+		mainImg = toolkit.getImage(Ariafx.class.getResource("aria.png"));
 		main = new TrayIcon(mainImg, About.App_Name);
+		main.setImageAutoSize(true);
 		
-		listImg = toolkit.getImage(Aria.class.getResource("./gui/fxml/res/24/view-list-details-symbolic.png"));
+		listImg = toolkit.getImage(getClass().getResource("img/list.png"));
 		list = new TrayIcon(listImg,"list");
+		list.setImageAutoSize(true);
 		
 	}
 	
 	 public void  initializeFX(){
-		 stage = new Stage(StageStyle.UNDECORATED);
 		 
 		 try {
 			 mainContext = new Context();
 			 FXMLLoader loader = new FXMLLoader(getClass().getResource("MainContext.xml"));
 			 loader.setController(mainContext);
-			 context = loader.load();
+			 contextMenuMain = loader.load();
 			 
-			AnchorPane pane = new AnchorPane();
-			pane.setPrefSize(0, 0);
-			stage.setScene(new Scene(pane));
-			
-			
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		 contextMenuList = new ContextMenu();
+		 
+		 MenuItem item = new MenuItem("Show All");
+		 item.setOnAction((e)->{
+			 TrayUtile.showAll();
+		 });
+		 contextMenuList.getItems().add(item);
 		 
 	 }
 	
@@ -104,34 +106,65 @@ public class FxTray extends Application{
 	}
 	
 	public void addMainMouseListener() {
-		main.addMouseListener(new MouseListener() {
+		main.addMouseListener(new MouseListenerFX() {
 			
 			@Override
-			public void mouseReleased(MouseEvent e) {
+			public void mouseReleasedFX(MouseEvent e) {
 				
 			}
 			
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mousePressedFX(MouseEvent e) {
 				int x = e.getX();
 				int y = e. getY();
-				
-				mainContext.show(stage, x, y);
+				mainContext.show(TrayUtile.stage, x, y);
 			}
 			
 			@Override
-			public void mouseExited(MouseEvent e) {
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
+			public void mouseExitedFX(MouseEvent e) {
 				
 			}
 			
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseEnteredFX(MouseEvent e) {
 				
+			}
+			
+			@Override
+			public void mouseClickedFX(MouseEvent e) {
+				Ariafx.showUI();
+			}
+		});
+	}
+	
+	public void addListMouseListener() {
+		list.addMouseListener(new MouseListenerFX() {
+			
+			@Override
+			public void mouseReleasedFX(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mousePressedFX(MouseEvent e) {
+				int x = e.getX();
+				int y = e. getY();
+				contextMenuList.show(TrayUtile.stage, x, y);
+			}
+			
+			@Override
+			public void mouseExitedFX(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseEnteredFX(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseClickedFX(MouseEvent e) {
+//				Ariafx.showUI();
 			}
 		});
 	}
