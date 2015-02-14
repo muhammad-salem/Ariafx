@@ -2,10 +2,10 @@ package aria.core.url.type;
 
 import java.io.File;
 
-import aria.opt.R;
-import aria.opt.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import aria.opt.R;
+import aria.opt.Utils;
 
 public class Category extends Type{
 
@@ -18,7 +18,7 @@ public class Category extends Type{
     public static final Category Application
             = new Category("Application", "exe msi deb rpm");
     public static final Category Compressed
-            = new Category("Compressed", "zip iso rar r0* r1* arj sit"
+            = new Category("Compressed", "zip zip iso rar r0* r1* arj sit"
                     + " sitxsea ace bz2 7z gz tar");
     public static final Category Docouments
             = new Category("Docouments", "doc pdf ppt pps");

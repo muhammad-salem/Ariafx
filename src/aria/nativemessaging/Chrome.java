@@ -6,18 +6,39 @@
 package aria.nativemessaging;
 
 import java.io.BufferedReader;
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import aria.notify.Notifier;
+import aria.opt.R;
+
+import com.sun.javafx.PlatformUtil;
 
 /**
  *
  * @author moha
  */
 public class Chrome {
+	
+	static {
+		if(PlatformUtil.isMac()){
+			try {
+				URL source = Chrome.class.getResource("osx/org.javafx.aria.json");
+				File parent = new File(R.ConfigPath).getParentFile().getParentFile();
+				/// /Application Support/Google/Chrome/NativeMessagingHosts/org.javafx.aria.json
+				parent = new File(parent, "Google/Chrome/NativeMessagingHosts/");
+				parent.mkdir();
+				File destination = new File(parent, "org.javafx.aria.json");
+				Notifier.Copy(source, destination);
+			} catch (Exception e) {
+				R.cout("Google chrome : NativeMessagingHosts : " + e.getMessage());
+			}
+		}
+	}
 	
 	public static String extensions_id = "gaogianbgnmoompbfkmgnefkbehmeijh";
 
@@ -121,21 +142,5 @@ public class Chrome {
 				(bytes[1] << 8) & 0x0000ff00 | 
 				(bytes[0]) & 0x000000ff;
 	}
-
 	
-	public static void mainTest(String[] args) throws Exception {
-		if(args[0].contains(extensions_id)){
-			FileOutputStream stream = new FileOutputStream("/home/salem/Desktop/logStream.txt", true);
-			stream.write(Arrays.toString(args).getBytes());
-			int l = readLength();
-			stream.write(String.valueOf(l).getBytes());
-			String str = readMSG(l);
-			ChromeMSG msg = ChromeMSG.CreateMessage(str);
-			
-			stream.write(msg.toString().getBytes());
-			
-			stream.close();
-		}
-	}
-
 }

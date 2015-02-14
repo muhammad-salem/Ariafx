@@ -28,11 +28,11 @@ import aria.about.About;
 import aria.core.download.Link;
 import aria.gui.fxml.AriafxMainGUI;
 import aria.gui.fxml.imp.MovingStage;
-import aria.gui.fxml.notify.Notifier;
 import aria.gui.manager.DownList;
 import aria.gui.manager.ParameterToLink;
 import aria.nativemessaging.Chrome;
 import aria.nativemessaging.ChromeMSG;
+import aria.notify.Notifier;
 import aria.opt.AppInstance;
 import aria.opt.Parameter;
 import aria.opt.R;
@@ -105,12 +105,13 @@ public class Ariafx extends Application {
 	public void start(Stage stage) throws Exception {
 		stage.getIcons().add(
 				new Image(getClass().getResource("aria.png").openStream()));
+		
 		if(silentStartup){
 			initUI(stage);
 			initAfterFX();
 			R.ReadDownloads();
 		}else{
-			Notifier.NotifyNative("Lunch Ariafx", "");
+			Notifier.NotifyNative("Lunch Ariafx", "A Smart Download Manager");
 			Preloader preloader = new Preloader();
 			preloader.start(new Stage());
 			preloader.service.start();
@@ -118,7 +119,7 @@ public class Ariafx extends Application {
 				preloader.close();
 				initUI(stage);
 				initAfterFX();
-				Notifier.NotifyUser("Ariafx is running", "Download Manager");
+				Notifier.NotifyUser("Ariafx is running", "A Smart Download Manager");
 			});
 		}
 		ui = stage;

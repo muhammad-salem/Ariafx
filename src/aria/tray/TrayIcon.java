@@ -31,7 +31,7 @@ public class TrayIcon {
 		
 		if(!SystemTray.isSupported()) return;
 		
-		main = new Icon("Ariafx", Ariafx.class.getResource("aria.png"));
+		main = new Icon("Ariafx", getClass().getResource("img/aria.png"));
 		main.addActionListener((e)->{
 			Ariafx.showUI();
 		});

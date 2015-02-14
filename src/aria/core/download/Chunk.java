@@ -200,10 +200,26 @@ public class Chunk extends Service<Number> implements ChunkUI{
 			@Override
 			protected Number call() throws Exception {
 				if (range != null) {
-					if (range[2] >= range[0] && range[0] != 0)
+					if (range[2] >= range[0] && range[0] != 0){
+						updateProgress(range[2], range[1]);
 						return -1;
-					if (range[1] == (range[0] + range[2]))
+					}
+					else if (range[1] == (range[0] + range[2])){
+						updateValue(range[0] + range[2]);
+						updateProgress(range[2], range[1]);
+						setStateCode("Done");
+						setSize(Utils.fileLengthUnite(range[1] - range[0]));
+						setDone(Utils.fileLengthUnite(range[2]));
 						return -1;
+					}
+					else if (range[1] == (range[0] + range[2] - 1)){
+						updateValue(range[0] + range[2]);
+						updateProgress(range[2], range[1]);
+						setStateCode("Done");
+						setSize(Utils.fileLengthUnite(range[1] - range[0]));
+						setDone(Utils.fileLengthUnite(range[2]));
+						return -1;
+					}
 					/* how to get range for that @param id */
 					String byteRange = range[0] + range[2] + "-";
 					if (range[1] != -1) {

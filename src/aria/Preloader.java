@@ -46,7 +46,7 @@ public class Preloader extends Application {
 		this.stage = stage;
 		stage.getIcons().add(
 				new Image(getClass().getResource("aria.png").openStream()));
-		stage.initStyle(StageStyle.UNDECORATED);
+		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.setTitle("Initializing " + About.App_Name);
 
 		try {

@@ -23,7 +23,7 @@ import org.apache.commons.io.FilenameUtils;
 import aria.core.url.Item;
 import aria.core.url.Url;
 import aria.core.url.type.DownState;
-import aria.gui.fxml.notify.Notifier;
+import aria.notify.Notifier;
 import aria.opt.Utils;
 
 public class Download extends Service<Number> {
@@ -163,7 +163,7 @@ public class Download extends Service<Number> {
 				setDownState(DownState.Complete);
 				if (!item.isCopied){
 					moveFileAfterDownload();
-					Notifier.NotifyUser("Download Complete", item.getFilename());
+					Notifier.NotifyUser(item.getFilename(), "Download Complete");
 				}
 				
 			} else if (item.downloaded > item.length) {

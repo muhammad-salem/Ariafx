@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +16,6 @@ import aria.core.url.type.Category;
 import aria.core.url.type.Queue;
 import aria.core.url.type.Type;
 import aria.gui.fxml.AriafxMainGUI;
-import aria.gui.fxml.notify.Notifier;
 import aria.gui.manager.DownList;
 import aria.gui.manager.DownManager;
 
@@ -141,14 +139,7 @@ public class R {
 			creator.mkdir();
 		}
 		
-		URL source = Notifier.class.getResource("notify.png");
-		File destination = new File(new File(ConfigPath), "notify.png");
-		try {
-			FileUtils.copyURLToFile(source, destination);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 
 	/* ========================================================================= */
@@ -312,7 +303,7 @@ public class R {
 		InitiDirs();
 		Setting.updateSetting();
 		SaveSetting();
-		SaveDownloads();
+//		SaveDownloads();
 		SaveQueues();
 		SaveCategores();
 		
