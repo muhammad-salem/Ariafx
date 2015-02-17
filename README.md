@@ -4,6 +4,7 @@ A Smart Download Manager based on java (JavaFX), with support of HttpClient, GSO
 
 
 ## Options :
+ - Support Http and HTTP.
  - Cross-platform: support Linux(Ubuntu), Windows and, Mac OS.
  - Categories 	: add downloads to Categores.
  - Multi-Thread	: download file in chunkes.
@@ -18,12 +19,13 @@ A Smart Download Manager based on java (JavaFX), with support of HttpClient, GSO
 	[--url=URL] [--http-referer=REFERER] [--file-name=FNAME] 
 	[--user-agent=UA] [--cookie=COOKIE] [--cookie-file=CFILE] [--input-file=UFILE]
 	
- - Support Google Chrome
+ - Support Google Chrome.
 
 	
 ## Not avalibele yet:
  - Manage download in queues.
- - Add Download alogothims. 
+ - Add new download Alogothims.
+ - Support FTP Protocole. 
 
 
 ## Firefox Support: 
