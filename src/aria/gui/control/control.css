@@ -47,3 +47,12 @@
 	-fx-background-repeat: no-repeat;
 }
 
+.proxy{
+	-fx-background-image: url("./icon/unnamed.png");
+	-fx-background-size: 64px 64px;
+	-fx-background-repeat: no-repeat;
+}
+
+
+
+

@@ -31,6 +31,8 @@ public class SimpleDownTask extends Task<Number> {
 		this.httpClient = HttpClients.createDefault();
 		this.httpGet = new HttpGet(item.getURL());
 		
+		
+		
 	}
 
 	@Override

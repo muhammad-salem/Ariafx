@@ -182,6 +182,8 @@ public class ItemBinding {
 		ui.labelStatus.textProperty().bind(link.downStateProperty().asString());
 		ui.labelAddress.setText(link.getURL());
 		ui.labelFileSize.setText(Utils.fileLengthUnite(link.getLength()));
+		
+		ui.remining.textProperty().bind(link.remainingProperty());
 		if(link.getItem().isUnknowLength()){
 			ui.labelResume.setText("You can try.");
 		}else{

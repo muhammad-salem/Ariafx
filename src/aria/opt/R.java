@@ -4,12 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+import aria.core.download.Download;
 import aria.core.download.Link;
 import aria.core.url.Item;
 import aria.core.url.type.Category;
@@ -33,9 +35,11 @@ public class R {
 
 	public static String separator = File.separator;
 	public static String app_name = "ariafx";
+//	public static String app_nameA = "Ariafx";
 	public static String UserHome = System.getProperty("user.home");
 	public static String DefaultPath = UserHome + separator + "Downloads" 
-						+ separator + app_name;
+//						+ separator + app_nameA
+						;
 	
 	public static String CachePath = UserHome + separator 
 						+ ".cache" + separator + app_name;
@@ -57,7 +61,8 @@ public class R {
 			
 		} else if(PlatformUtil.isWindows()){
 			DefaultPath = UserHome + separator + "Documents" + separator +  "Downloads" 
-					+ separator + app_name;
+//					+ separator + app_nameA
+					;
 			str = UserHome +  separator + "Application Data" 
 					+ separator + app_name + separator;
 			CachePath  = str + "cache";
@@ -76,7 +81,8 @@ public class R {
 		NewLink = ConfigPath + separator + "newLink";
 	}
 	
-	public static String SettingPath = ConfigPath + separator+ "setting.json";
+	public static String StaticPoint = ConfigPath + separator + "static.json";
+	public static String SettingPath = ConfigPath + separator + "setting.json";
 
 	public static String downloadsPath 	= ConfigPath + separator + "downloads.json";
 	public static String queuesPath		= ConfigPath + separator + "queues.json";
@@ -145,14 +151,26 @@ public class R {
 	/* ========================================================================= */
 	/* ======================== Resources Methods onSave ======================= */
 	public static void ReadSetting() {
+		SettingPath = Utils.fromJson(StaticPoint, SettingPath.getClass());
+		if(SettingPath == null){
+			SettingPath = ConfigPath + separator + "setting.json";
+		}
 		Setting setting = Utils.fromJson(SettingPath, Setting.class);
+		if(setting == null){
+			setting = new Setting();
+		}
 		Setting.setSetting(setting);
-		AriafxMainGUI.isMinimal = Setting.getMinimal();
-		DefaultPath = Setting.getDefaultPath();
 		
+		
+		AriafxMainGUI.isMinimal = setting.isMinimal;
+		DefaultPath = setting.paths[0];
+		Download.ParallelChunks = setting.ParallelChunks;
+		
+		//System.out.println(Utils.toJson(setting));
 	}
 
 	public static void SaveSetting() {
+		Utils.toJsonFile(StaticPoint, SettingPath);
 		Utils.toJsonFile(SettingPath, Setting.getSetting());
 //		System.out.println(Setting.getSetting());
 	}
@@ -317,7 +335,7 @@ public class R {
 	public static void initFileLock(){
 		try {
 			File file =  new File(LockFile);
-			FileUtils.writeStringToFile(file, System.currentTimeMillis() + "");
+			FileUtils.writeStringToFile(file,  " -- Start App" + System.currentTimeMillis() + "\n" , Charset.defaultCharset() , true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

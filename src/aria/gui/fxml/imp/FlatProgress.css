@@ -1,0 +1,152 @@
+
+/*******************************************************************************
+ *                                                                             *
+ * ProgressBar                                                                 *
+ *                                                                             *
+ ******************************************************************************/
+
+.progress-bar {
+    -fx-indeterminate-bar-length: 60;
+    -fx-indeterminate-bar-escape: true;
+    -fx-indeterminate-bar-flip: true;
+    -fx-indeterminate-bar-animation-time: 2;
+}
+.progress-bar > .bar {
+	-fx-background-color:  #5bc0de;
+    -fx-background-insets: 2 0 2 0;
+    -fx-background-radius: 0 0px 0 0;
+    -fx-border-radius: 0 0px 0 0;
+    -fx-border-color: #ee5f5b;
+    -fx-border-insets: 2 0 2 0;
+    -fx-border-width: 0 0 0 1px;
+}
+.progress-bar:indeterminate > .bar {
+    -fx-background-color: linear-gradient(to left, transparent, -fx-accent);
+}
+.progress-bar > .track {
+	-fx-background-color: #bdbdbd;
+	-fx-background-insets: 2 0 2 0;
+	-fx-background-radius: 0 0px 0 0;
+	-fx-border-radius: 0 0px 0 0;
+	-fx-border-color: #eeeeee;
+	-fx-border-width: 0px 0 1 0;
+    
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * ProgressBar                                                                 *
+ *                                                                             *
+ ******************************************************************************/
+
+.bar-primary {
+	-fx-height: 20px;
+	-fx-margin-bottom: 20px;
+	-fx-overflow: hidden;
+	-fx-accent: #f7f7f7;
+	-fx-background-repeat: repeat-x;
+	-fx-border-radius: 4px;
+	-fx-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.bar-primary >.bar {
+  -fx-float: left;
+  -fx-width: 0;
+  -fx-height: 100%;
+  -fx-font-size: 12px;
+  -fx-color: #ffffff;
+  -fx-text-align: center;
+/*  -fx-text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); */
+  -fx-text-shadow: 0 -1px 0 -1px ;
+  -fx-accent: #0e90d2;
+  -fx-background-repeat: repeat-x;
+  -fx-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  -fx-box-sizing: border-box;
+  -fx-transition: width 0.6s ease;
+}
+
+.bar-default >.bar{
+  -fx-accent: #9f9f99;
+}
+
+.bar-striped >.bar {
+  -fx-accent: #4ab4e9;
+  -fx-background-size: 40px 40px;
+}
+
+.bar-danger >.bar{
+  --fx-accent: #ee5f5b;
+}
+.bar-success >.bar{
+  -fx-accent: #7ddb7d;
+}
+
+.bar-info >.bar {
+  -fx-accent: #5bc0de;
+}
+
+.bar-warning >.bar{
+  -fx-accent: #fbb450;
+}
+
+/*************** A200 ****************/
+
+.bar-red > .bar {
+	-fx-accent: #ff5177;
+}
+.bar-pink > .bar {
+	-fx-accent: #ff4081;
+}
+.bar-purple > .bar {
+	-fx-accent: #e040fb;
+}
+.bar-deep_purple > .bar {
+	-fx-accent: #7c4dff;
+}
+.bar-indigo > .bar {
+	-fx-accent: #536dfe;
+}
+.bar-blue > .bar {
+	-fx-accent: #6889ff;
+}
+.bar-light_blue > .bar {
+	-fx-accent: #40c4ff;
+}
+.bar-cyan > .bar {
+	-fx-accent: #18ffff;
+}
+.bar-teal > .bar {
+	-fx-accent: #64ffda;
+}
+.bar-green > .bar {
+	-fx-accent: #5af158;
+}
+.bar-light_green > .bar {
+	-fx-accent: #b2ff59;
+}
+.bar-lime > .bar {
+	-fx-accent: #c6ff00;
+}
+.bar-yellow > .bar {
+	-fx-accent: #ffd600;
+}
+.bar-amber > .bar {
+	-fx-accent: #ffd740;
+}
+.bar-orange > .bar {
+	-fx-accent: #ffab40;
+}
+.bar-deep_orange > .bar {
+	-fx-accent: #ff6e40;
+}
+.bar-brown > .bar {
+	-fx-accent: #bcaaa4;
+}
+.bar-grey > .bar {
+	-fx-accent: #eeeeee;
+}
+.bar-blue-grey > .bar {
+	-fx-accent: #b0bec5;
+}
+
+

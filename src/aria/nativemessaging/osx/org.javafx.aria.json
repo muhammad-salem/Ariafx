@@ -1,7 +1,7 @@
 {
   "name": "org.javafx.aria",
   "description": "Ariafx",
-  "path": "/Applications/ariafx.app/Contents/MacOS/ariafx",
+  "path": "/Applications/Ariafx.app/Contents/MacOS/ariafx",
   "type": "stdio",
   "allowed_origins": [
     "chrome-extension://gaogianbgnmoompbfkmgnefkbehmeijh/"

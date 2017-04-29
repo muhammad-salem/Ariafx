@@ -33,8 +33,8 @@ public class About  {
 	
 	static Stage  stage;
 	public static String App_Name = "Ariafx";
-	public static String App_Version = "V 0.1502.14";
-	public static String App_Description = "Download Manager 2014-2015";
+	public static String App_Version = "0.28.4 29.04.2017";
+	public static String App_Description = "Download Manager 2014-2017";
 	public static String Code_Name = "ن";
 	public static String about = "";
 	public static String GithubLink = "https://github.com/salemebo/aria";

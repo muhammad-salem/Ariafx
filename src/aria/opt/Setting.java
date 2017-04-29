@@ -5,6 +5,10 @@ package aria.opt;
 
 import java.util.Arrays;
 
+import aria.core.download.Download;
+import aria.core.download.ProxySetting;
+import aria.core.download.ProxySetting.ProxyConfig;
+import aria.core.download.ProxySetting.ProxyType;
 import aria.core.url.Item;
 import aria.core.url.type.Category;
 import aria.core.url.type.Queue;
@@ -22,12 +26,16 @@ public class Setting {
 	 */
 	
 
-	double time_to_save_in_minutes  = 2;
+	double time_to_save_in_minutes  = 1;
 	boolean isMinimal;
+	int ParallelChunks = Download.ParallelChunks;
 	String[] paths;
 	Category[] categories;
 	Queue[] queues;
+	ProxySetting proxySetting;
+
 	Item[] items;
+	
 	
 	private static Setting setting;
 
@@ -37,8 +45,10 @@ public class Setting {
 		categories = Category.getNewCatArray();
 		queues = Queue.getNewQueues();
 		items = DownList.getItems();
-		time_to_save_in_minutes = 2.0;
+		time_to_save_in_minutes = 1.0;
 		isMinimal = AriafxMainGUI.isMinimal;
+		ParallelChunks = Download.ParallelChunks;
+		proxySetting = ProxySetting.createDefalutProxySetting();
 	}
 	
 	
@@ -58,13 +68,16 @@ public class Setting {
 	
 	public static void updateSetting(){
 		double t = setting.time_to_save_in_minutes;
+		ProxySetting ps = getProxySetting();
 		setting = new Setting();
 		setting.time_to_save_in_minutes = t;
+		setProxySetting(ps);
 	}
 
 	public static void setSetting(Setting setting) {
 		Setting.setting = setting;
-		if(setting == null) Setting.setting = new Setting();
+		if(setting == null) 
+			Setting.setting = new Setting();
 	}
 	
 	public static String[] getPaths() {
@@ -104,6 +117,79 @@ public class Setting {
 
 	public static String getDefaultPath() {
 		return Setting.getPaths()[0];
+	}
+	
+	public static int getParallelChunks() {
+		return getSetting().ParallelChunks;
+	}
+	
+	public static void settParallelChunks(int num) {
+		getSetting().ParallelChunks = num;
+	}
+
+
+	public static ProxySetting getProxySetting() {
+		return getSetting().proxySetting;
+	}
+
+
+	public static void setProxySetting(ProxySetting proxySetting) {
+		getSetting().proxySetting = proxySetting;
+	}
+	
+	public static String GetRemoteAddress() {
+		return getProxySetting().getRemoteAddress();
+	}
+	public static void SetRemoteAddress(String remoteAddress) {
+		getProxySetting().setRemoteAddress(remoteAddress);
+	}
+	public static int GetRemotePort() {
+		return getProxySetting().getRemotePort();
+	}
+	public static void SetRemotePort(int remotePort) {
+		getProxySetting().setRemotePort(remotePort);
+	}
+	
+	public static ProxyType GetProxyType() {
+		return getProxySetting().getProxyType();
+	}
+	public static void SetProxyType(ProxyType proxyType) {
+		getProxySetting().setProxyType(proxyType);
+	}
+	
+	public static ProxyConfig GetProxyConfig() {
+		return getProxySetting().getProxyConfig();
+	}
+	public static void SetProxyConfig(ProxyConfig proxyConfig) {
+		getProxySetting().setProxyConfig(proxyConfig);
+	}
+	
+	public static void USE_No_Proxy() {
+		getProxySetting().setProxyConfig(ProxyConfig.NoProxy); 
+	}
+	
+	public static void USE_System_Proxy() {
+		getProxySetting().setProxyConfig(ProxyConfig.SystemProxy);
+	}
+	
+	
+	public static void Use_Manual_Proxy_Settings(String remoteAddress, String remotePort) {
+		getProxySetting().setProxyConfig(ProxyConfig.ManualProxy);
+		getProxySetting().setProxyType(ProxyType.HTTP);
+		SetRemoteAddress(remoteAddress);
+		SetRemotePort(Integer.parseInt(remotePort));
+	}
+	
+	public static void Use_Manual_Proxy_Settings(String remoteAddress, int remotePort, ProxyType proxyType) {
+		getProxySetting().setProxyConfig(ProxyConfig.ManualProxy);
+		getProxySetting().setProxyType(proxyType);
+		SetRemoteAddress(remoteAddress);
+		SetRemotePort(remotePort);
+	}
+	
+	public static void Use_AutoConfiguration_Proxy(String url) {
+		getProxySetting().setProxyConfig(ProxyConfig.AutoConfigProxy);
+		getProxySetting().setUrlAutoConfig(url);
 	}
 	
 }

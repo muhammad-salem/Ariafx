@@ -1,26 +1,44 @@
 package aria.core.download;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.Socket;
 import java.util.List;
+
+import javax.net.ssl.SSLContext;
 
 import org.apache.http.Header;
 import org.apache.http.HttpHeaders;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.HttpClientConnectionManager;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.ssl.SSLContexts;
 
+import aria.core.download.ProxySetting.ProxyConfig;
+import aria.core.download.ProxySetting.ProxyType;
 import aria.core.url.Item;
 import aria.core.url.Url;
 import aria.opt.R;
+import aria.opt.Setting;
 
 public class Link extends Download {
 	
@@ -145,14 +163,16 @@ public class Link extends Download {
 		item.isStreaming = true;
 	}
 	
+	/*
+	
 	public void removeStreaming() {
 		item.isStreaming = false;
 		//implement of changes in ranges
 		{
-			/**
+			/ **
 			 *  start new download from item.downloaded,
 			 *  conquer and div the rest for item.chunksNum
-			 */
+			 * /
 			item.setChunksNum(4);
 			item.ranges = new long[item.getChunksNum()][3];
 			long remaning = item.length - item.downloaded;
@@ -166,6 +186,8 @@ public class Link extends Download {
 			item.ranges[item.getChunksNum() - 1][1] = item.getLength();
 		}
 	}
+	
+	*/
 
 	public void toJsonItem() {
 		item.toJson();
@@ -180,25 +202,116 @@ public class Link extends Download {
 		
 		HttpClientBuilder  builder = HttpClients.custom();
 		CookieStore store = null;
-		if (haveCookie()) {
+		HttpClientContext context = HttpClientContext.create();
+		
+//		if (haveCookie()) {
 			store = getCookieStore();
-			if(store != null)
+			if(store != null){
 				builder.setDefaultCookieStore(getCookieStore());
+				context.setCookieStore(getCookieStore());
+			}
+				
+//		}
+		
+			if(Setting.GetProxyConfig() == ProxyConfig.ManualProxy 
+					&& Setting.GetProxyType() == ProxyType.SOCKS){
+				// Client HTTP connection objects when fully initialized can be bound to
+		        // an arbitrary network socket. The process of network socket initialization,
+		        // its connection to a remote address and binding to a local one is controlled
+		        // by a connection socket factory.
+
+		        // SSL context for secure connections can be created either based on
+		        // system or application specific properties.
+		        SSLContext sslcontext = SSLContexts.createSystemDefault();
+
+		        // Create a registry of custom connection socket factories for supported
+		        // protocol schemes.	        
+		        class SocksPlainConnectionSocketFactory extends PlainConnectionSocketFactory {
+
+		            public SocksPlainConnectionSocketFactory() {
+		                super();
+		            }
+
+		            @Override
+		            public Socket createSocket(final HttpContext context) throws IOException {
+		                InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
+		                Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
+		                return new Socket(proxy);
+		            }
+
+		        }
+		        
+		        class SocksSSLConnectionSocketFactory extends SSLConnectionSocketFactory {
+
+		            public SocksSSLConnectionSocketFactory(final SSLContext sslContext) {
+		                super(sslContext);
+		            }
+
+		            @Override
+		            public Socket createSocket(final HttpContext context) throws IOException {
+		                InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
+		                Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
+		                return new Socket(proxy);
+		            }
+
+		        }
+		        
+				Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
+				            .register("http", new SocksPlainConnectionSocketFactory())
+				            .register("https", new SocksSSLConnectionSocketFactory(sslcontext))
+				            .build();
+				 
+				PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg);
+				builder.setConnectionManager(cm);
+			
+		}else{
+			HttpClientConnectionManager connMrg = new BasicHttpClientConnectionManager();
+			builder.setConnectionManager(connMrg);
 		}
 		
-		HttpClientConnectionManager connMrg = new BasicHttpClientConnectionManager();
-		builder.setConnectionManager(connMrg);
+		
 		builder.setRedirectStrategy(new LaxRedirectStrategy());
 		
 		RequestConfig globalConfig = RequestConfig.custom()
-		        .setCookieSpec(CookieSpecs.BROWSER_COMPATIBILITY)
+		        .setCookieSpec(CookieSpecs.DEFAULT)
 		        .build();
 		builder.setDefaultRequestConfig(globalConfig);
+		builder.useSystemProperties();
+		
+		//proxy setting gos her
+		ProxySetting setting = Setting.getProxySetting();
+		if(setting.getProxyConfig() != ProxyConfig.NoProxy){
+			if(setting.getProxyConfig() == ProxyConfig.SystemProxy){
+				builder.useSystemProperties();
+			} else if(setting.getProxyConfig() == ProxyConfig.ManualProxy){
+				HttpHost proxy = new HttpHost(setting.getRemoteAddress(), setting.getRemotePort());
+				if(setting.getProxyType() == ProxyType.HTTPS){
+					builder.setProxy(proxy);
+				} 
+				else if(setting.getProxyType() == ProxyType.HTTPS){
+						proxy = new HttpHost(setting.getRemoteAddress(), setting.getRemotePort(), "https");
+						builder.setProxy(proxy);
+				} 
+				else if(setting.getProxyType() == ProxyType.SOCKS){
+					 InetSocketAddress socksaddr = new InetSocketAddress(setting.getRemoteAddress(), setting.getRemotePort());
+					 context.setAttribute("socks.address", socksaddr);
+				}
+						
+				
+				
+			} else if(setting.getProxyConfig() == ProxyConfig.AutoConfigProxy){
+//						HttpHost proxy = new HttpHost(ProxySetting.HTTPRemoteAddress, ProxySetting.HTTPRemotePort);
+				builder.setProxy(new HttpHost( setting.getUrlAutoConfig() ) );
+			}
+		}
+		
+		
+		builder.setUserAgent(item.getUserAgent());
 		
 		CloseableHttpClient  httpClient = builder.build();
 		HttpGet httpGet = new HttpGet(getURL());
 		RequestConfig localConfig = RequestConfig.copy(globalConfig)
-		        .setCookieSpec(CookieSpecs.BEST_MATCH)
+		        .setCookieSpec(CookieSpecs.STANDARD_STRICT)
 		        .build();
 		httpGet.setConfig(localConfig);
 		
@@ -212,10 +325,7 @@ public class Link extends Download {
 		httpGet.addHeader(HttpHeaders.RANGE, "bytes=0-");
 		
 		
-		HttpClientContext context = HttpClientContext.create();
-		if (haveCookie() && store != null) {
-			context.setCookieStore(store);
-		}
+		
 		
 		
 		try {
@@ -232,7 +342,7 @@ public class Link extends Download {
 			Header content = response.getFirstHeader("Content-Disposition");
 			
 			if(content != null){
-				System.out.printf("%s %s\n", content.getName(), content.getValue());
+				//System.out.printf("%s %s\n", content.getName(), content.getValue());
 				String name = content.getValue();
 				int x = 0;
 				if( (x = name.indexOf("=\"")) == -1){

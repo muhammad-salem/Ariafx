@@ -3,6 +3,7 @@ package aria.gui.fxml.control;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,12 +14,12 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.cell.ProgressBarTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -30,6 +31,8 @@ import aria.core.download.Link;
 import aria.core.url.type.DownState;
 import aria.gui.fxml.imp.MovingStage;
 import aria.gui.fxml.imp.ProgressCircle;
+import aria.gui.fxml.imp.ProgressStyled;
+import aria.gui.fxml.imp.ProgressStyledTableCell;
 import aria.gui.manager.ItemBinding;
 import aria.tray.TrayUtile;
 
@@ -93,7 +96,8 @@ public class DownUi implements Initializable {
 	public void setLink(Link link) {
 		this.link = link;
 	}
-
+	
+	boolean process_speed = true;  // true_false;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		progress.setDoneText("Download");
@@ -120,28 +124,48 @@ public class DownUi implements Initializable {
 		link.downStateProperty().addListener((obv, old, value)->{
 			if(!link.isInitState()){
 				if (value == DownState.Downloading){
-					chunksTable.getItems().clear();
-					chunksTable.getItems().addAll(link.getChunks());
+					updateProcessTable();
 					show();
 					TrayUtile.addTListTray(this);
+				}else if (value == DownState.Complete){
+					TrayUtile.removeFromListTray(this);
+				}else{
+					TrayUtile.removeFromListTray(this);
 				}
 			}
 			
 		});
-//		link.stateProperty().addListener((obv, old, value)->{
-//			if ( value == State.CANCELLED){
-//		    	TrayUtile.removeFromListTray(this);
-//			}
-//		});
 		
 		subprocess.setOnAction((e)->{
 			addonsBox.setLayoutX(0);
 			link.stopCollectSpeedData();
+			stage.setHeight(450);
+			process_speed = true;
 		});
 		
 		speed.setOnAction((e)->{
 			addonsBox.setLayoutX(-540);
 			link.canCollectSpeedData();
+			stage.setHeight(450);
+			process_speed = false;
+		});
+		
+		showInfo.setOnAction((e)->{
+			if(showInfo.getText().equals("<<")){	// hide
+				stage.setHeight(240);
+				showInfo.setText(">>");
+				clearProcessTable();
+				link.stopCollectSpeedData();
+			} else {								// show
+				stage.setHeight(450);
+				showInfo.setText("<<");
+				if(process_speed){
+					updateProcessTable();
+				} else {
+					link.canCollectSpeedData();
+				}
+			}
+			
 		});
 		
 		toggleState.setOnAction((e)->{
@@ -157,11 +181,14 @@ public class DownUi implements Initializable {
 		});
 		
 		
+		
 		initTable();
 		//chunksTable.getItems().addAll(link.getChunks());
 		
 		ItemBinding.bindItem(link, this);
 		MovingStage.pikeToMoving(stage, anchor);
+		
+		labelCurrentTime.textProperty().bind(link.currentTimeProperty());
 
 //    	TrayUtile.addTListTray(this);
 	}
@@ -173,11 +200,57 @@ public class DownUi implements Initializable {
 		chunkID.setCellValueFactory(new PropertyValueFactory<Chunk, Integer>( "id"));
 		chunkProgress.setCellValueFactory(new PropertyValueFactory<Chunk, Double>( "progress"));
 		
-		chunkProgress.setCellFactory( ProgressBarTableCell.<Chunk> forTableColumn());
+		chunkProgress.setCellFactory( ProgressStyledTableCell.<Chunk> forTableColumn());
+		
+		
 		
 		chunksTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		
 	}
+	
+	private void clearProcessTable(){
+		chunksTable.getItems().clear();
+		subprogress.getChildren().clear();
+	}
+	
+	private void updateProcessTable(){
+		clearProcessTable();
+//		if(!process_speed) return;
+		Chunk[] chunks = link.getChunks();
+		if(chunks == null){
+			try {
+				Thread.sleep(500);
+				chunks = link.getChunks();
+			} catch (Exception e) {
+			}
+		}
+		if(!(chunks == null) ){
+			chunksTable.getItems().addAll(chunks);
+			for (Chunk chunk : chunks) {
+				ProgressBar progress = ProgressStyled.CreateProgressFlat();
+				progress.progressProperty().bind(chunk.progressProperty());
+				progress.setPrefHeight(subprogress.getPrefHeight());
+				
+//				progress.setPrefWidth(subprogress.getPrefWidth()/chunks.length);
+//				progress.setPrefWidth( (double)( (double)(chunk.range[1]-chunk.range[0]) / (double)link.getLength()) *(double)subprogress.getWidth() );
+
+//				progress.setMaxWidth ( (double)( (double)(chunk.range[1]-chunk.range[0]) / (double)link.getLength()) *(double)subprogress.getWidth() );
+//				progress.setMinWidth ( (double)( (double)(chunk.range[1]-chunk.range[0]) / (double)link.getLength()) *(double)subprogress.getWidth() );
+				
+				SimpleDoubleProperty testDoneSize = new SimpleDoubleProperty(1);
+				
+//				chunk.progressProperty().multiply(chunk.range[1]-chunk.range[0]).divide(link.getLength()).multiply(subprocess.getWidth());
+				testDoneSize.bind(chunk.progressProperty().multiply(chunk.range[1]-chunk.range[0]).divide(link.getLength()).multiply(subprocess.getWidth()));
+				
+				progress.minWidthProperty().bind( testDoneSize);
+//				progress.maxWidthProperty().multiply(chunk.progressProperty().multiply(chunk.range[1]-chunk.range[0]).divide(link.getLength()).multiply(subprocess.getWidth()));
+				
+				
+				subprogress.getChildren().add(progress);
+			}
+		}
+	}
+	
 	
 //	public void initFinish() {
 //		textSaveTo.setText(link.getSaveto());
@@ -211,9 +284,14 @@ public class DownUi implements Initializable {
     @FXML
     private TableColumn<Chunk, Integer> chunkID;
     
+    @FXML
+    private ToggleButton subprocess,  speed, showInfo;
     
     @FXML
-    private ToggleButton subprocess,  speed;
+	public Text remining;
+    
+    @FXML
+    private HBox subprogress;
     
     @FXML
     private ToggleButton toggleState, toggleLimite, toggleFinish;
@@ -222,7 +300,7 @@ public class DownUi implements Initializable {
     public Label panename, labelTransferRate, 
     	labelAddress, labelTransferRate2, 
     	labelStatus, labelDownloaded, labelFileSize, 
-    	labelResume, filename, labelTimeLeft;
+    	labelResume, filename, labelTimeLeft, labelCurrentTime;
     
     @FXML
     public Text textSaveTo;
@@ -290,7 +368,8 @@ public class DownUi implements Initializable {
     @FXML
     void cancel(ActionEvent event) {
     	if(link.isRunning()){
-    		link.cancel();
+    		if(link.getDownState() != DownState.Complete)
+    			link.cancel();
     	}
     	link.stopCollectSpeedData();
     	stage.close();

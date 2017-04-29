@@ -3,20 +3,6 @@ package aria.core.download;
 import java.io.File;
 import java.util.Arrays;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringExpression;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
-import javafx.scene.chart.XYChart.Data;
-import javafx.scene.chart.XYChart.Series;
-import javafx.util.Duration;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
@@ -25,6 +11,22 @@ import aria.core.url.Url;
 import aria.core.url.type.DownState;
 import aria.notify.Notifier;
 import aria.opt.Utils;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringExpression;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.scene.chart.XYChart.Data;
+import javafx.scene.chart.XYChart.Series;
+import javafx.util.Duration;
 
 public class Download extends Service<Number> {
 
@@ -32,13 +34,28 @@ public class Download extends Service<Number> {
 	public Chunk[] chunks;
 	public boolean[] chunkState;
 	
-	
+	public static int ParallelChunks = 4;
 	
 	public Download(Item item) {
 		super();
 		this.item = item;
 		initStateLine();
 		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.statusProperty().addListener(new ChangeListener<Animation.Status>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Animation.Status> observable,
+					Animation.Status oldValue, Animation.Status newValue) {
+				
+				if(newValue.equals(Animation.Status.STOPPED)){
+					sTime = 0;
+					setCurrentTime("");
+				}
+			}
+
+			
+		});
+		
 	}
 
 	/***
@@ -106,12 +123,13 @@ public class Download extends Service<Number> {
 					if (item.ranges == null) {
 						item.ranges = new long[item.getChunksNum()][3];
 						item.ranges[0][0] = 0;
-						item.ranges[0][1] = -1;
+						item.ranges[0][1] = 0;
 						item.ranges[0][2] = 0;
 					}
 				} else {
-					creatChunks();
 					callRange();
+					creatChunks();
+					
 				}
 				
 				boolean[] temp = new boolean[item.getChunksNum()];
@@ -137,6 +155,19 @@ public class Download extends Service<Number> {
 					if (equalsTrue)
 						break;
 					Thread.sleep(300);
+					
+					for (int i = 0; i < item.getChunksNum(); i++) {
+						
+						if(chunks[i].httpStateCode/100 == 5){
+							chunks[i].cancel();
+							chunks[i].start();
+							System.out.println("restat chunk "+ i 
+									+ " chunks[i].httpStateCode "+ chunks[i].httpStateCode);
+						}
+						Thread.sleep(300);
+						
+					}
+					
 				}
 
 				updateProgress(item.downloaded,
@@ -153,11 +184,12 @@ public class Download extends Service<Number> {
 	void stopAndPause() {
 		timeline.stop();
 		setDownState(DownState.Pause);
+		
 	}
 
 	public void initStateLine() {
 		setOnSucceeded((e) -> {
-
+			
 			timeline.stop();
 			if (item.downloaded == item.length) {
 				setDownState(DownState.Complete);
@@ -315,7 +347,8 @@ public class Download extends Service<Number> {
 
 	public void setTransferRate(double rate) {
 		transfer = rate;
-		transferRateProperty().set(Utils.fileLengthUnite(rate).concat("/sec"));
+//		transferRateProperty().set(Utils.fileLengthUnite(rate).concat("/sec"));
+		transferRateProperty().set(Utils.sizeLengthFormate0_0( rate).concat("/sec"));
 	}
 
 	public StringProperty transferRateProperty() {
@@ -323,10 +356,57 @@ public class Download extends Service<Number> {
 			transferRate = new SimpleStringProperty(this, "transferRate");
 		return transferRate;
 	}
+	
+	private StringProperty remaining;
+	
+	public String getRemaining() {
+		return remainingProperty().get();
+	}
+	
+	public void setRemaining(long value) {
+		item.timeLeft = value;
+		setRemaining(Utils.fileLengthUnite(value));
+	}
 
-	Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), (e) -> {
+	public void setRemaining(String value) {
+		remainingProperty().set(value);
+	}
+	
+	public StringProperty remainingProperty() {
+		if (remaining == null)
+			remaining = new SimpleStringProperty(this, "remaining");
+		return remaining;
+	}
+	
+	
+	private StringProperty currentTime;
+	private int sTime = 0;
+	
+	public String getCurrentTime() {
+		return currentTimeProperty().get();
+	}
+	
+	public void setCurrentTime(long value) {
+		setCurrentTime(Utils.getTime(value));
+	}
+
+	public void setCurrentTime(String value) {
+		currentTimeProperty().set(value);
+	}
+	
+	public StringProperty currentTimeProperty() {
+		if (currentTime == null)
+			currentTime = new SimpleStringProperty(this, "currentTime");
+		return currentTime;
+	}
+	
+
+	Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), (e) -> {
 		calculateSpeed();
+		setCurrentTime( ++sTime);
 	}));
+	
+	
 
 	private boolean collectData = false;
 
@@ -374,20 +454,27 @@ public class Download extends Service<Number> {
 
 	public void calculateSpeed() {
 		//
-		double newDownLength = item.downloaded;
+		double newDownLength = 0;
+		for (int i = 0; i < item.getChunksNum(); i++) {
+			newDownLength += item.ranges[i][2];
+		}
+		
 		// calc speed
 		downedLength = newDownLength - getDownedLength();
+		
 		setTransferRate(downedLength);
 		if (collectData)
-			addData(downedLength / 1000);
+			addData(downedLength / 1024);
 		// collectData = !collectData;
 
 		// calc time left
 		item.timeLeft = (long) ((item.length - newDownLength) / downedLength);
-		lefttimeProperty.set(Utils.getTimeLeft(item.timeLeft));
+		lefttimeProperty.set(Utils.getTime(item.timeLeft));
 
-		// Duration duration = new Duration(item.timeLeft);
-		// duration.
+		// calc remaining
+		if(!item.isUnknowLength()){
+			setRemaining(item.length - item.downloaded);
+		}
 
 		// make downedLength equal to downloaded from 1 sec ago.
 		downedLength = newDownLength;
@@ -494,21 +581,75 @@ public class Download extends Service<Number> {
 		if (item.ranges == null) {
 			item.ranges = new long[1][3];
 			if (item.isUnknowLength()) {
+				
+				item.ranges[0][0] = 0;
+				item.ranges[0][1] = item.downloaded;
+				item.ranges[0][2] = item.downloaded;
+				
+			} else {
+				
+//				item.ranges = new long[item.getChunksNum()][3];
+//				
+//				item.ranges[item.getChunksNum() - 1][1] = item.getLength();
+//				item.ranges[item.getChunksNum() - 1][0] = item.getLength() - (1024*1024) ;
+//				item.ranges[item.getChunksNum() - 1][2] = 0;
+//				long sub =  item.getLength() - (1024*1024) / (int)item.getChunksNum() - 1;
+//				
+//				for (int i = 0; i < item.getChunksNum() -1; i++) {
+//					item.ranges[i][0] = sub * i;
+//					item.ranges[i][1] = sub * (i + 1) - 1;
+//					
+//				}
+				
+				item.ranges = new long[item.getChunksNum()][3];
+				
+				long sub =  item.getLength() / (long)item.getChunksNum();
+				
+				for (int i = 0; i < item.getChunksNum(); i++) {
+					item.ranges[i][0] = i * sub;
+					item.ranges[i][1] = (i + 1) * sub - 1;
+					item.ranges[i][2] = 0;
+				}
+				item.ranges[item.getChunksNum()-1][1] = item.getLength()-1;
+			}
+		}
+		
+//		for (int i = 0; i < item.ranges.length; i++) {
+//			System.out.println(Arrays.toString(item.ranges[i]));
+//		}
+	}
+	
+	public void callRangeForStreaming() {
+		if (item.ranges == null) {
+			item.ranges = new long[1][3];
+			if (item.isUnknowLength()) {
+				
 				item.ranges[0][0] = 0;
 				item.ranges[0][1] = item.downloaded;
 				item.ranges[0][2] = 0;
+				
 			} else {
-				long sub = (int) item.getLength() / item.getChunksNum();
+				
 				item.ranges = new long[item.getChunksNum()][3];
+				
+				long sub =  item.getLength() / (int)item.getChunksNum();
+				
 				for (int i = 0; i < item.getChunksNum(); i++) {
 					item.ranges[i][0] = sub * i;
 					item.ranges[i][1] = sub * (i + 1) - 1;
-					item.ranges[i][2] = 0;
+					
 				}
-				item.ranges[item.getChunksNum() - 1][1] = item.getLength();
+				// set last 2 chunk 
+				item.ranges[item.getChunksNum()-2][1] = item.ranges[item.getChunksNum()-1][1]- (2*1024*1024);
+				item.ranges[item.getChunksNum()-1][0] = item.ranges[item.getChunksNum()-2][1]+1;
+				item.ranges[item.getChunksNum()-1][1] = item.getLength()-1;
+				
 			}
-
 		}
+		
+//		for (int i = 0; i < item.ranges.length; i++) {
+//			System.out.println(Arrays.toString(item.ranges[i]));
+//		}
 	}
 
 	public void creatChunks() {

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="550.0" styleClass="main-background" stylesheets="@control.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox layoutY="14.0" prefHeight="200.0" prefWidth="70.0" styleClass="sidebar" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" spacing="3.0">
+               <children>
+                  <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#minimize" prefHeight="32.0" prefWidth="32.0">
+                     <styleClass>
+                        <String fx:value="minimize" />
+                        <String fx:value="button-bar" />
+                     </styleClass>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+                  <Button cancelButton="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="32.0" prefWidth="32.0">
+                     <styleClass>
+                        <String fx:value="close" />
+                        <String fx:value="button-bar" />
+                     </styleClass>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="3.0" left="3.0" right="3.0" top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <Line endX="65.0" startX="5.0" stroke="#bdbdbd">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+            </Line>
+            <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showBrowser" prefHeight="64.0" prefWidth="64.0" textAlignment="CENTER">
+               <VBox.margin>
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+               </VBox.margin>
+               <styleClass>
+                  <String fx:value="button-bar" />
+                  <String fx:value="browser" />
+               </styleClass>
+            </Button>
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showControlPanel" prefHeight="64.0" prefWidth="64.0">
+               <VBox.margin>
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+               </VBox.margin>
+               <styleClass>
+                  <String fx:value="button-bar" />
+                  <String fx:value="tweak" />
+               </styleClass>
+            </Button>
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showProxySettting" prefHeight="64.0" prefWidth="64.0">
+               <VBox.margin>
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+               </VBox.margin>
+               <styleClass>
+                  <String fx:value="button-bar" />
+                  <String fx:value="proxy" />
+               </styleClass>
+            </Button>
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="64.0" prefWidth="64.0" styleClass="button-bar">
+               <VBox.margin>
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+               </VBox.margin>
+            </Button>
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="64.0" prefWidth="64.0" styleClass="button-bar">
+               <VBox.margin>
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+               </VBox.margin>
+            </Button>
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="64.0" prefWidth="64.0" styleClass="button-bar">
+               <VBox.margin>
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+      <VBox fx:id="vbox" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="75.0">
+         <children>
+            <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="500.0">
+               <children>
+                  <Button fx:id="browserChrome" layoutX="34.0" layoutY="35.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="64.0" prefWidth="64.0">
+                     <styleClass>
+                        <String fx:value="button-bar" />
+                        <String fx:value="google" />
+                     </styleClass>
+                  </Button>
+                  <Button fx:id="browserFirefox" layoutX="109.0" layoutY="35.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="64.0" prefWidth="64.0">
+                     <styleClass>
+                        <String fx:value="button-bar" />
+                        <String fx:value="firefox" />
+                     </styleClass>
+                  </Button>
+                  <Text fontSmoothingType="LCD" layoutX="19.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add support to browser:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <ImageView fx:id="browserImage" fitHeight="300.0" fitWidth="450.0" layoutX="14.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true" />
+                  <TextArea fx:id="browserSupport" editable="false" layoutX="12.0" layoutY="411.0" prefHeight="80.0" prefWidth="450.0" wrapText="true" />
+                  <Slider fx:id="browserSlider" blockIncrement="1.0" layoutX="15.0" layoutY="394.0" majorTickUnit="1.0" max="4.0" min="1.0" minorTickCount="0" prefHeight="16.0" prefWidth="450.0" showTickMarks="true" snapToTicks="true" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="10.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="500.0">
+               <children>
+                  <Text fontSmoothingType="LCD" layoutX="16.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit default download path:">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="defalutPathChangeButton" layoutX="245.0" layoutY="42.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="..." />
+                  <TextField fx:id="defalutPathEdit" layoutX="28.0" layoutY="69.0" prefHeight="25.0" prefWidth="315.0" />
+                  <Text fontSmoothingType="LCD" layoutX="10.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Auto Save:">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                  <Slider fx:id="autoSaveSlider" blockIncrement="1.0" layoutX="98.0" layoutY="116.0" majorTickUnit="0.2" max="2.2" min="0.1" minorTickCount="2" prefHeight="25.0" prefWidth="351.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1" />
+                  <Text layoutX="319.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="default : 1 minutes" />
+               </children></AnchorPane>
+            <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="500.0">
+               <children>
+                  <Label text="Configure proxy to access the internet" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
+                  <VBox spacing="10.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="45.0">
+                     <children>
+                        <RadioButton fx:id="noProxy" mnemonicParsing="false" text="No Proxy" /><RadioButton fx:id="useSystemProxySetting" mnemonicParsing="false" text="Use System Proxy settings" selected="true"/>
+                     	<RadioButton fx:id="useManualProxyConfiguration" mnemonicParsing="false" text="Manual Proxy configuration"/>
+                        <VBox spacing="10.0">
+                           <children>
+                              <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                 <children>
+                                    <Label text="HTTP :" />
+                                    <TextField fx:id="remoteAddressHTTP" prefWidth="250.0" promptText="Remote Address" text="127.0.0.1" />
+                                    <TextField fx:id="remotePortHTTP" prefWidth="70.0" promptText="Port" text="8089" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" spacing="10.0">
+                                 <children>
+                                    <Label text="HTTPs :" />
+                                    <TextField fx:id="remoteAddressHTTPS" prefWidth="250.0" promptText="Remote Address" text="127.0.0.1" />
+                                    <TextField fx:id="remotePortHTTPS" prefWidth="70.0" promptText="Port" text="8080" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="46.0" spacing="10.0">
+                                 <children>
+                                    <Label text="SOCKET :" />
+                                    <TextField fx:id="remoteAddressSOCKET" prefWidth="250.0" promptText="Remote Address" text="127.0.0.1" />
+                                    <TextField fx:id="remotePortSOCKET" prefWidth="70.0" promptText="Port" text="8080" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <RadioButton fx:id="automaticProxyConfiguration" layoutX="10.0" layoutY="66.0" mnemonicParsing="false" text="Automatic Proxy Configuration" />
+                        <HBox spacing="10.0">
+                           <children>
+                              <TextField fx:id="automaticProxyConfigurationURL" prefWidth="350.0" promptText="URL" />
+                              <Button mnemonicParsing="false" onAction="#reloadAutomaticProxyConfiguration" text="Reload" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

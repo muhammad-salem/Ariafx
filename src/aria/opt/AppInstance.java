@@ -14,7 +14,13 @@ public class AppInstance {
     private static FileChannel channel;
     private static FileLock lock;
     
-    public static boolean isAppInstanceExists() {
+	public static void initFileLock() {
+		 isAppInstanceExists();
+	}
+
+    
+    @SuppressWarnings("resource")
+	public static boolean isAppInstanceExists() {
     	
     	File file = new  File(R.LockFile);
 		try {
@@ -41,9 +47,10 @@ public class AppInstance {
 			//file.createNewFile();
 			channel = new RandomAccessFile(R.LockFile, "rw").getChannel();
 			lock = channel.tryLock();
+//			channel.close();
             if(lock == null){
                 // File is lock by other application
-                channel.close();
+               
 //                file.delete();
                 return true;							// run app
             }
@@ -52,9 +59,8 @@ public class AppInstance {
 			e.printStackTrace();
 		}
 		
-		ShutdownHook shutdownHook = new ShutdownHook();
+		ShutdownHookThread shutdownHook = new ShutdownHookThread();
         Runtime.getRuntime().addShutdownHook(shutdownHook);
-        
     	
     	return false;
 	}
@@ -63,6 +69,7 @@ public class AppInstance {
         // release and delete file lock
         try {
             if(lock != null) {
+            	//if(!lock.isValid())return;
                 lock.release();
                 channel.close();
 //                file.delete();
@@ -72,7 +79,7 @@ public class AppInstance {
         }
     }
  
-    static class ShutdownHook extends Thread {
+    static class ShutdownHookThread extends Thread {
  
         public void run() {
             unlockFile();

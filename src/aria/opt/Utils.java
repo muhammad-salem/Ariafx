@@ -62,7 +62,7 @@ public class Utils {
 			t = gson.fromJson(reader, classT );
 //			System.out.println(url);
 		} catch (Exception e) {
-			System.err.println("no file found");
+			System.err.println("no file found " + file);
 			return null;
 		}
 		return t;
@@ -121,6 +121,34 @@ public class Utils {
 		return fileString;
 	}
     
+    /**
+	   * @param length file path to read from.
+	   */
+  public static String sizeLengthFormate0_0(double length) {
+      String hrSize = "";
+      DecimalFormat dec = new DecimalFormat("0.0");
+      
+      double b = length;
+      double k = length / 1024.0;
+      double m = ((length / 1024.0) / 1024.0);
+      double g = (((length / 1024.0) / 1024.0) / 1024.0);
+      double t = ((((length / 1024.0) / 1024.0) / 1024.0) / 1024.0);
+
+      if (t >= 1) {
+          hrSize = dec.format(t).concat(" TB");
+      } else if (g >= 1) {
+          hrSize = dec.format(g).concat(" GB");
+      } else if (m >= 1) {
+          hrSize = dec.format(m).concat(" MB");
+      } else if (k >= 1) {
+          hrSize = dec.format(k).concat(" KB");
+      } else {
+          hrSize = dec.format(b).concat(" Bytes");
+      }
+
+      return hrSize;
+  }
+    
     
 	  /**
 	   * @param length file path to read from.
@@ -169,6 +197,47 @@ public class Utils {
     }
     
     
+    public static int gesslChunkesNum(long length) {
+//    	 double k = length / 1024.0;
+    	
+    	if(length <= 0){
+    		return 1;
+    	}
+         double m = ((length / 1024.0) / 1024.0);
+         double g = (((length / 1024.0) / 1024.0) / 1024.0);
+         double t = ((((length / 1024.0) / 1024.0) / 1024.0) / 1024.0);
+
+         if (t > 1) {
+             return 32;
+         } else if (g > 1) {
+             return 16;
+         } else if (m >= 700 ) {
+             return 10;
+         } else if (m < 700 && m >= 500 ) {
+             return 8;
+         } else if (m < 500 && m >= 250 ) {
+             return 6;
+         } else if (m < 250 && m >= 200 ) {
+             return 5;
+         } else if (m < 200 && m >= 100 ) {
+             return 4;
+         } else if (m < 100 && m >= 10 ) {
+             return 3;
+         } else if (m < 10 && m >= 4 ) {
+             return 2;
+         }
+         /*
+         else if (m < 5 && m >= 1 ) {
+             return 1;
+         } 
+         else if (k > 1) {
+             return 1;
+         }
+         */
+		
+		return 1;
+	}
+    
 
     public static String percent(long downloaded, long size) {
         String hrSize = "(";
@@ -185,7 +254,7 @@ public class Utils {
 		return fileLengthUnite(progress*length);
 	}
 	
-	public static String getTimeLeft(long date){
+	public static String getTime(long date){
 		long rmnd = 0;
 		long ss = date % 60; rmnd = date / 60; 	// minute
 		long mm = rmnd % 60; rmnd /= 60;		// hours

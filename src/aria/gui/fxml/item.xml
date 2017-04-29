@@ -58,11 +58,12 @@
                         </AnchorPane>
                         <AnchorPane fx:id="pane1" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="90.0" prefWidth="600.0">
                            <children>
-                              <Label fx:id="url" alignment="CENTER" layoutX="14.0" layoutY="7.0" styleClass="label-indigo5" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0"></Label>
+                              <Label fx:id="url" alignment="CENTER" layoutX="14.0" layoutY="7.0" styleClass="label-indigo5" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
                               <Label fx:id="savePath" alignment="CENTER" layoutX="14.0" layoutY="25.0" styleClass="label-indigo5" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
                               <ProgressStyled fx:id="progress" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" progress="0.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="40.0" />
                               <Label fx:id="percent" alignment="CENTER" layoutX="55.0" layoutY="38.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="440.0" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="100.0" />
                               <Label fx:id="timeLeft" layoutX="75.0" layoutY="67.0" styleClass="label-indigo5" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="75.0" />
+                              <Label fx:id="remining" layoutX="288.0" layoutY="48.0" styleClass="label-indigo5" AnchorPane.bottomAnchor="27.0" />
                               <Label fx:id="speed1" alignment="CENTER" layoutX="413.0" layoutY="62.0" styleClass="label-indigo5" AnchorPane.bottomAnchor="27.0" AnchorPane.rightAnchor="115.0" />
                               <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#toMin" prefHeight="32.0" prefWidth="32.0" styleClass="button-header" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                  <graphic>

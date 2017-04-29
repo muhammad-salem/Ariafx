@@ -5,8 +5,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.animation.Transition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,9 +30,8 @@ import javafx.util.Duration;
 
 import org.apache.commons.io.FilenameUtils;
 
+import aria.core.download.Download;
 import aria.core.download.Link;
-import aria.core.download.ReadyItem;
-import aria.core.url.Item;
 import aria.core.url.type.Category;
 import aria.core.url.type.DownState;
 import aria.core.url.type.Queue;
@@ -45,7 +46,7 @@ import aria.opt.Utils;
 public class FeatchURL implements Initializable {
 
 	private Stage stage;
-	private Item item;
+//	private Item item;
 	private Link link;
 
 	public static URL FXML;
@@ -96,9 +97,8 @@ public class FeatchURL implements Initializable {
     private ChoiceBox<Integer> parallelThread;
 
 	// anchor
-	private Transition animation, linkUrlAnim;
+	private Transition animation;
 	
-	private String saveTemp;
 	
 	/**-------------------------1-----------------------------**/
 
@@ -124,32 +124,6 @@ public class FeatchURL implements Initializable {
 		
 		animation.setCycleCount(1);
 //		animation.setAutoReverse(true);
-		
-		linkUrlAnim = new Transition() {
-			
-			{
-				 setCycleDuration(Duration.seconds(1));
-			}
-			@Override
-			protected void interpolate(double frac) {
-				if (!Double.isNaN(frac)) {
-					// from anchorVB2
-					int length = item.getURL().length();
-			        int n = Math.round(length * (float) frac);
-			        linkUrl.setText(item.getURL().substring(0, n));
-					// for save to 
-			        length = saveTemp.length();
-			        n = Math.round(length * (float) frac);
-			        editSavePath.setText(saveTemp.substring(0, n));
-			        
-				}
-				
-			}
-		};
-		linkUrlAnim.setCycleCount(1);
-//		linkUrlAnim.setAutoReverse(true);
-		
-		animation.setOnFinished((e)->{ linkUrlAnim.play();});
 		
 	}
 
@@ -187,14 +161,20 @@ public class FeatchURL implements Initializable {
 		});
 		
 		ObservableList<Integer> listNum 
-			= FXCollections.observableArrayList(1,2,4,8,10,16,20,24,32);
+			= FXCollections.observableArrayList(1,2,3,4,5,6,7,8,10,16,20,24,32);
 		parallelThread.setItems(listNum);
-		parallelThread.getSelectionModel().select(Integer.valueOf(4));
+		parallelThread.getSelectionModel()
+			.select(Integer.valueOf(Download.ParallelChunks));
 	}
 
 	@FXML
 	void fetchInfo(ActionEvent event) {
-		if(bindItem()){
+		if(bindLink()){
+			
+			parallelThread.getSelectionModel()
+			.select(Integer.valueOf(
+					Utils.gesslChunkesNum(link.getLength())));
+			
 			// init to bimd item
 			initAnchorVB2();
 			// play animation
@@ -210,40 +190,40 @@ public class FeatchURL implements Initializable {
 		
 		this.stage.setTitle("Fetch link Info");
 
-//		linkUrl.setText(item.getURL());
+		linkUrl.setText(link.getURL());
 
 		// init category and queue
 		category.setItems(Category.getCategores());
 		category.selectionModelProperty()
 				.get().selectedItemProperty()
 				.addListener((obs, old, nw) -> {
-					item.setCategory(nw.getName());
+					link.setCategory(nw.getName());
 					editSavePath.setText(nw.getSaveTo()
-							+ File.separator + item.getFilename());
+							+ File.separator + link.getFilename());
 		});
-		category.getSelectionModel().select(Category.get(item.getCategory()));
+		category.getSelectionModel().select(Category.get(link.getCategory()));
 
 		queue.setItems(Queue.getQueuesTree());
-		queue.getSelectionModel().select(Queue.getQueue(item.getQueue()));
+		queue.getSelectionModel().select(Queue.getQueue(link.getQueue()));
 
 		queue.selectionModelProperty().get().selectedItemProperty()
 				.addListener((obs, old, nw) -> {
-					item.setQueue(nw.getName());
+					link.setQueue(nw.getName());
 				});
 
 		// init changes on saveto path
 		editSavePath.textProperty().addListener((ob, old, str) -> {
-			item.setSaveto(str);
-			if(item.checkConfliectName()){
-				str = item.getSaveto();
+			link.setSaveto(str);
+			if(link.checkConfliectName()){
+				str = link.getSaveto();
 				editSavePath.setText(str);
 			}
-			item.setFilename(FilenameUtils.getName(str));
+			link.setFilename(FilenameUtils.getName(str));
 		});
 		
+		itemLength.setText(Utils.fileLengthUnite(link.getLength()));
 		setupICONFile();
 		
-		bindLink();
 	}
 
 	private void setupICONFile() {
@@ -265,9 +245,9 @@ public class FeatchURL implements Initializable {
 	@FXML
 	void changeSaveTo(ActionEvent event) {
 		FileChooser chooser = new FileChooser();
-		chooser.setInitialFileName(item.getFilename());
-		chooser.setTitle("Save " + item.getFilename() + " to:");
-		File file = new File(item.getSaveto());
+		chooser.setInitialFileName(link.getFilename());
+		chooser.setTitle("Save " + link.getFilename() + " to:");
+		File file = new File(link.getSaveto());
 		chooser.setInitialDirectory(file.getParentFile());
 		file = chooser.showSaveDialog(null);
 		if (file != null) {
@@ -277,7 +257,7 @@ public class FeatchURL implements Initializable {
 
 	@FXML
 	void downLater(ActionEvent event) {
-		Item2Gui gui = bindItem2Gui();
+		Item2Gui gui = bindILink2Gui();
 		if(gui == null){
 			return;
 		}else{
@@ -294,7 +274,7 @@ public class FeatchURL implements Initializable {
 //		link.setDownState(DownState.Downloading);
 		link.start();
 		
-		Item2Gui gui= bindItem2Gui();
+		Item2Gui gui= bindILink2Gui();
 		if(gui == null){
 			return;
 		}else{
@@ -316,23 +296,19 @@ public class FeatchURL implements Initializable {
 	}
 	/**-------------------------5-----------------------------**/
 	
-	private boolean bindItem() {
+	private boolean bindLink() {
 		String str = link1.getText();
 		if (Utils.verifyURL(str)) {
 			try {
-				item = new Item(str);
-				item.setReferer(referer.getText());
+//				item = new Item(str);
+				link = new Link(str);
+				if(!referer.getText().equals(""))
+					link.setReferer(referer.getText());
 				
-				
-				Integer i = parallelThread.getValue();
-				item.isStreaming = (i == 1);
-				item.setChunksNum(i);
-				
-				
-				item.setState(DownState.InitDown);
+				link.setDownState(DownState.InitDown);
 				
 				if (authrization.isSelected()) {
-					item.setAuthrized(user.getText(), pass.getText());
+					link.setAuthrized(user.getText(), pass.getText());
 				}
 			} catch (Exception e) {
 				message.setVisible(true);
@@ -342,21 +318,45 @@ public class FeatchURL implements Initializable {
 			message.setVisible(true);
 			return false;
 		}
-		ReadyItem ready = new ReadyItem(item);
-		item = ready.initItem();
 		
-		// get temp value of saveto
-		saveTemp = item.getSaveto();
+		link.retrieveInfo();
+//		link.callRange();
 		
 		return true;
 	}
-
-	private void bindLink() {
-		link = new Link(item);
-		itemLength.setText(Utils.fileLengthUnite(item.length));
-	}
 	
+	/*
 	private Item2Gui bindItem2Gui(){
+		Item2Gui gui = null;
+		try {
+			gui = new Item2Gui(link);
+			FXMLLoader loader;
+			if(AriafxMainGUI.isMinimal){
+				loader = new FXMLLoader(Item2Gui.FXMLmin);
+			}else {
+				loader= new FXMLLoader(Item2Gui.FXML);
+			}
+			loader.setController(gui);
+			AnchorPane pane = loader.load();
+			DownList.AddGuiToList(pane, link);
+		}catch (Exception e) {
+			System.err.println("error in loading fxml file.\n"
+					+ Item2Gui.FXML.toString());
+		}
+		R.Save_Changes_Progress();
+		return gui;
+	}
+	*/
+	
+	private Item2Gui bindILink2Gui(){
+		Integer parl = parallelThread.getValue();
+		if(parl == 1) link.setStreaming();
+		link.setChunksNum(parl);
+		
+		link.setDownState(DownState.InitDown);
+		link.callRange();
+		
+		
 		Item2Gui gui = null;
 		try {
 			gui = new Item2Gui(link);
@@ -381,18 +381,29 @@ public class FeatchURL implements Initializable {
 	/**-------------------------6-----------------------------**/
 
 	public static void AddURL() {
-		try {
-			Stage ui = new Stage();
-			FeatchURL featchURL = new FeatchURL(ui);
-			FXMLLoader loader = new FXMLLoader(FXML);
-			loader.setController(featchURL);
-			ui.setScene(new Scene(loader.load()));
-			ui.show();
-			MovingStage.pikeToMoving(ui, featchURL.anchor);
-		} catch (Exception e) {
-			System.err.println("error in loading fxml file.\n"
-					+ FXML.toString());
-		}
+		
+		Platform.runLater(new Task<Void>() {
+
+			@Override
+			protected Void call() throws Exception {
+				try {
+					Stage ui = new Stage();
+					FeatchURL featchURL = new FeatchURL(ui);
+					FXMLLoader loader = new FXMLLoader(FXML);
+					loader.setController(featchURL);
+					ui.setScene(new Scene(loader.load()));
+					ui.show();
+					MovingStage.pikeToMoving(ui, featchURL.anchor);
+				} catch (Exception e) {
+					System.err.println("error in loading fxml file.\n"
+							+ FXML.toString());
+				}
+				return null;
+			}
+			
+		});
+		
+		
 	}
 
 }

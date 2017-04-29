@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
 <?import aria.gui.fxml.imp.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.image.*?>
@@ -11,7 +12,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="425.0" prefWidth="540.0" stylesheets="@../res/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="540.0" stylesheets="@../res/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 <children>
       <VBox prefHeight="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -34,6 +35,8 @@
                                     <Font size="12.0" />
                                  </font></Label>
                               <Label fx:id="labelStatus" layoutX="25.0" layoutY="40.0" text="Complete" textFill="#1aa2fa" />
+                              <Label fx:id="labelCurrentTime" layoutX="160.0" layoutY="40.0" prefHeight="17.0" prefWidth="68.0" text="0.0.0.0" />
+                              <Text fx:id="remining" fontSmoothingType="LCD" layoutX="243.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" AnchorPane.rightAnchor="235.0" />
                               <Separator layoutX="14.0" layoutY="60.0" prefWidth="300.0" />
                               <VBox layoutX="25.0" layoutY="70.0" spacing="5.0">
                                  <children>
@@ -49,7 +52,7 @@
                                     <Label fx:id="labelFileSize" layoutX="175.0" layoutY="75.0" text="100 MB" AnchorPane.leftAnchor="200.0" />
                                     <Label fx:id="labelDownloaded" layoutX="175.0" layoutY="93.0" text="10 MB (10%)" AnchorPane.leftAnchor="200.0" />
                                     <Label fx:id="labelTransferRate" layoutX="175.0" layoutY="110.0" text="0.0 KB/Sec" AnchorPane.leftAnchor="200.0" />
-                                    <Label fx:id="labelTimeLeft" layoutX="175.0" layoutY="127.0" text="10 sec" AnchorPane.leftAnchor="200.0" />
+                                    <Label fx:id="labelTimeLeft" text="10 sec" />
                                     <Label fx:id="labelResume" layoutX="175.0" layoutY="145.0" text="Yes" AnchorPane.leftAnchor="200.0" />
                                  </children>
                               </VBox>
@@ -146,8 +149,9 @@
                   <ToggleGroup fx:id="toggleInfo" />
                </toggleGroup>
             </ToggleButton>
-            <ToggleButton fx:id="speed" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" styleClass="toggle-right" text="Speed" toggleGroup="$toggleInfo" />
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="200.0" />
+            <ToggleButton fx:id="speed" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" text="Speed" toggleGroup="$toggleInfo" />
+            <ToggleButton fx:id="showInfo" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" styleClass="toggle-right" text="&lt;&lt;" toggleGroup="$toggleInfo" />
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" />
       <Button mnemonicParsing="false" onAction="#checkLink" styleClass="button-item" text="Pause" AnchorPane.rightAnchor="145.0">
                <HBox.margin>
                   <Insets left="5.0" right="5.0" />
@@ -156,40 +160,53 @@
          </children>
       </HBox>
       <ProgressCircle fx:id="progress" layoutX="350.0" layoutY="37.0" prefHeight="170.0" prefWidth="170.0" progress="0.15" />
-      <HBox fx:id="addonsBox" layoutY="240.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="175.0" prefWidth="540.0" spacing="5.0">
+      <VBox layoutY="240.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="540.0">
          <children>
-            <TableView fx:id="chunksTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="175.0" prefWidth="530.0" stylesheets="@../res/ThemeDark.css">
-              <columns>
-                  <TableColumn fx:id="chunkID" editable="false" maxWidth="-1.0" minWidth="40.0" prefWidth="50.0" sortable="false" text="Id" />
-                <TableColumn fx:id="chunkSize" editable="false" minWidth="65.0" prefWidth="65.0" sortable="false" text="Size" />
-                  <TableColumn fx:id="chunkDone" editable="false" minWidth="65.0" prefWidth="65.0" sortable="false" text="Done" />
-                <TableColumn fx:id="chunkStateCode" editable="false" minWidth="90.0" prefWidth="90.0" sortable="false" text="State" />
-                  <TableColumn fx:id="chunkProgress" editable="false" minWidth="100.0" prefWidth="100.0" sortable="false" text="Progress %" />
-              </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-               <styleClass>
-                  <String fx:value="theme-presets" />
-                  <String fx:value="SBKIT-hierarchy-panel" />
-               </styleClass>
-            </TableView>
-            <LineChart fx:id="chart" alternativeRowFillVisible="false" createSymbols="false" horizontalZeroLineVisible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="175.0" prefWidth="540.0" verticalZeroLineVisible="false">
-        <xAxis>
-          <NumberAxis autoRanging="false" forceZeroInRange="false" minorTickVisible="false" nodeOrientation="RIGHT_TO_LEFT" side="BOTTOM" tickLabelsVisible="false" upperBound="60.0" fx:id="xAxis" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis fx:id="yAxis" animated="false" forceZeroInRange="false" minorTickVisible="false" side="LEFT" tickLength="2.0" tickMarkVisible="false" />
-        </yAxis>
-               <padding>
-                  <Insets left="5.0" right="5.0" />
-               </padding>
-      </LineChart>
+            <HBox fx:id="subprogress" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="520.0">
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </VBox.margin>
+            </HBox>
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="540.0">
+               <children>
+                  <HBox fx:id="addonsBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="175.0" prefWidth="540.0" spacing="5.0">
+                     <children>
+                        <TableView fx:id="chunksTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="175.0" prefWidth="530.0" stylesheets="@../res/ThemeDark.css">
+                          <columns>
+                              <TableColumn fx:id="chunkID" editable="false" maxWidth="-1.0" minWidth="40.0" prefWidth="50.0" sortable="false" text="Id" />
+                              <TableColumn fx:id="chunkDone" editable="false" minWidth="65.0" prefWidth="65.0" sortable="false" text="Done" />
+                              <TableColumn fx:id="chunkProgress" editable="false" minWidth="100.0" prefWidth="100.0" sortable="false" text="Progress %" />
+                            <TableColumn fx:id="chunkSize" editable="false" minWidth="65.0" prefWidth="65.0" sortable="false" text="Size" />
+                            <TableColumn fx:id="chunkStateCode" editable="false" minWidth="90.0" prefWidth="90.0" sortable="false" text="State" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                           <styleClass>
+                              <String fx:value="theme-presets" />
+                              <String fx:value="SBKIT-hierarchy-panel" />
+                           </styleClass>
+                        </TableView>
+                        <LineChart fx:id="chart" alternativeRowFillVisible="false" createSymbols="false" horizontalZeroLineVisible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="175.0" prefWidth="540.0" verticalZeroLineVisible="false">
+                    <xAxis>
+                      <NumberAxis autoRanging="false" forceZeroInRange="false" minorTickVisible="false" nodeOrientation="RIGHT_TO_LEFT" side="BOTTOM" tickLabelsVisible="false" upperBound="60.0" fx:id="xAxis" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis fx:id="yAxis" animated="false" forceZeroInRange="false" minorTickVisible="false" side="LEFT" tickLength="2.0" tickMarkVisible="false" />
+                    </yAxis>
+                           <padding>
+                              <Insets left="5.0" right="5.0" />
+                           </padding>
+                  </LineChart>
+                     </children>
+                     <padding>
+                        <Insets left="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </AnchorPane>
          </children>
-         <padding>
-            <Insets left="5.0" top="5.0" />
-         </padding>
-      </HBox>
+      </VBox>
 
 </children>
    <styleClass>

@@ -1,51 +1,37 @@
-aria
-====
+Ariafx
+======
+A Smart Download Manager based on java (JavaFX), with support of HttpClient, GSON.
 
-A multithreading download manager program with pure Java/JavaFx,
-  managed in queue, cross-platform (linux/windows/mac).
+Used lib:
+====== 
+	HttpClient
+	GSON
+	Commons-IO
 
-used lib: HttpClient, GSON.
-It is open source.
-
-Options available now :
-  - add link
-  - choose streaming or parallel download (until 8-thread)
-  - choose category and queue
-  - can change referrer
-  - can change save file path and file name
-  - can the last minute for graph speed
-  - copy url
-   
-  - start/pause/stop download link(s)
-  - delete selected/complete downloads
-   
-  - save date in json format (new categories/queues/ and all links)
-  - save changes on close
-  - keep saved data updated in every  3 minute 
-  - keep history of links that had been added
-  - export/import links to/from [IDM(.ef2) file format], [Aria(.aria/json) format file], [text (.txt) link list]
-   
-  - switch between  normal and minimal view
-  - the download binding that appear when start download 
-  - by states can show All/Active/Queuing/Finished/Failed downloads
-  - can add/edit categories and queue 
-  
-  - download files into cache directory then copy it to the save directory then clear cache
-  
-  - can search for downloads
-  - have itself decoration and fixed size stage
-  
-  - add support to firefox by flashgot [cli] :
+## Options :
+ - Support Http and HTTP.
+ - Cross-platform: support Linux(Ubuntu), Windows and, Mac OS.
+ - Categories 	: add downloads to Categores.
+ - Multi-Thread	: download file in chunkes.
+ - Saved setting every 1 minute.
+ - Change Setting support.
+ - Save date in json format (new categories/queues/ and all links)
+ - Export and Import links to/from [IDM(.ef2) file format], [Aria(.aria/json) format file], [text (.txt) link list]
+ - Switch between  normal and minimal view.
+ - Add new Categories and queue , nad edit them.
+ - Search Downloads.
+ - Support to firefox by flashgot [cli] :
 	[--url=URL] [--http-referer=REFERER] [--file-name=FNAME] 
 	[--user-agent=UA] [--cookie=COOKIE] [--cookie-file=CFILE] [--input-file=UFILE]
+	
+ - Support Google Chrome.
+ - Support using Proxy [HTTP, HTTPS, SOCKS].
+ - Fix some bugs.
+
+	
+## Not avalibele yet:
+ - Manage download in queues.
+ - Add new download Alogothims.
+ - Support FTP Protocole. 
 
 
-## Screenshot 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria01.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria02.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria03.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria04.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria05.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria06.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria07.png) 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/aria08.png) 

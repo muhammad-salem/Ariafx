@@ -3,6 +3,7 @@ package aria.gui.fxml;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -45,7 +46,6 @@ import aria.Ariafx;
 import aria.about.About;
 import aria.core.download.Download;
 import aria.core.download.Link;
-import aria.core.download.ReadyItem;
 import aria.core.url.Item;
 import aria.core.url.Url;
 import aria.core.url.type.DownState;
@@ -110,7 +110,7 @@ public class AriafxMainGUI implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		//menu.setUseSystemMenuBar(true);
+//		menu.setUseSystemMenuBar(true);
 		
 		initTreeView();
 		initSelectTreeProperty();
@@ -324,7 +324,7 @@ public class AriafxMainGUI implements Initializable {
 		}
 
 		try {
-			FileUtils.writeStringToFile(file, data);
+			FileUtils.writeStringToFile(file, data, Charset.defaultCharset());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -397,7 +397,7 @@ public class AriafxMainGUI implements Initializable {
 		}
 
 		try {
-			FileUtils.writeStringToFile(file, data);
+			FileUtils.writeStringToFile(file, data, Charset.defaultCharset());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -420,18 +420,16 @@ public class AriafxMainGUI implements Initializable {
 				List<Url> urls = Url.fromEf2IDMFile(file);
 				for (Url url : urls) {
 					System.out.println(url);
-					Item item = null;
+					Link link = null;
 					try {
-						item = new Item(url.url, url.referer);
+						link = new Link(url.url, url.referer);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					item.setState(DownState.InitDown);
-					ReadyItem ready = new ReadyItem(item);
-					item = ready.initItem();
-					Download download = new Download(item);
-					DownList.initGUI(download);
-					download.updateProgressShow();
+					link.setDownState(DownState.InitDown);
+					link.retrieveInfo();
+					DownList.initGUI(link);
+					link.updateProgressShow();
 				}
 				return null;
 			}
@@ -483,11 +481,9 @@ public class AriafxMainGUI implements Initializable {
 			protected Void call() throws Exception {
 				List<Url> urls = Url.fromTextFile(file);
 				for (Url url : urls) {
-					Item item = new Item(url.url);
-					ReadyItem ready = new ReadyItem(item);
-					item = ready.initItem();
-					Download download = new Download(item);
-					DownList.initGUI(download);
+					Link link = new Link(url.url);
+					link.retrieveInfo();
+					DownList.initGUI(link);
 				}
 				return null;
 			}

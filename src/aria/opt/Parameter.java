@@ -86,7 +86,7 @@ public class Parameter {
 	}
 	
 	public String addFileSize(String fileSize) {
-		return map.put("--cookie-file", fileSize);
+		return map.put("--fileSize", fileSize);
 	}
 	public String getFileSizeString() {
 		return map.get("--fileSize");
@@ -125,7 +125,7 @@ public class Parameter {
 				map.put(args[i++], args[i]);
 			} else if (args[i].contains("--cookie-file")
 					&& !args[i].contains("=")) {
-				map.put(args[i++], args[i]);
+				addCookieFile(args[++i]);
 			} else if (args[i].contains("--fileSize")
 					&& !args[i].contains("=")) {
 				map.put(args[i++], args[i]);
@@ -172,7 +172,8 @@ public class Parameter {
 				File destFile = new File(getCookieFilePath());
 				try {
 					FileUtils.copyFile(srcFile, destFile);
-					map.put("--cookie-file", destFile.getPath());
+//					map.put("--cookie-file", destFile.getPath());
+					addCookieFile(destFile.getAbsolutePath());
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -186,9 +187,9 @@ public class Parameter {
 			String[] strs = getCookie().split("\t");
 			if(haveCookieFile){
 				if(strs.length > 4){
-					File file = new File(getCookieFile());
+					File destFile = new File(getCookieFilePath());
 					try{
-						FileUtils.writeStringToFile(file, getCookie(), "UTF-8", true);
+						FileUtils.writeStringToFile(destFile, getCookie(), "UTF-8", true);
 					}catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -231,7 +232,14 @@ public class Parameter {
 		return getSaveFileFor("input", ".cookie");
 	}
 	public void clear() {
-		FileUtils.deleteQuietly(new File(R.NewLink + R.separator + getAdded()));
+//		FileUtils.deleteQuietly(new File(R.NewLink + R.separator + getAdded()));
+		File paramfile = new File(R.NewLink + R.separator + getAdded());
+		try {
+			R.delete(paramfile);
+		} catch (Exception e) {
+			R.cout("Can't delete paramter " + getAdded());
+		}
+		
 	}
 
 	public HashMap<String, String> getMap() {

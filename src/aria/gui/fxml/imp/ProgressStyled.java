@@ -21,6 +21,7 @@ public class ProgressStyled extends ProgressBar{
 			setStyleClass(StyleProgress.Orange);
 		} 
 	};
+	
 	public ProgressStyled(double progress) {
 		super(progress);
 		getStylesheets().add(getClass().getResource("progressPar.css").toExternalForm());
@@ -33,6 +34,35 @@ public class ProgressStyled extends ProgressBar{
 	public ProgressStyled(StyleProgress styleProgress) {
 		this(INDETERMINATE_PROGRESS);
 		setStyleClass(styleProgress);
+	}
+	
+	public ProgressStyled(double progress, StyleProgress styleProgress) {
+		this(progress);
+		setStyleClass(styleProgress);
+	}
+	
+	public static ProgressBar CreateProgressFlat(){
+		return CreateProgressFlat(INDETERMINATE_PROGRESS);
+	}
+	
+	public static ProgressBar CreateProgressFlat(double progress){
+		ProgressBar styled =  new ProgressBar(progress);
+		styled.getStylesheets().add(
+				ProgressStyled.class.getResource("FlatProgress.css")
+				.toExternalForm());
+		return styled;
+	}
+	public static ProgressBar CreateProgressFlat(StyleProgress styleProgress) {
+		ProgressBar styled = CreateProgressFlat();
+		styled.getStyleClass().removeAll(StyleProgress.Styles);
+		styled.getStyleClass().add(styleProgress.toString());
+		return styled;
+	}
+	
+	public static ProgressBar CreateProgressFlat(double progress, StyleProgress styleProgress) {
+		ProgressBar styled = CreateProgressFlat(styleProgress);
+		styled.setProgress(progress);
+		return styled;
 	}
 	
 	public void addStyleListener(){

@@ -4,8 +4,10 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +24,7 @@ import javafx.stage.StageStyle;
 
 import org.apache.commons.io.FilenameUtils;
 
+import aria.core.download.Download;
 import aria.core.download.Link;
 import aria.core.url.type.Category;
 import aria.core.url.type.DownState;
@@ -101,9 +104,13 @@ public class DisplayUrlInfo implements Initializable {
 	void initAnchorVB1() {
 		
 		ObservableList<Integer> listNum 
-			= FXCollections.observableArrayList(1,2,4,8,10,16,20,24,32);
+			= FXCollections.observableArrayList(1,2,3,4,5,6,7,8,10,16,20,24,32);
 		parallelThread.setItems(listNum);
-		parallelThread.getSelectionModel().select(Integer.valueOf(4));
+		parallelThread.getSelectionModel()
+			.select(Integer.valueOf(Download.ParallelChunks));
+		parallelThread.getSelectionModel()
+			.select(Integer.valueOf(
+					Utils.gesslChunkesNum(link.getLength())));
 		
 	}
 
@@ -230,6 +237,8 @@ public class DisplayUrlInfo implements Initializable {
 	}
 	/**-------------------------5-----------------------------**/
 	
+	
+	
 	private Item2Gui bindILink2Gui(){
 		Integer parl = parallelThread.getValue();
 		if(parl == 1) link.setStreaming();
@@ -237,6 +246,7 @@ public class DisplayUrlInfo implements Initializable {
 		
 		link.setDownState(DownState.InitDown);
 		
+		/*
 		if (link.getItem().ranges == null) {
 			long sub = (int) link.getLength() / link.getChunksNum();
 			link.getItem().ranges = new long[link.getChunksNum()][3];
@@ -247,6 +257,10 @@ public class DisplayUrlInfo implements Initializable {
 			}
 			link.getItem().ranges[link.getChunksNum() - 1][1] = link.getLength();
 		}
+		*/
+		
+		link.callRange();
+		
 		
 		Item2Gui gui = null;
 		try {
@@ -272,18 +286,27 @@ public class DisplayUrlInfo implements Initializable {
 	/**-------------------------6-----------------------------**/
 
 	public static void AddLink(Link link) {
-		try {
-			Stage ui = new Stage();
-			DisplayUrlInfo info = new DisplayUrlInfo(ui, link);
-			FXMLLoader loader = new FXMLLoader(DisplayUrlInfo.FXML);
-			loader.setController(info);
-			ui.setScene(new Scene(loader.load()));
-			ui.show();
-			MovingStage.pikeToMoving(ui, info.anchor);
-		} catch (Exception e) {
-			System.err.println("error in loading fxml file.\n"
-					+ DisplayUrlInfo.FXML.toString());
-		}
+		
+		Platform.runLater(new Task<Void>() {
+
+			@Override
+			protected Void call() throws Exception {
+				try {
+					Stage ui = new Stage();
+					DisplayUrlInfo info = new DisplayUrlInfo(ui, link);
+					FXMLLoader loader = new FXMLLoader(DisplayUrlInfo.FXML);
+					loader.setController(info);
+					ui.setScene(new Scene(loader.load()));
+					ui.show();
+					MovingStage.pikeToMoving(ui, info.anchor);
+				} catch (Exception e) {
+					System.err.println("error in loading fxml file.\n"
+							+ DisplayUrlInfo.FXML.toString());
+				}
+				return null;
+			}
+		});
+		
 	}
 	
 	

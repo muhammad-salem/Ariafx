@@ -10,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -57,13 +58,15 @@ public class Item {
 
 	String queue;
 	String category;
+	
+	public boolean isAuthorized = false;
+	private String authorization;
+	
 	public boolean isStreaming = false;
-
 	int chunksNum;
 	public long[][] ranges;
 
-	public boolean isAuthorized = false;
-	private String authorization;
+	
 
 	private void initURL() {
 
@@ -173,8 +176,9 @@ public class Item {
 	}
 
 	public void removeAuthrized() {
-		String str = "anonymous:anonymous";
-		setAuthorization(Base64.encodeBase64String(str.getBytes()));
+//		String str = "anonymous:anonymous";
+//		setAuthorization(Base64.encodeBase64String(str.getBytes()));
+		setAuthorization(null);
 		isAuthorized = false;
 	}
 
@@ -506,21 +510,28 @@ public class Item {
 				cookie = new BasicClientCookie(str[5], null);
 			}
 			cookie.setDomain(str[0]);
-//			cookie.setAttribute("", str[1]);
+//			cookie.setAttribute(BasicClientCookie.DOMAIN_ATTR, str[0]);
+//			cookie.setAttribute("httpOnly", str[1]);
 			cookie.setPath(str[2]);
-			cookie.setSecure(!Boolean.valueOf(str[3]));
+//			cookie.setAttribute(BasicClientCookie.PATH_ATTR, str[2]);
+			cookie.setSecure( Boolean.valueOf(str[3]) );
+//			cookie.setAttribute(BasicClientCookie.SECURE_ATTR, str[3]);
+			
 			cookie.setExpiryDate(new Date(Long.valueOf(str[4])));
+//			cookie.setAttribute(BasicClientCookie.EXPIRES_ATTR, str[4]);
+			cookie.setVersion(1);
+			
 			
 //			System.out.println(cookie.toString());
-			if(getUrl().getUrl().getProtocol().equals("http")){
-				if(!Boolean.valueOf(str[1])){
-					store.addCookie(cookie);
-				}
-			}else{
+//			if(getUrl().getUrl().getProtocol().equals("http")){
+//				if(!Boolean.valueOf(str[1])){
+//					store.addCookie(cookie);
+//				}
+//			}else{
 				store.addCookie(cookie);
-			}
+//			}
 			
-			
+//			System.out.println(cookie);
 				
 		}
 		
@@ -531,7 +542,7 @@ public class Item {
 	public List<String> readCookieLines() {
 		List<String> lines;
 		try {
-			lines = FileUtils.readLines(new File(getCookieFile()));
+			lines = FileUtils.readLines(new File(getCookieFile()), Charset.defaultCharset());
 		} catch (IOException e) {
 			return null;
 		}

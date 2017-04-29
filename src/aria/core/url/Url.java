@@ -9,16 +9,17 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 import org.apache.commons.io.FileUtils;
 
-import aria.opt.Utils;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import aria.opt.Utils;
 
 public class Url {
 	
@@ -82,7 +83,7 @@ public class Url {
 		
 		List<String> list;
 		try {
-			list = FileUtils.readLines(file);
+			list = FileUtils.readLines(file, Charset.defaultCharset());
 		} catch (IOException e) {
 			return new ArrayList<Url>();
 		}
@@ -121,7 +122,7 @@ public class Url {
 		
 		List<String> list;
 		try {
-			list = FileUtils.readLines(file);
+			list = FileUtils.readLines(file, Charset.defaultCharset());
 		} catch (IOException e) {
 			return new ArrayList<Url>();
 		}

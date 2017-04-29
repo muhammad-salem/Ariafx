@@ -2,11 +2,9 @@ package aria.gui.manager;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.List;
-
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -18,8 +16,10 @@ import aria.core.download.Link;
 import aria.core.url.Item;
 import aria.gui.fxml.control.DisplayUrlInfo;
 import aria.opt.Parameter;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 
-public class ParameterToLink {
+public class ParameterToLink extends Service<Void>{
 	Parameter param;
 	Link link;
 	private ParameterToLink(Parameter param){
@@ -35,7 +35,8 @@ public class ParameterToLink {
 				// case of more than one link
 				String path =  copyInputFile();
 				try {
-					List<String> urls = FileUtils.readLines(new File(path));
+					List<String> urls = FileUtils.readLines(new File(path), Charset.defaultCharset());
+//					List<String> urls = FileUtils.readLines(new File(path));
 					for (String string : urls) {
 						System.out.println(string);
 					}
@@ -80,9 +81,9 @@ public class ParameterToLink {
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println("ParameterToLink.setItem()" + url);
+			}finally{
+				param.clear();
 			}
-			
-			param.clear();
 		}
 		
 	}
@@ -155,7 +156,8 @@ public class ParameterToLink {
 	public List<String> readCookieLines() {
 		List<String> lines;
 		try {
-			lines = FileUtils.readLines(new File(link.getCookieFile()));
+			lines = FileUtils.readLines(new File(link.getCookieFile()), Charset.defaultCharset());
+//			lines = FileUtils.readLines(new File(link.getCookieFile()));
 //			for (String string : lines) {
 //				System.out.println(string);
 ////				String[] str = string.split("\t");
@@ -177,16 +179,30 @@ public class ParameterToLink {
 	
 	public static void initLink(Parameter param) {
 		ParameterToLink toLink = new ParameterToLink(param);
-		Platform.runLater(new Task<Void>() {
+		toLink.start();
+		
+//		Platform.runLater(new Task<Void>() {
+//			@Override
+//			protected Void call() throws Exception {
+//				toLink.initLink();
+//				return null;
+//			}
+//		});
+		
+		
+	}
 
+	@Override
+	protected Task<Void> createTask() {
+		
+		return new Task<Void>() {
+			
 			@Override
 			protected Void call() throws Exception {
-				toLink.initLink();
+				initLink();
 				return null;
 			}
-		});
-		
-		
+		};
 	}
 
 

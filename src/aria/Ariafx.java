@@ -54,13 +54,19 @@ public class Ariafx extends Application {
 	
 	public void initAfterFX() {
 		Platform.runLater(() -> {
-			// R.ReadDownloads();
 			saveStateTimeLine();
 			initMonitor();
 			// init tray icon
 			TrayUtile.InitTray();
+                        Chrome.CheckNetiveMessage();
 			Platform.setImplicitExit(false);
 		});
+	}
+	
+	public static String[] readChromeMessage(){
+		String str = Chrome.readMessage();
+		ChromeMSG msg = ChromeMSG.CreateMessage(str);
+		return msg.toArgs();
 	}
 
 	/**
@@ -77,14 +83,21 @@ public class Ariafx extends Application {
 	 */
 	public static void main(String[] args) throws Exception {
 		
-		if(args.length != 0 && args[0].contains(Chrome.extensions_id)){
-			String str = Chrome.readMessage();
-			ChromeMSG msg = ChromeMSG.CreateMessage(str.trim());
-			args = msg.toArgs();
+		if(args.length == 1 
+				&& args[0].contains(Chrome.extensions_id)){
+			args = readChromeMessage();
+		}else if(args.length == 2 
+//				&& args[0].equals("--silent") 
+				&& args[1].contains(Chrome.extensions_id)){
+			args = readChromeMessage();
 		}
 		
+		
 		if(AppInstance.isAppInstanceExists()){
-			if(args.length != 0){
+			if(args.length == 1 
+					&& args[0].contains("--silent")){
+				return;
+			} else if(args.length != 0){
 				/*Parameter parameter =*/ new Parameter(args);
 				//System.out.println(Arrays.toString(args));
 				//System.out.println(parameter.toString());
@@ -119,7 +132,7 @@ public class Ariafx extends Application {
 				preloader.close();
 				initUI(stage);
 				initAfterFX();
-				Notifier.NotifyUser("Ariafx is running", "A Smart Download Manager");
+				Notifier.NotifyUser("Ariafx has lunched", "A Smart Download Manager");
 			});
 		}
 		ui = stage;
@@ -202,6 +215,7 @@ public class Ariafx extends Application {
 			
 			@Override
 			public void onFileCreate(File file) {
+				
 				new Service<Void>() {
 					@Override
 					protected Task<Void> createTask() {
@@ -237,7 +251,7 @@ public class Ariafx extends Application {
 			e.printStackTrace();
 		}
 		
-		if(param.length != 0){
+		if(param != null && param.length != 0){
 			Platform.runLater(new Task<Void>() {
 				@Override
 				protected Void call() throws Exception {
@@ -278,12 +292,14 @@ public class Ariafx extends Application {
 	}
 	
 	public static void Exit() {
+		ui.close();
 		StopMonitor();
 		R.SAVE_CHANGES();
 		Runtime.getRuntime().removeShutdownHook(shutdownHookThread);
 		Platform.setImplicitExit(true);
 		Platform.exit();
 		System.exit(0);
+		
 	}
 
 }

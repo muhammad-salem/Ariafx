@@ -3,8 +3,13 @@ package aria;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import aria.about.About;
+import aria.gui.fxml.imp.MovingStage;
+import aria.gui.fxml.imp.ProgressStyled;
+import aria.opt.R;
 import javafx.animation.Transition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -20,10 +25,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import aria.about.About;
-import aria.gui.fxml.imp.MovingStage;
-import aria.gui.fxml.imp.ProgressStyled;
-import aria.opt.R;
 
 /**
  * Simple Preloader Using the ProgressBar Control
@@ -62,10 +63,7 @@ public class Preloader extends Application {
 		stage.setScene(new Scene(anchor));
 		stage.show();
 		MovingStage.pikeToMoving(stage, anchor);
-
-		stage.setOnHiding((e) -> {
-			R.ReadDownloads();
-		});
+		
 	}
 
 	int sleep = 250;
@@ -81,7 +79,7 @@ public class Preloader extends Application {
 					protected Void call() throws Exception {
 						R.InitiDirs();
 						pre.setProgress(0.2);
-						pre.sendMessage("Makeing Directory");
+						pre.sendMessage("Creating Directorys");
 						Thread.sleep(350);
 
 						R.ReadSetting();
@@ -89,7 +87,9 @@ public class Preloader extends Application {
 						pre.sendMessage("Reading saved Setting");
 						Thread.sleep(350);
 						
-//						R.initFileLock();
+						//R.initFileLock();
+						//AppInstance.initFileLock();    // had been run in the main thread
+						
 						pre.setProgress(0.50);
 						pre.sendMessage("Init File Lock");
 						Thread.sleep(450);
@@ -108,13 +108,18 @@ public class Preloader extends Application {
 
 						// R.ReadDownloads(); //need fx thread
 						pre.setProgress(0.84);
-						pre.sendMessage("Links Initialization");
+						pre.sendMessage("URLs Initialization");
 						Thread.sleep(350);
 
 						R.LoadTreeItems();
-						pre.setProgress(1.0);
+//						pre.setProgress(1.0);
 						pre.sendMessage("Start " + About.App_Name + "....");
 						Thread.sleep(350);
+						
+						Platform.runLater(()->{
+							R.ReadDownloads();
+						});
+						pre.setProgress(1.0);
 
 						return null;
 					}

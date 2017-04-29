@@ -4,9 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.Socket;
+
+import javax.net.ssl.SSLContext;
 
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -17,28 +23,41 @@ import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.HttpClientConnectionManager;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.ssl.SSLContexts;
 
+import aria.core.download.ProxySetting.ProxyConfig;
+import aria.core.download.ProxySetting.ProxyType;
 import aria.core.url.Item;
 import aria.gui.fxml.control.ChunkUI;
 import aria.opt.R;
+import aria.opt.Setting;
 import aria.opt.Utils;
 
 public class Chunk extends Service<Number> implements ChunkUI{
 
 	public CloseableHttpClient httpClient;
 	public HttpGet httpGet;
+	public HttpClientContext context;
 	public Header[] headers;
 
 	public long[] range;
@@ -52,6 +71,7 @@ public class Chunk extends Service<Number> implements ChunkUI{
 	public SimpleStringProperty stateCode = new SimpleStringProperty(this, "stateCode", "");
 	public SimpleStringProperty size = new SimpleStringProperty(this, "size", "");
 	public SimpleStringProperty done = new SimpleStringProperty(this, "done", "");
+	public int httpStateCode;
 	
 	
 //	public Chunk(int id, String url, String saveFile, Header[] headers,
@@ -153,26 +173,119 @@ public class Chunk extends Service<Number> implements ChunkUI{
 		
 		HttpClientBuilder  builder = HttpClients.custom();
 		CookieStore store = null;
+		context = HttpClientContext.create();
 		if (item.haveCookie()) {
 			store = item.getCookieStore();
-			if(store != null)
+			if(store != null){
 				builder.setDefaultCookieStore(item.getCookieStore());
+				context.setCookieStore(item.getCookieStore());
+			}
+				
 		}
 		
-		HttpClientConnectionManager connMrg = new BasicHttpClientConnectionManager();
-		builder.setConnectionManager(connMrg);
+		if(Setting.GetProxyConfig() == ProxyConfig.ManualProxy 
+				&& Setting.GetProxyType() == ProxyType.SOCKS){
+			// Client HTTP connection objects when fully initialized can be bound to
+	        // an arbitrary network socket. The process of network socket initialization,
+	        // its connection to a remote address and binding to a local one is controlled
+	        // by a connection socket factory.
+
+	        // SSL context for secure connections can be created either based on
+	        // system or application specific properties.
+	        SSLContext sslcontext = SSLContexts.createSystemDefault();
+
+	        // Create a registry of custom connection socket factories for supported
+	        // protocol schemes.	        
+	        class SocksPlainConnectionSocketFactory extends PlainConnectionSocketFactory {
+
+	            public SocksPlainConnectionSocketFactory() {
+	                super();
+	            }
+
+	            @Override
+	            public Socket createSocket(final HttpContext context) throws IOException {
+	                InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
+	                Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
+	                return new Socket(proxy);
+	            }
+
+	        }
+	        
+	        class SocksSSLConnectionSocketFactory extends SSLConnectionSocketFactory {
+
+	            public SocksSSLConnectionSocketFactory(final SSLContext sslContext) {
+	                super(sslContext);
+	            }
+
+	            @Override
+	            public Socket createSocket(final HttpContext context) throws IOException {
+	                InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
+	                Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
+	                return new Socket(proxy);
+	            }
+
+	        }
+	        
+			Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
+			            .register("http", new SocksPlainConnectionSocketFactory())
+			            .register("https", new SocksSSLConnectionSocketFactory(sslcontext))
+			            .build();
+			 
+			PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg);
+			builder.setConnectionManager(cm);
+			
+		}else{
+			HttpClientConnectionManager connMrg = new BasicHttpClientConnectionManager();
+			builder.setConnectionManager(connMrg);
+		}
 		builder.setRedirectStrategy(new LaxRedirectStrategy());
 		
 		RequestConfig globalConfig = RequestConfig.custom()
-		        .setCookieSpec(CookieSpecs.BROWSER_COMPATIBILITY)
+//		        .setCookieSpec(CookieSpecs.BROWSER_COMPATIBILITY)
+		        .setCookieSpec(CookieSpecs.DEFAULT)
 		        .build();
 		builder.setDefaultRequestConfig(globalConfig);
+		builder.useSystemProperties();
+		//builder.setProxy(new HttpHost("127.0.0.1", 8089));
+		
+		//proxy setting gos her
+		//proxy setting gos her
+				ProxySetting setting = Setting.getProxySetting();
+				if(setting.getProxyConfig() != ProxyConfig.NoProxy){
+					if(setting.getProxyConfig() == ProxyConfig.SystemProxy){
+						builder.useSystemProperties();
+					} else if(setting.getProxyConfig() == ProxyConfig.ManualProxy){
+						HttpHost proxy = new HttpHost(setting.getRemoteAddress(), setting.getRemotePort());
+						if(setting.getProxyType() == ProxyType.HTTPS){
+							builder.setProxy(proxy);
+						} 
+						else if(setting.getProxyType() == ProxyType.HTTPS){
+								proxy = new HttpHost(setting.getRemoteAddress(), setting.getRemotePort(), "https");
+								builder.setProxy(proxy);
+						} 
+						else if(setting.getProxyType() == ProxyType.SOCKS){
+							 InetSocketAddress socksaddr = new InetSocketAddress(setting.getRemoteAddress(), setting.getRemotePort());
+							 context.setAttribute("socks.address", socksaddr);
+						}
+								
+						
+						
+					} else if(setting.getProxyConfig() == ProxyConfig.AutoConfigProxy){
+//								HttpHost proxy = new HttpHost(ProxySetting.HTTPRemoteAddress, ProxySetting.HTTPRemotePort);
+						builder.setProxy(new HttpHost( setting.getUrlAutoConfig() ) );
+					}
+				}
+		
+		
+		
+		
 		
 		httpClient = builder.build();
 
 		httpGet = new HttpGet(url);
 		RequestConfig localConfig = RequestConfig.copy(globalConfig)
-		        .setCookieSpec(CookieSpecs.BEST_MATCH)
+		        .setCookieSpec(CookieSpecs.STANDARD_STRICT)
+//		        .setCookieSpec(CookieSpecs.BROWSER_COMPATIBILITY)
 		        .build();
 		httpGet.setConfig(localConfig);
 		if (headers != null){
@@ -200,26 +313,24 @@ public class Chunk extends Service<Number> implements ChunkUI{
 			@Override
 			protected Number call() throws Exception {
 				if (range != null) {
-					if (range[2] >= range[0] && range[0] != 0){
-						updateProgress(range[2], range[1]);
-						return -1;
-					}
-					else if (range[1] == (range[0] + range[2])){
-						updateValue(range[0] + range[2]);
-						updateProgress(range[2], range[1]);
+					updateValue(range[0] + range[2]);
+					updateProgress(range[2], (range[1] - range[0] ));
+					setSize(Utils.fileLengthUnite(range[1] - range[0]));
+					updateMessage(Utils.fileLengthUnite(range[2]));
+					
+					if (range[1] == (range[0] + range[2])){
 						setStateCode("Done");
-						setSize(Utils.fileLengthUnite(range[1] - range[0]));
-						setDone(Utils.fileLengthUnite(range[2]));
-						return -1;
+						return 1;
 					}
 					else if (range[1] == (range[0] + range[2] - 1)){
-						updateValue(range[0] + range[2]);
-						updateProgress(range[2], range[1]);
 						setStateCode("Done");
-						setSize(Utils.fileLengthUnite(range[1] - range[0]));
-						setDone(Utils.fileLengthUnite(range[2]));
+						return 1;
+					}else if (range[2] >= range[0] && (range[0] != 0  )){
+						updateProgress((range[0] + range[2]), range[1]);
+						setStateCode("Error");
 						return -1;
 					}
+					
 					/* how to get range for that @param id */
 					String byteRange = range[0] + range[2] + "-";
 					if (range[1] != -1) {
@@ -228,13 +339,14 @@ public class Chunk extends Service<Number> implements ChunkUI{
 
 					httpGet.addHeader(HttpHeaders.RANGE, "bytes=" + byteRange);
 				}
-				HttpClientContext context = HttpClientContext.create();
+//				HttpClientContext context = HttpClientContext.create();
 				HttpResponse response = httpClient.execute(httpGet, context);
 				//System.out.println("-> " + response.toString());
 				R.cout("-> " + response.toString());
 				
 				stateCode.set(response.getStatusLine().getReasonPhrase());
 				setSize(Utils.fileLengthUnite(range[1] - range[0]));
+				httpStateCode = response.getStatusLine().getStatusCode();
 				
 				if (response.getStatusLine().getStatusCode() / 100 != 2) {
 					String strLog = "id:" + id.get()
@@ -272,7 +384,7 @@ public class Chunk extends Service<Number> implements ChunkUI{
 						range[2] += read;
 						Platform.runLater(() -> {
 							if (item.isUnknowLength() ) {
-								updateProgress(range[2], range[2]);
+								updateProgress(range[2], range[1]);
 								item.downloaded = range[2];
 							} else {
 								updateProgress(range[2], length);
@@ -280,7 +392,7 @@ public class Chunk extends Service<Number> implements ChunkUI{
 							// updateTitle(response.getStatusLine().toString() +
 							// " State: " + getState());
 							updateValue(range[2]);
-							setDone(Utils.fileLengthUnite(range[2]));
+							updateMessage(Utils.fileLengthUnite(range[2]));
 						});
 					}
 					file.close();
@@ -321,8 +433,8 @@ public class Chunk extends Service<Number> implements ChunkUI{
 		return size;
 	}
 	@Override
-	public StringProperty doneProperty() {
-		return done;
+	public ReadOnlyStringProperty doneProperty() {
+		return messageProperty();
 	}
 	
 	

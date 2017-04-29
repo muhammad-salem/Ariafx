@@ -1,6 +1,7 @@
 package aria.gui.fxml.control;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.StringProperty;
 
 public interface ChunkUI {
@@ -8,7 +9,7 @@ public interface ChunkUI {
 	public StringProperty stateCodeProperty();
 	public IntegerProperty idProperty();
 	public StringProperty sizeProperty();
-	public StringProperty doneProperty();
+	public ReadOnlyStringProperty doneProperty();
 	
 	
 	public default String getStateCode() {
@@ -30,13 +31,6 @@ public interface ChunkUI {
 	}
 	public default void setSize(String size) {
 		sizeProperty().set(size);
-	}
-	
-	public default String getDone() {
-		return doneProperty().get();
-	}
-	public default void setDone(String done) {
-		doneProperty().set(done);
 	}
 	
 	

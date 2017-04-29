@@ -103,8 +103,8 @@ public class Item2Gui implements Initializable {
 
 	@FXML
 	public Label title, percent, url, state, 
-		timeLeft, savePath, speed1, speed2;
-
+		timeLeft, savePath, speed1, speed2, remining;
+	  
     @FXML
     private Menu categoryMenu;
     
@@ -257,7 +257,7 @@ public class Item2Gui implements Initializable {
 		referrer.textProperty().addListener((obs, old, nw) -> {
 			link.setReferer(nw);
 		});
-
+		remining.textProperty().bind(link.remainingProperty());
 		ItemBinding.bindItem(link, this);
 
 	}
@@ -272,15 +272,22 @@ public class Item2Gui implements Initializable {
 				break;
 			case CANCELLED:
 				progress.setStyleClass(StyleProgress.Grey);
+				timeLeft.setVisible(false);
+				speed1.setVisible(false);
+				remining.setVisible(false);
 				break;
 			case RUNNING:
 				progress.setStyleClass(StyleProgress.Green);
+				timeLeft.setVisible(true);
+				speed1.setVisible(true);
+				remining.setVisible(true);
 				break;
 			case SUCCEEDED: {
 				if (link.getDownloaded() == link.getLength()) { // in success
 					progress.setStyleClass(StyleProgress.Green);
 					timeLeft.setVisible(false);
 					speed1.setVisible(false);
+					remining.setVisible(false);
 				} else if (link.getDownloaded() > link.getLength()) { // in
 																		// faild
 					if (link.getItem().isUnknowLength()) {
@@ -290,7 +297,7 @@ public class Item2Gui implements Initializable {
 					}
 					timeLeft.setVisible(false);
 					speed1.setVisible(false);
-
+					remining.setVisible(false);
 				} else { // still in pause
 
 					progress.setStyleClass(StyleProgress.Grey);
@@ -300,6 +307,7 @@ public class Item2Gui implements Initializable {
 			case FAILED:
 				timeLeft.setVisible(false);
 				speed1.setVisible(false);
+				remining.setVisible(false);
 				progress.setStyleClass(StyleProgress.Grey);
 				break;
 
@@ -331,6 +339,7 @@ public class Item2Gui implements Initializable {
 						+ Utils.fileLengthUnite(link.getDownloaded())
 						+ " of " + Utils.fileLengthUnite(link.getLength())
 						+ ((link.getRetry() == 0)? "" : " ("+ link.getRetry() + ")")
+//						+ ((link.getRemining() == null )? "" : (" need :(" + link.getRemining() + ")" ) )
 					);
 			}
 		});
@@ -349,7 +358,7 @@ public class Item2Gui implements Initializable {
 
 		// hide timeleft
 		timeLeft.setVisible(false);
-
+		remining.textProperty().bind(link.remainingProperty());
 	}
 
 	@FXML

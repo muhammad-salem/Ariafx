@@ -23,7 +23,7 @@ public class ChromeMSG {
 	boolean page;
 	String url;
 	String origUrl;
-	String cookies;
+	String cookies = null ;
 	String referrer;
 	String filename;
 	String post;
@@ -66,7 +66,9 @@ public class ChromeMSG {
 			File cookeFile = new File(R.NewLink + 
 					R.separator + getDate() + 
 					R.separator + "cookfile.txt");
+			
 			try {
+				FileUtils.forceMkdir(cookeFile.getParentFile());
 				FileOutputStream stream = new FileOutputStream(cookeFile);
 				stream.write(getCookies().getBytes());
 				stream.flush();
@@ -74,8 +76,8 @@ public class ChromeMSG {
 				
 				args += "--cookie-file=" + cookeFile.getAbsolutePath() + ":;";
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				R.cout("can't create cookies");
+				R.cout(e.getMessage());
 			}
 			
 		}

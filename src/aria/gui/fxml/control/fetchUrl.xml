@@ -20,21 +20,21 @@
                   <CheckBox fx:id="authrization" layoutX="18.0" layoutY="52.0" mnemonicParsing="false" prefHeight="25.0" text="Login" AnchorPane.leftAnchor="18.0" AnchorPane.topAnchor="80.0" />
                   <TextField fx:id="user" disable="true" layoutX="90.0" layoutY="52.0" prefHeight="25.0" prefWidth="275.0" promptText="User" styleClass="button-item" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="80.0" />
                   <PasswordField fx:id="pass" disable="true" layoutX="394.0" layoutY="52.0" prefHeight="25.0" prefWidth="275.0" promptText="Password" styleClass="button-item" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="80.0" />
-                  <Button defaultButton="true" layoutX="493.0" layoutY="104.0" mnemonicParsing="false" onAction="#fetchInfo" styleClass="button-item" text="Add URL" textFill="#1aa2fa" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="50.0" />
-                  <ChoiceBox fx:id="parallelThread" layoutX="191.0" layoutY="113.0" prefHeight="27.0" prefWidth="62.0" styleClass="button-head">
-                     <tooltip>
-                        <Tooltip text="For Streaming prefere to choise 1." />
-                     </tooltip></ChoiceBox>
-                  <Label layoutX="21.0" layoutY="119.0" text="Num. of Parallel Threads:" />
-                  <Label fx:id="message" contentDisplay="RIGHT" layoutX="393.0" layoutY="90.0" prefHeight="24.0" text="Wrong URL Formate" textFill="RED" visible="false" AnchorPane.bottomAnchor="5.0">
-                     <graphic>
-                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../res/gtk/media-record.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Label>
+                  <HBox layoutX="393.0" layoutY="115.0" spacing="7.0" AnchorPane.rightAnchor="20.0">
+                     <children>
+                        <Label fx:id="message" contentDisplay="RIGHT" layoutX="393.0" layoutY="90.0" prefHeight="24.0" text="Wrong URL Formate" textFill="RED" visible="false" AnchorPane.bottomAnchor="5.0">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../res/gtk/media-record.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                        <Button cancelButton="true" mnemonicParsing="false" onAction="#close" prefHeight="25.0" prefWidth="74.0" styleClass="button-item" text="Cancel " textFill="#1aa2fa" />
+                        <Button defaultButton="true" layoutX="493.0" layoutY="104.0" mnemonicParsing="false" onAction="#fetchInfo" styleClass="button-item" text="Add URL" textFill="#1aa2fa" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="50.0" />
+                     </children>
+                  </HBox>
                </children>
                <padding>
                   <Insets bottom="5.0" />
@@ -57,7 +57,7 @@
                   <Label layoutX="14.0" layoutY="85.0" text="Category" textFill="BLUE" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="60.0" />
                   <Label layoutX="14.0" layoutY="120.0" text="Save To" textFill="BLUE" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="95.0" />
                   <Label layoutX="14.0" layoutY="159.0" text="Queue" textFill="BLUE" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="135.0" />
-                  <Label fx:id="itemLength" alignment="CENTER" layoutX="599.0" layoutY="95.0" prefHeight="20.0" prefWidth="86.0" textAlignment="CENTER" textFill="BLUE" wrapText="true" />
+                  <Label fx:id="itemLength" alignment="CENTER" layoutX="599.0" layoutY="121.0" prefHeight="20.0" prefWidth="86.0" textAlignment="CENTER" textFill="BLUE" wrapText="true" />
                   <TextField fx:id="linkUrl" editable="false" focusTraversable="false" layoutX="107.0" layoutY="35.0" prefHeight="27.0" prefWidth="517.0" styleClass="button-item" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="78.0" AnchorPane.topAnchor="20.0" />
                   <ChoiceBox fx:id="category" layoutX="105.0" layoutY="80.0" prefHeight="25.0" prefWidth="224.0" styleClass="button-item" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="55.0" />
                   <Button layoutX="349.2275390625" layoutY="79.5" mnemonicParsing="false" onAction="#addCategory" styleClass="button-head" text="+" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="55.0" />
@@ -65,9 +65,23 @@
                   <Button layoutX="544.0" layoutY="115.0" mnemonicParsing="false" onAction="#changeSaveTo" prefHeight="25.0" prefWidth="20.0" styleClass="button-head" text="..." AnchorPane.rightAnchor="125.0" AnchorPane.topAnchor="90.0" />
                   <ChoiceBox fx:id="queue" layoutX="105.0" layoutY="154.0" prefHeight="25.0" prefWidth="224.0" styleClass="button-item" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="130.0" />
                   <Button layoutX="349.0" layoutY="154.0" mnemonicParsing="false" onAction="#addQueue" styleClass="button-head" text="+" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="130.0" />
-                  <Button layoutX="120.0" layoutY="180.0" mnemonicParsing="false" onAction="#downLater" prefHeight="25.0" prefWidth="139.0" styleClass="button-item" text="Download Later" />
-                  <Button cancelButton="true" layoutX="320.0" layoutY="180.0" mnemonicParsing="false" onAction="#close" prefHeight="25.0" prefWidth="139.0" styleClass="button-item" text="Cancel " />
-                  <Button defaultButton="true" layoutX="520.0" layoutY="180.0" mnemonicParsing="false" onAction="#downloadNow" prefHeight="25.0" prefWidth="139.0" styleClass="button-item" text="Start Download" textFill="#1aa2fa" />
+                  <HBox layoutX="385.0" layoutY="180.0" spacing="5.0">
+                     <children>
+                        <Button layoutX="377.0" layoutY="180.0" mnemonicParsing="false" onAction="#downLater" prefHeight="25.0" prefWidth="96.0" styleClass="button-item" text="Down Later" />
+                        <Button cancelButton="true" layoutX="481.0" layoutY="180.0" mnemonicParsing="false" onAction="#close" prefHeight="25.0" prefWidth="74.0" styleClass="button-item" text="Cancel " />
+                        <Button defaultButton="true" layoutX="564.0" layoutY="180.0" mnemonicParsing="false" onAction="#downloadNow" prefHeight="25.0" prefWidth="123.0" styleClass="button-item" text="Download Now" textFill="#1aa2fa" />
+                     </children>
+                  </HBox>
+                  <HBox layoutX="10.0" layoutY="181.0" spacing="5.0">
+                     <children>
+                        <Label layoutX="149.0" layoutY="119.0" prefHeight="25.0" text="Num. of Parallel Threads:" />
+                        <ChoiceBox fx:id="parallelThread" layoutX="319.0" layoutY="113.0" prefHeight="25.0" prefWidth="62.0" styleClass="button-head">
+                           <tooltip>
+                              <Tooltip text="For Streaming prefere to choise 1." />
+                           </tooltip>
+                        </ChoiceBox>
+                     </children>
+                  </HBox>
                </children>
             </AnchorPane>
          </children>
