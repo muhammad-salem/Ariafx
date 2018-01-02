@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import ariafx.gui.fxml.imp.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="root" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="41.0" prefWidth="600.0" style="-fx-border-width: 1px, 0px, 0px, 0px; -fx-border-color: #ccc; -fx-border-style: solid;" styleClass="white-background" stylesheets="@res/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="title" prefHeight="10.0" prefWidth="320.0" styleClass="label-text" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="1.0" />
+      <Label fx:id="state" alignment="CENTER" prefHeight="10.0" prefWidth="110.0" styleClass="label-text" textAlignment="RIGHT" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="1.0" />
+      <Button fx:id="buttonSetting" alignment="CENTER" ellipsisString="" focusTraversable="false" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" styleClass="button-head" AnchorPane.rightAnchor="0.0">
+         <graphic>
+            <ImageView fx:id="imgSetting" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+               <image>
+                  <Image url="@res/ic_commit.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <ProgressStyled fx:id="progress" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="7.0" progress="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="50.0" />
+      <Label fx:id="percent" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" textAlignment="CENTER" textFill="#c2174ad9" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="5.0" />
+      <Label fx:id="timeLeft" layoutX="334.0" layoutY="4.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="85.0" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="170.0" />
+      <Label fx:id="speed1" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="110.0" styleClass="label-speed" textAlignment="RIGHT" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="55.0" />
+      <Label fx:id="remining" layoutX="281.0" layoutY="18.0" prefHeight="10.0" prefWidth="85.0" styleClass="label-indigo5" textAlignment="RIGHT" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="1.0" />
+   </children>
+</AnchorPane>

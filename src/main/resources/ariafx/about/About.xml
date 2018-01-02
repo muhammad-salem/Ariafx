@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="500.0" style="-fx-border-color: #0091EA; -fx-border-width: 1px;" styleClass="background-white" stylesheets="@../gui/fxml/res/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<children>
+      <VBox layoutX="1.0" layoutY="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <StackPane layoutY="36.0" maxHeight="-Infinity" minHeight="-Infinity" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <Text fx:id="appName" fill="#1aa2fa" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Aria" textAlignment="CENTER">
+                     <font>
+                        <Font name="Source Code Pro Medium" size="40.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <StackPane layoutY="83.0" maxHeight="-Infinity" minHeight="-Infinity" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <Text fx:id="description" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Download Manager 2014">
+                     <font>
+                        <Font name="Source Code Pro" size="13.0" />
+                     </font></Text>
+               </children>
+            </StackPane>
+            <TextArea fx:id="aboutText" editable="false" prefHeight="225.0" text="ariafx&#10;====&#10;&#10;A multithreading download manager program with pure Java/JavaFx,&#10;  managed in queue, cross-platform (linux/windows/mac).&#10;&#10;used lib: HttpClient, GSON.&#10;It is open source.&#10;&#10;Options available now :&#10;  - add link&#10;  - choose streaming or parallel download (until 8-thread)&#10;  - choose category and queue&#10;  - can change referrer&#10;  - can change save file path and file name&#10;  - can the last minute for graph speed&#10;  - copy url&#10;   &#10;  - start/pause/stop download link(s)&#10;  - delete selected/complete downloads&#10;   &#10;  - save date in json format (new categories/queues/ and all links)&#10;  - save changes on close&#10;  - keep saved data updated in every  3 minute &#10;  - keep history of links that had been added&#10;  - export/import links to/from [IDM(.ef2) file format], [Aria(.ariafx/json) format file], [text (.txt) link list]&#10;   &#10;  - switch between  normal and minimal view&#10;  - the download binding that appear when start download &#10;  - by states can show All/Active/Queuing/Finished/Failed downloads&#10;  - can add/edit categories and queue &#10;  &#10;  - download files into cache directory then copy it to the save directory then clear cache&#10;  &#10;  - can search for downloads&#10;  - have itself decoration and fixed size stage&#10;&#10;" wrapText="true">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Source Code Pro Medium" size="14.0" />
+               </font>
+            </TextArea>
+            <StackPane>
+               <children>
+                  <HBox spacing="5.0">
+                     <children>
+                        <Hyperlink fx:id="githupLink" prefHeight="32.0" text="https://github.com/SalemEbo/aria" />
+                        <AnchorPane prefWidth="170.0">
+                           <children>
+                              <Line endX="170.0" layoutY="18.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                        <Hyperlink fx:id="facebookLink" prefHeight="32.0" text="Facebook" />
+                     </children>
+                     <padding>
+                        <Insets left="5.0" right="5.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </StackPane>
+         </children>
+      </VBox>
+      <Button cancelButton="true" mnemonicParsing="false" onAction="#close" prefHeight="32.0" prefWidth="32.0" styleClass="close" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="0.0" />
+</children>
+</AnchorPane>

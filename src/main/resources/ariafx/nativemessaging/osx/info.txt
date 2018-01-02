@@ -1,0 +1,4 @@
+The manifest file must be placed at 
+/Library/Google/Chrome/NativeMessagingHosts/org.javafx.ariafx.json
+or, for applications installed on user level, 
+~/Library/Application Support/Google/Chrome/NativeMessagingHosts/org.javafx.ariafx.json
