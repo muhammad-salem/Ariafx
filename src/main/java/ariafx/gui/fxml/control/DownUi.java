@@ -3,6 +3,7 @@ package ariafx.gui.fxml.control;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
@@ -29,8 +30,8 @@ import javafx.stage.StageStyle;
 import ariafx.core.download.Chunk;
 import ariafx.core.download.Link;
 import ariafx.core.url.type.DownState;
+import ariafx.gui.fxml.imp.JFXSpinner;
 import ariafx.gui.fxml.imp.MovingStage;
-import ariafx.gui.fxml.imp.ProgressCircle;
 import ariafx.gui.fxml.imp.ProgressStyled;
 import ariafx.gui.fxml.imp.ProgressStyledTableCell;
 import ariafx.gui.manager.ItemBinding;
@@ -47,7 +48,8 @@ public class DownUi implements Initializable {
 	public DownUi() {
 		this.stage = new Stage(StageStyle.UNDECORATED);
 		if(Fxml == null)
-			Fxml = getClass().getResource("DownUi.xml");
+//			Fxml = getClass().getResource("DownUi.xml");
+			Fxml = getClass().getResource("down-ui.fxml");
 	}
 	
 	public DownUi(int id , Link link) {
@@ -100,7 +102,7 @@ public class DownUi implements Initializable {
 	boolean process_speed = true;  // true_false;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		progress.setDoneText("Download");
+		//progress.setDoneText("Download");
 		
 		link.runningProperty().addListener((obv, old, value)->{
 			if(!link.isInitState()){
@@ -227,7 +229,7 @@ public class DownUi implements Initializable {
 		if(!(chunks == null) ){
 			chunksTable.getItems().addAll(chunks);
 			for (Chunk chunk : chunks) {
-				ProgressBar progress = ProgressStyled.CreateProgressFlat();
+				ProgressBar progress = ProgressStyled.CreateProgressFlat(); // new JFXProgressBar();  
 				progress.progressProperty().bind(chunk.progressProperty());
 				progress.setPrefHeight(subprogress.getPrefHeight());
 				
@@ -313,7 +315,8 @@ public class DownUi implements Initializable {
 
 
     @FXML
-    public ProgressCircle progress;
+//    public ProgressCircle progress;
+    public JFXSpinner progress;
 
     @FXML
     public Button selector;

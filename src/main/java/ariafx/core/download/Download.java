@@ -40,7 +40,7 @@ public class Download extends Service<Number> {
 		super();
 		this.item = item;
 		initStateLine();
-		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.setCycleCount(Animation.INDEFINITE);
 		timeline.statusProperty().addListener(new ChangeListener<Animation.Status>() {
 
 			@Override
@@ -603,7 +603,7 @@ public class Download extends Service<Number> {
 				
 				item.ranges = new long[item.getChunksNum()][3];
 				
-				long sub =  item.getLength() / (long)item.getChunksNum();
+				long sub =  item.getLength() / item.getChunksNum();
 				
 				for (int i = 0; i < item.getChunksNum(); i++) {
 					item.ranges[i][0] = i * sub;
@@ -632,7 +632,7 @@ public class Download extends Service<Number> {
 				
 				item.ranges = new long[item.getChunksNum()][3];
 				
-				long sub =  item.getLength() / (int)item.getChunksNum();
+				long sub =  item.getLength() / item.getChunksNum();
 				
 				for (int i = 0; i < item.getChunksNum(); i++) {
 					item.ranges[i][0] = sub * i;

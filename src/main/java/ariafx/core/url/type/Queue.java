@@ -42,10 +42,12 @@ public class Queue extends Type {
 		this.shutDownOS = shutDownOS;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String str) {
 		name = str;
 	}

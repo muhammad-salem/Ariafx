@@ -228,12 +228,12 @@ public class R {
 	}
 
 	public static void LoadTreeItems() {
-		Category.categoryList.clear();
+		Type.categoryList.clear();
 		for (Category c : Category.getCategores()) {
 			if(!c.equals(Category.Default))
 				Type.addTreeCategory(c);
 		}
-		Queue.queueList.clear();
+		Type.queueList.clear();
 		for (Queue q : Queue.getQueues()) {
 			if(!q.equals(Queue.Default))
 				Type.addTreeQueue(q);

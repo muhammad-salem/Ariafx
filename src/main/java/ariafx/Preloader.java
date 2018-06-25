@@ -3,6 +3,7 @@ package ariafx;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+
 import ariafx.about.About;
 import ariafx.gui.fxml.imp.MovingStage;
 import ariafx.gui.fxml.imp.ProgressStyled;
@@ -51,8 +52,9 @@ public class Preloader extends Application {
 		stage.setTitle("Initializing " + About.App_Name);
 
 		try {
-			FXMLLoader loader = new FXMLLoader(this.getClass().getResource(
-					"preloader.xml"));
+			//FXMLLoader loader = new FXMLLoader(this.getClass().getResource("preloader.xml"));
+			FXMLLoader loader = new FXMLLoader(this.getClass().getResource("preloader-jfx.xml"));
+			// preloader-jfx.xml
 			pre = new Pre();
 			loader.setController(pre);
 			anchor = loader.load();
@@ -138,6 +140,7 @@ public class Preloader extends Application {
 
 		@FXML
 		private ProgressStyled progress;
+//		private JFXProgressBar progress;
 		@FXML
 		private Label title;
 		@FXML

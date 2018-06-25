@@ -96,10 +96,12 @@ public class Link extends Download {
 		item.setSaveto(saveto);
 	}
 
+	@Override
 	public String getCacheFile() {
 		return item.getCacheFile();
 	}
 
+	@Override
 	public void setCacheFile(String cacheFile) {
 		item.setCacheFile(cacheFile);
 	}

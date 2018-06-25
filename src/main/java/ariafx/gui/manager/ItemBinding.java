@@ -3,7 +3,6 @@ package ariafx.gui.manager;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Worker.State;
 import ariafx.core.download.Download;
 import ariafx.core.download.Link;
 import ariafx.core.url.type.Category;
@@ -205,16 +204,16 @@ public class ItemBinding {
 		});
 		
 		
-		link.stateProperty().addListener((obv, old, value)->{
-			if(value == State.SUCCEEDED){
-				if(link.getDownloaded() == link.getLength()){
-					if(!link.getItem().isUnknowLength()){
-						ui.progress.setDoneText("Copy");
-					}
-					
-				}
-			}
-		});
+//		link.stateProperty().addListener((obv, old, value)->{
+//			if(value == State.SUCCEEDED){
+//				if(link.getDownloaded() == link.getLength()){
+//					if(!link.getItem().isUnknowLength()){
+//						ui.progress.setDoneText("Copy");
+//					}
+//					
+//				}
+//			}
+//		});
 		
 		ui.labelTransferRate.textProperty().bind(link.transferRateProperty());
 		ui.labelTransferRate2.textProperty().bind(link.transferRateProperty());
