@@ -1,4 +1,4 @@
-Ariafx
+Ariafx  (0.28.9)
 ======
 A Smart Download Manager based on java (JavaFX), with support of HttpClient, GSON.
 
@@ -7,6 +7,8 @@ Used lib:
 	HttpClient
 	GSON
 	Commons-IO
+	
+*use java 8 - java 9 not suopported	
 
 ## Options :
  - Support Http and HTTP.

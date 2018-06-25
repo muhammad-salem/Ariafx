@@ -1,16 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.http</groupId>
-  <artifactId>ariafx</artifactId>
-  <version>0.28.6</version>
-  <name>Ariafx</name>
-  <description>A multithreading download manager program with pure Java/JavaFx,
-  managed in queue, cross-platform (linux/windows/mac).</description>
-  
-  <properties>
-	     <java.version>1.8</java.version>
-	</properties>
-  <dependencies>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.http</groupId>
+    <artifactId>ariafx</artifactId>
+    <version>0.28.9</version>
+    <name>Ariafx</name>
+    <description>A multithreading download manager program with pure Java/JavaFx,
+    managed in queue, cross-platform (linux/windows/mac).</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+    <dependencies>
 		  	
 		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 		<dependency>
@@ -101,6 +101,14 @@
 		    <artifactId>jna-platform</artifactId>
 		    <version>4.5.1</version>
 		</dependency>
+		
+		<!--
+		<dependency>
+		    <groupId>com.jfoenix</groupId>
+		    <artifactId>jfoenix</artifactId>
+		    <version>9.0.1</version>
+		</dependency>
+		-->
   </dependencies>
   
   <build>
