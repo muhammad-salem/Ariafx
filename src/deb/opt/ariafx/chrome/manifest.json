@@ -1,0 +1,18 @@
+{
+   "background": {
+      "scripts": [ "download.js" ]
+   },
+   "description": "Aria Download Manager",
+   "homepage_url": "https://github.com/salemebo/Aria-Port-Chrome-Extension/releases",
+   "icons": {
+      "128": "aria.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtT6YgZ1dR7v68m1Kb2D/AC1+gAM63pnRdOs2AouMMOOUSHaHnVa0T91A8/p8BVFLLL4v9HwJVwiaZO8h4n057pFtA1coKNwgtaPa0XtIJIbjvVWIXRi4f09GKh2+Ts1o0XmRy6zKKUEuuoucvSJvZ6s6Uj+Bm2uMH4eG2uprhdTSTT9ej4ci19pDnD7X8mLXyPwkQONwEC1DwinQ/f1ckRDFvkWYrY2piz/Je3plyJjryoC2AI+EB34mZ+kDY8Hq08eJ+Nr7kD5APSEQzxulphmMu0O+/UI4gDA93KAQaVUIqoaRFE7kzX07U7lrbfF/HZX65lINPnuwUJl9nbAo5wIDAQAB",
+   "manifest_version": 2,
+   "minimum_chrome_version": "32",
+   "name": "Aria Port",
+   "offline_enabled": true,
+   "permissions": [ "cookies", "webRequest", "webRequestBlocking", "*://*/*", "downloads", "nativeMessaging", "contextMenus", "activeTab" ],
+   "update_url": "https://raw.githubusercontent.com/salemebo/Aria-Port-Chrome-Extension/master/updates.xml",
+   "version": "0.25"
+}

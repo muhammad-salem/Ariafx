@@ -1,0 +1,3 @@
+name: ariafx
+path: /opt/ariafx/ariafx
+args: [--url=URL] [--http-referer=REFERER] [--file-name=FNAME]  [--user-agent=UA] [--cookie=COOKIE] [--cookie-file=CFILE] [--input-file=UFILE]

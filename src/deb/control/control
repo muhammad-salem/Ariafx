@@ -1,0 +1,29 @@
+Package: ariafx
+Version: 0.28.9
+Section: java
+Maintainer: salem <salem.ebo@gmail.com>
+Provides: ariafx
+Section: misc, network, java
+Priority: low
+Architecture: all
+Depends: libnotify-bin
+Description:Ariafx (Download Manager)
+ A multi-threading download manager program written in JavaFx,
+ Aria is cross-platform (linux/windows/mac).
+ .
+ - Can manage links with Queues and Categories,
+ .
+ - Choose streaming or parallel download (support 8-thread),
+ .
+ - export/import links to/from [IDM(.ef2) file format], [Aria(.aria/json) format file], [text (.txt) link list],
+ .
+ - Have Normal and Minimal View.
+ .
+ - Users can search in downloads items.
+ .
+ - add support to firefox by flashgot [cli] :
+	[--url=URL] [--http-referer=REFERER] [--file-name=FNAME] 
+	[--user-agent=UA] [--cookie=COOKIE] [--cookie-file=CFILE] [--input-file=UFILE]
+ .
+ - add support to google chrome "/opt/Ariafx/chrome"
+Homepage: https://github.com/salemebo/Ariafx

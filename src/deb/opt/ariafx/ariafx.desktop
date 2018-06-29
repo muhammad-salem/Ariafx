@@ -1,0 +1,23 @@
+[Desktop Entry]
+Version=0.25
+Name=Ariafx
+Comment=Smart Download Manager build with javafx
+Exec=/opt/ariafx/ariafx %U
+Icon=ariafx
+Type=Application
+Categories=GNOME;Application;Network;FileTransfer;
+StartupNotify=true
+
+X-Ayatana-Desktop-Shortcuts=NewLink;Silent;
+
+[NewLink Shortcut Group]
+Name=New Link
+Exec=/opt/ariafx/ariafx --new-link
+TargetEnvironment=Unity
+
+[Silent Shortcut Group]
+Name=Ariafx Silent Start
+Exec=/opt/ariafx/ariafx --silent
+TargetEnvironment=Unity
+
+

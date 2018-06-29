@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
+	<app appid='akleemhcondmnldaaapmkalfoopkejdf'>
+            <updatecheck codebase='https://github.com/salemebo/Aria-Port-Chrome-Extension/master/Releases/aria-0.24.crx' version='0.24' />
+	</app>
+</gupdate>
+
