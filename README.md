@@ -8,15 +8,14 @@ Used lib:
 	GSON
 	Commons-IO
 	
-*use java 8 - java 9 not suopported	
 
 ## Options :
  - Support Http and HTTP.
  - Cross-platform: support Linux(Ubuntu), Windows and, Mac OS.
  - Categories 	: add downloads to Categores.
- - Multi-Thread	: download file in chunkes.
+ - Prallel Download.
  - Saved setting every 1 minute.
- - Change Setting support.
+ - Change Setting.
  - Save date in json format (new categories/queues/ and all links)
  - Export and Import links to/from [IDM(.ef2) file format], [Aria(.aria/json) format file], [text (.txt) link list]
  - Switch between  normal and minimal view.
