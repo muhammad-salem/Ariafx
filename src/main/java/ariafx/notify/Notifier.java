@@ -6,14 +6,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.geometry.Pos;
-import javafx.scene.image.Image;
-
 import org.apache.commons.io.FileUtils;
 
-import ariafx.opt.R;
-
 import com.sun.javafx.PlatformUtil;
+
+import ariafx.opt.R;
+import javafx.geometry.Pos;
+import javafx.scene.image.Image;
 
 public class Notifier {
 	
@@ -133,7 +132,6 @@ public class Notifier {
 	
 	
 	public static boolean isNativeNotification() {
-		String osname = System.getProperty("os.name");
 		if(PlatformUtil.isUnix() || PlatformUtil.isLinux()){
 			File file = new File("/usr/bin/notify-send");
 			if(file.exists()){

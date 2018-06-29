@@ -33,7 +33,7 @@ public class About  {
 	
 	static Stage  stage;
 	public static String App_Name = "ariafx";
-	public static String App_Version = "0.28.6 2018.1.2";
+	public static String App_Version = "0.29.2 2018.06.26";
 	public static String App_Description = "Download Manager 2014-2018";
 	public static String Code_Name = "ن";
 	public static String about = "";

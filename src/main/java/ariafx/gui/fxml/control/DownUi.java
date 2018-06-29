@@ -3,7 +3,15 @@ package ariafx.gui.fxml.control;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-
+import ariafx.core.download.Chunk;
+import ariafx.core.download.Link;
+import ariafx.core.url.type.DownState;
+import ariafx.gui.fxml.imp.MovingStage;
+import ariafx.gui.fxml.imp.ProgressCircle;
+import ariafx.gui.fxml.imp.ProgressStyled;
+import ariafx.gui.fxml.imp.ProgressStyledTableCell;
+import ariafx.gui.manager.ItemBinding;
+import ariafx.tray.TrayUtile;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
@@ -27,15 +35,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import ariafx.core.download.Chunk;
-import ariafx.core.download.Link;
-import ariafx.core.url.type.DownState;
-import ariafx.gui.fxml.imp.JFXSpinner;
-import ariafx.gui.fxml.imp.MovingStage;
-import ariafx.gui.fxml.imp.ProgressStyled;
-import ariafx.gui.fxml.imp.ProgressStyledTableCell;
-import ariafx.gui.manager.ItemBinding;
-import ariafx.tray.TrayUtile;
 
 public class DownUi implements Initializable {
 
@@ -48,8 +47,7 @@ public class DownUi implements Initializable {
 	public DownUi() {
 		this.stage = new Stage(StageStyle.UNDECORATED);
 		if(Fxml == null)
-//			Fxml = getClass().getResource("DownUi.xml");
-			Fxml = getClass().getResource("down-ui.fxml");
+			Fxml = getClass().getResource("DownUi.xml");
 	}
 	
 	public DownUi(int id , Link link) {
@@ -102,7 +100,7 @@ public class DownUi implements Initializable {
 	boolean process_speed = true;  // true_false;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		//progress.setDoneText("Download");
+		progress.setDoneText("Download");
 		
 		link.runningProperty().addListener((obv, old, value)->{
 			if(!link.isInitState()){
@@ -129,6 +127,7 @@ public class DownUi implements Initializable {
 					updateProcessTable();
 					show();
 					TrayUtile.addTListTray(this);
+					
 				}else if (value == DownState.Complete){
 					TrayUtile.removeFromListTray(this);
 				}else{
@@ -229,7 +228,7 @@ public class DownUi implements Initializable {
 		if(!(chunks == null) ){
 			chunksTable.getItems().addAll(chunks);
 			for (Chunk chunk : chunks) {
-				ProgressBar progress = ProgressStyled.CreateProgressFlat(); // new JFXProgressBar();  
+				ProgressBar progress = ProgressStyled.CreateProgressFlat();
 				progress.progressProperty().bind(chunk.progressProperty());
 				progress.setPrefHeight(subprogress.getPrefHeight());
 				
@@ -242,7 +241,7 @@ public class DownUi implements Initializable {
 				SimpleDoubleProperty testDoneSize = new SimpleDoubleProperty(1);
 				
 //				chunk.progressProperty().multiply(chunk.range[1]-chunk.range[0]).divide(link.getLength()).multiply(subprocess.getWidth());
-				testDoneSize.bind(chunk.progressProperty().multiply(chunk.range[1]-chunk.range[0]).divide(link.getLength()).multiply(subprocess.getWidth()));
+				testDoneSize.bind(chunk.progressProperty().multiply(chunk.getRange()[1]-chunk.getRange()[0]).divide(link.getLength()).multiply(subprocess.getWidth()));
 				
 				progress.minWidthProperty().bind( testDoneSize);
 //				progress.maxWidthProperty().multiply(chunk.progressProperty().multiply(chunk.range[1]-chunk.range[0]).divide(link.getLength()).multiply(subprocess.getWidth()));
@@ -315,8 +314,7 @@ public class DownUi implements Initializable {
 
 
     @FXML
-//    public ProgressCircle progress;
-    public JFXSpinner progress;
+    public ProgressCircle progress;
 
     @FXML
     public Button selector;

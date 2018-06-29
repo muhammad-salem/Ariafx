@@ -24,7 +24,7 @@ public class TrayIcon {
 	Icon list;
 	
 	
-	public TrayIcon() {
+	public TrayIcon() throws UnsupportedOperationException{
 		
 		
 		tray = SystemTray.getSystemTray();

@@ -10,15 +10,6 @@ import java.net.Socket;
 
 import javax.net.ssl.SSLContext;
 
-import javafx.application.Platform;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ReadOnlyStringProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -52,81 +43,51 @@ import ariafx.gui.fxml.control.ChunkUI;
 import ariafx.opt.R;
 import ariafx.opt.Setting;
 import ariafx.opt.Utils;
+import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 
 public class Chunk extends Service<Number> implements ChunkUI{
 
-	public CloseableHttpClient httpClient;
-	public HttpGet httpGet;
-	public HttpClientContext context;
-	public Header[] headers;
+	private CloseableHttpClient httpClient;
+	private HttpGet httpGet;
+	private HttpClientContext context;
+	private Header[] headers;
 
-	public long[] range;
-	public String url, cachedFile;
+	private long[] range;
+	
+	private String url, cachedFile;
 
-	public RandomAccessFile file;
-	public boolean stop = false;
+	private RandomAccessFile file;
+	private boolean stop = false;
 	private Item item;
 	
-	public SimpleIntegerProperty id = new SimpleIntegerProperty(this, "id", -1);
-	public SimpleStringProperty stateCode = new SimpleStringProperty(this, "stateCode", "");
-	public SimpleStringProperty size = new SimpleStringProperty(this, "size", "");
-	public SimpleStringProperty done = new SimpleStringProperty(this, "done", "");
-	public int httpStateCode;
+	private SimpleIntegerProperty id = new SimpleIntegerProperty(this, "id", -1);
+	private SimpleStringProperty stateCode = new SimpleStringProperty(this, "stateCode", "");
+	private SimpleStringProperty size = new SimpleStringProperty(this, "size", "");
+	//private SimpleStringProperty done = new SimpleStringProperty(this, "done", "");
+	private int httpStateCode;
 	
-	
-//	public Chunk(int id, String url, String saveFile, Header[] headers,
-//			long[] range) {
-//		super();
-//		this.id = id;
-//		this.url = url;
-//		this.cachedFile = saveFile;
-//		this.headers = headers;
-//		this.range = range;
-//
-//	}
-//
-//	public Chunk(int id, String url, String saveFile, Header[] headers /*
-//																		 * ,
-//																		 * long
-//																		 * end
-//																		 */) {
-//		super();
-//		this.id = id;
-//		this.url = url;
-//		this.cachedFile = saveFile;
-//		this.headers = headers;
-//
-//		// this.range = new long[3];
-//		// this.range[0] = 0; //start
-//		// this.range[1] = end; //end
-//		// this.range[2] = 0; //download
-//
-//	}
-//
-//	/**
-//	 * quick simple chunk download the file no chunks
-//	 * 
-//	 * @param url
-//	 *            the {@link Url}
-//	 * @param saveFile
-//	 *            where to save the content of that link
-//	 */
-//	public Chunk(String url, String saveTo) {
-//		this.id = 0;
-//		this.url = url;
-//		this.cachedFile = saveTo;
-//		try {
-//			item = new Item(url);
-//			item.setCacheFile(saveTo);
-//			item.isStreaming = true;
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
 
 	public Chunk(int id, Item item) {
 		super();
+		setId(id+1);
+		this.item = item;
+		this.url = item.getURL();
+		// this.saveFile = item.getSaveto();
+		this.cachedFile = item.getCacheFile();
+		this.range = item.ranges[id];
+		
+	}
+	
+	public Chunk(CloseableHttpClient httpClient, Item item, int id) {
+		super();
+		this.httpClient = httpClient;
 		setId(id+1);
 		this.item = item;
 		this.url = item.getURL();
@@ -170,7 +131,36 @@ public class Chunk extends Service<Number> implements ChunkUI{
 	}
 
 	private void initChunk() {
-		
+		if(httpClient == null)
+			httpClient  = createHttpClient();
+
+		httpGet = new HttpGet(url);
+		RequestConfig localConfig = RequestConfig.custom()
+		        .setCookieSpec(CookieSpecs.STANDARD_STRICT)
+		        .build();
+		httpGet.setConfig(localConfig);
+		if (headers != null){
+			httpGet.setHeaders(headers);
+		}
+		if(item.getUserAgent() != null){
+			httpGet.addHeader(HttpHeaders.USER_AGENT, item.getUserAgent());
+		}
+		if (item.isAuthorized) {
+			httpGet.addHeader(HttpHeaders.AUTHORIZATION,
+					"Besic " + item.getAuthorization());
+		}
+		try {
+			FileUtils.forceMkdir(new File(cachedFile).getParentFile());
+		} catch (IOException e) {
+			R.cout("couldn't make dir file");
+		}
+	}
+
+
+	/**
+	 * @return
+	 */
+	private CloseableHttpClient createHttpClient() {
 		HttpClientBuilder  builder = HttpClients.custom();
 		CookieStore store = null;
 		context = HttpClientContext.create();
@@ -280,30 +270,7 @@ public class Chunk extends Service<Number> implements ChunkUI{
 		
 		
 		
-		
-		httpClient = builder.build();
-
-		httpGet = new HttpGet(url);
-		RequestConfig localConfig = RequestConfig.copy(globalConfig)
-		        .setCookieSpec(CookieSpecs.STANDARD_STRICT)
-//		        .setCookieSpec(CookieSpecs.BROWSER_COMPATIBILITY)
-		        .build();
-		httpGet.setConfig(localConfig);
-		if (headers != null){
-			httpGet.setHeaders(headers);
-		}
-		if(item.getUserAgent() != null){
-			httpGet.addHeader(HttpHeaders.USER_AGENT, item.getUserAgent());
-		}
-		if (item.isAuthorized) {
-			httpGet.addHeader(HttpHeaders.AUTHORIZATION,
-					"Besic " + item.getAuthorization());
-		}
-		try {
-			FileUtils.forceMkdir(new File(cachedFile).getParentFile());
-		} catch (IOException e) {
-			R.cout("couldn't make dir file");
-		}
+		return builder.build();
 	}
 
 	@Override
@@ -439,7 +406,18 @@ public class Chunk extends Service<Number> implements ChunkUI{
 	}
 	
 	
+
+	public int getIntStateCode() {
+		return httpStateCode;
+	}
 	
+	public long[] getRange() {
+		return range;
+	}
+	
+	public boolean isStop() {
+		return stop;
+	}
 	
 	
 

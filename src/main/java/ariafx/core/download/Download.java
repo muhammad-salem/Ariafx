@@ -143,7 +143,7 @@ public class Download extends Service<Number> {
 					long down = 0;
 					for (int i = 0; i < item.getChunksNum(); i++) {
 						down += item.ranges[i][2];
-						chunkState[i] = chunks[i].stop;
+						chunkState[i] = chunks[i].isStop();
 					}
 
 					boolean equalsTrue = Arrays.equals(chunkState, temp);
@@ -158,11 +158,11 @@ public class Download extends Service<Number> {
 					
 					for (int i = 0; i < item.getChunksNum(); i++) {
 						
-						if(chunks[i].httpStateCode/100 == 5){
+						if(chunks[i].getIntStateCode()/100 == 5){
 							chunks[i].cancel();
 							chunks[i].start();
 							System.out.println("restat chunk "+ i 
-									+ " chunks[i].httpStateCode "+ chunks[i].httpStateCode);
+									+ " chunks[i].httpStateCode "+ chunks[i].getIntStateCode());
 						}
 						Thread.sleep(300);
 						
