@@ -35,11 +35,23 @@ Used lib:
  - Add new download Alogothims.
  - Support FTP Protocole. 
 
+# how to use Ariafx App:
+-  download the jar file  [ariafx-0.28.9-jar-with-dependencies.jar](https://github.com/salemebo/Ariafx/releases/download/0.28.9/ariafx-0.28.9-jar-with-dependencies.jar)
+- make sure that you have JDK 8 installed on your system and it is the default JVM on your OS.
+- run jar file with this commend: java -jar ariafx-0.28.9-jar-with-dependencies.jar
+
+## try Ariia 
+ - CLI and cloud based download manager [Ariia](https://github.com/salemebo/ariia)
+i am currently work on this app
+
+
 
 ## Firefox Support: 
+ - FlashGot for Firefox, is no longer supported due to not compatibility with Firefox Quantum version 57.
 ![screenshot](https://github.com/salemebo/aria/blob/master/img/firefox.png)
 
 ## Google chrome support: 
+ - Aria Port for Chrome,  need to be updated with the latest Chrome API, will be reimplement
 ![screenshot](https://github.com/salemebo/aria/blob/master/img/google-chrome.png)
 
 
