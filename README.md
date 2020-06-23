@@ -75,7 +75,7 @@ i am currently work on this app
 
 ![screenshot](https://github.com/salemebo/aria/blob/master/img/ariafx08.png)
 
-![screenshot](https://github.com/salemebo/aria/blob/master/img/ariafx08.png)
+![screenshot](https://github.com/salemebo/aria/blob/master/img/ariafx09.png)
 
 ![screenshot](https://github.com/salemebo/aria/blob/master/img/ariafx10.png)
 
