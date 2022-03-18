@@ -60,10 +60,10 @@ public class DownUi implements Initializable {
     public LineChart<Integer, Double> chart;
     @FXML
     public NumberAxis yAxis, xAxis;
-	
-	/*public void setStage(Stage stage) {
-		this.stage = stage;
-	}*/
+
+    /*public void setStage(Stage stage) {
+        this.stage = stage;
+    }*/
     Stage stage;
     Link link;
     int id;
@@ -226,7 +226,7 @@ public class DownUi implements Initializable {
         chunkStateCode.setCellValueFactory(new PropertyValueFactory<Chunk, String>("stateCode"));
         chunkID.setCellValueFactory(new PropertyValueFactory<Chunk, Integer>("id"));
         chunkProgress.setCellValueFactory(new PropertyValueFactory<Chunk, Double>("progress"));
-        chunkProgress.setCellFactory(ProgressStyledTableCell.<Chunk>forTableColumn());
+        chunkProgress.setCellFactory(ProgressStyledTableCell.forTableColumn());
         chunksTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
     }

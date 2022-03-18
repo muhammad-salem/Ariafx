@@ -45,14 +45,16 @@ public class Chrome {
     public static void sendMSG(String msg) {
         try {
             System.out.write(msg.getBytes());
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
     }
 
     public static void sendMessage(String message) {
         try {
             sendLength(message.length());
             sendMSG(message);
-        } catch (IOException ex) {}
+        } catch (IOException ex) {
+        }
     }
 
     public static int readLength() throws IOException {
@@ -71,7 +73,7 @@ public class Chrome {
 
     public static String readMSG(int length) {
         String msg = "";
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in));){
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
 
             // Scanner scanner = new Scanner(System.in);
 
@@ -96,7 +98,8 @@ public class Chrome {
         try {
             length = readLength();
             return readMSG(length).trim();
-        } catch (IOException ex) {}
+        } catch (IOException ex) {
+        }
         return "";
     }
 

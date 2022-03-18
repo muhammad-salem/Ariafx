@@ -58,7 +58,7 @@ public class ChromeMSG {
      * @param file file path to read from.
      */
     public static <T> T fromJson(String file, Class<T> classT) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))){
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             Gson gson = new Gson();
             return gson.fromJson(reader, classT);
         } catch (Exception e) {

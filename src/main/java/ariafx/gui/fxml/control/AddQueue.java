@@ -75,10 +75,7 @@ public class AddQueue {
     }
 
     boolean checkParameter() {
-        if (name.getText().equals("")) {
-            return false;
-        }
-        return true;
+        return !name.getText().equals("");
     }
 
     @FXML

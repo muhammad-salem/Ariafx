@@ -47,8 +47,8 @@ public class Utils {
      * @param file file path to read from.
      */
     public static <T> T fromJson(String file, Class<T> classT) {
-		try (BufferedReader reader = new BufferedReader(new FileReader(file));){
-			Gson gson = new Gson();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            Gson gson = new Gson();
             return gson.fromJson(reader, classT);
         } catch (Exception e) {
             System.err.println("no file found " + file);
@@ -85,7 +85,7 @@ public class Utils {
 
     public static String getStringFromInputStream(InputStream stream) {
         String fileString = "";
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream));) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
             String str = "";
             while ((str = reader.readLine()) != null) {
                 fileString += str + "\n";

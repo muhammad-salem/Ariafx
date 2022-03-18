@@ -151,8 +151,6 @@ public class Chunk extends Service<Number> implements ChunkUI {
                 builder.setDefaultCookieStore(item.getCookieStore());
                 context.setCookieStore(item.getCookieStore());
             }
-
-
         }
 
         if (Setting.GetProxyConfig() == ProxyConfig.ManualProxy
@@ -176,8 +174,8 @@ public class Chunk extends Service<Number> implements ChunkUI {
 
                 @Override
                 public Socket createSocket(final HttpContext context) throws IOException {
-                    InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
-                    Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
+                    InetSocketAddress socketAddress = (InetSocketAddress) context.getAttribute("socks.address");
+                    Proxy proxy = new Proxy(Proxy.Type.SOCKS, socketAddress);
                     return new Socket(proxy);
                 }
 
@@ -187,6 +185,7 @@ public class Chunk extends Service<Number> implements ChunkUI {
                 public SocksSSLConnectionSocketFactory(final SSLContext sslContext) {
                     super(sslContext);
                 }
+
                 @Override
                 public Socket createSocket(final HttpContext context) throws IOException {
                     InetSocketAddress socketAddress = (InetSocketAddress) context.getAttribute("socks.address");

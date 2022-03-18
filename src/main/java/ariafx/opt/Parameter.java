@@ -43,9 +43,9 @@ public class Parameter {
         return true;
     }
 
-	public static Parameter fromJson(File file) {
-		return fromJson(file.getPath(), Parameter.class);
-	}
+    public static Parameter fromJson(File file) {
+        return fromJson(file.getPath(), Parameter.class);
+    }
 
     public static Parameter fromJson(String file) {
         return fromJson(file, Parameter.class);
@@ -60,9 +60,9 @@ public class Parameter {
      * @param file file path to read from.
      */
     public static <T> T fromJson(String file, Class<T> classT) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))){
-			Gson gson = new Gson();
-            return (T) gson.fromJson(reader, classT);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            Gson gson = new Gson();
+            return gson.fromJson(reader, classT);
         } catch (Exception e) {
             System.err.println("no file found");
             return null;

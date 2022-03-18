@@ -8,7 +8,6 @@ import ariafx.opt.Setting;
 import ariafx.opt.Utils;
 import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -109,6 +108,7 @@ public class Control {
         private RadioButton automaticProxyConfiguration;
         @FXML
         private TextField automaticProxyConfigurationURL;
+
         public ControlStage() {
             if (FXML == null) {
                 FXML = getClass().getResource("control.fxml");
@@ -171,7 +171,7 @@ public class Control {
             proxyTypeBox.getItems().add(ProxyType.HTTP);
             proxyTypeBox.getItems().add(ProxyType.HTTPS);
             proxyTypeBox.getItems().add(ProxyType.SOCKS);
-			proxyTypeBox.valueProperty().addListener((observable, oldValue, newValue) -> Setting.SetProxyType(newValue));
+            proxyTypeBox.valueProperty().addListener((observable, oldValue, newValue) -> Setting.SetProxyType(newValue));
 
 
             groupProxy.selectedToggleProperty().addListener((e) -> {
@@ -187,7 +187,7 @@ public class Control {
                             remoteAddress.getText(),
                             Integer.parseInt(remotePort.getText()),
                             proxyTypeBox.getValue()
-					);
+                    );
                     manualVBox.setDisable(false);
                 } else if (automaticProxyConfiguration.isSelected()) {
                     Setting.Use_AutoConfiguration_Proxy(automaticProxyConfigurationURL.getText());
@@ -229,15 +229,15 @@ public class Control {
             if ((v - 1) < lines.length)
                 browserSupport.setText(lines[v - 1]);
             try {
-				Image image;
+                Image image;
                 if (browserChrome.equals(browserTempButton)) {
-					image = new Image(getClass().getResourceAsStream("img/linux-chrome" + v + ".png"));
+                    image = new Image(getClass().getResourceAsStream("img/linux-chrome" + v + ".png"));
                 } else if (browserFirefox.equals(browserTempButton)) {
                     image = new Image(getClass().getResourceAsStream("img/linux-firefox" + v + ".png"));
                 } else {
-					return;
-				}
-				browserImage.setImage(image);
+                    return;
+                }
+                browserImage.setImage(image);
             } catch (Exception e) {
 
             }

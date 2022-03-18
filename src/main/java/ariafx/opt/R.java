@@ -44,36 +44,36 @@ public class R {
     private static FileOutputStream logger = null;
 
     static {
-		String temp = "";
+        String temp = "";
         if (PlatformUtil.isWin7OrLater()) {
-			temp = UserHome + separator + "AppData" + separator + "Roaming" + separator + app_name + separator;
+            temp = UserHome + separator + "AppData" + separator + "Roaming" + separator + app_name + separator;
         } else if (PlatformUtil.isWindows()) {
             DefaultPath = UserHome + separator + "Documents" + separator + "Downloads";
-			temp = UserHome + separator + "Application Data" + separator + app_name + separator;
+            temp = UserHome + separator + "Application Data" + separator + app_name + separator;
         } else if (PlatformUtil.isMac()) {
-			temp = UserHome + separator + "Library" + separator + "Application Support" + separator + app_name + separator;
+            temp = UserHome + separator + "Library" + separator + "Application Support" + separator + app_name + separator;
             TempDir = UserHome + "/Library/Caches/TemporaryItems/";
         }
-		CachePath = temp + "cache";
-		ConfigPath = temp + "config";
+        CachePath = temp + "cache";
+        ConfigPath = temp + "config";
         LockFile = CachePath + separator + "lock";
         NewLink = ConfigPath + separator + "newLink";
     }
 
     public static String[] getPaths() {
         return new String[]{
-				DefaultPath,
+                DefaultPath,
                 CachePath,
-				LockFile,
+                LockFile,
                 ConfigPath,
-				NewLink,
+                NewLink,
                 OptDownloadsDir,
-				OptQueuesDir,
-				OptCategoriesDir,
+                OptQueuesDir,
+                OptCategoriesDir,
                 downloadsPath,
-				queuesPath,
-				categoriesPath
-		};
+                queuesPath,
+                categoriesPath
+        };
     }
 
     /* ========================================================================= */

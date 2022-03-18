@@ -10,6 +10,7 @@ public class MovingStage {
 
     boolean moving;
     double x, y;
+
     /***
      * create a new Stage and its AnchorPane
      * then assigns them to given stage and pane
@@ -19,8 +20,8 @@ public class MovingStage {
      */
     public MovingStage(Stage stage, AnchorPane pane) {
         moveWithMouse(stage, pane);
-		pane.heightProperty().addListener((observable, oldValue, newValue) -> stage.setHeight(pane.getHeight()));
-		pane.widthProperty().addListener((observable, oldValue, newValue) -> stage.setWidth(pane.getWidth()));
+        pane.heightProperty().addListener((observable, oldValue, newValue) -> stage.setHeight(pane.getHeight()));
+        pane.widthProperty().addListener((observable, oldValue, newValue) -> stage.setWidth(pane.getWidth()));
     }
 
     public static void pikeToMoving(Stage stage, AnchorPane pane) {
@@ -36,25 +37,25 @@ public class MovingStage {
     public void moveWithMouse(final Stage stage, Pane pane) {
 
         // moving = false;
-		pane.setOnMousePressed(event -> {
-			if (event.getButton() == MouseButton.PRIMARY) {
-				moving = true;
-				x = event.getSceneX();
-				y = event.getSceneY();
-			}
-		});
-		pane.setOnMouseDragged(event -> {
-			if (moving) {
-				stage.setX(event.getScreenX() - x);
-				stage.setY(event.getScreenY() - y);
-				pane.setCursor(Cursor.HAND);
-			}
-		});
+        pane.setOnMousePressed(event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                moving = true;
+                x = event.getSceneX();
+                y = event.getSceneY();
+            }
+        });
+        pane.setOnMouseDragged(event -> {
+            if (moving) {
+                stage.setX(event.getScreenX() - x);
+                stage.setY(event.getScreenY() - y);
+                pane.setCursor(Cursor.HAND);
+            }
+        });
 
-		pane.setOnMouseReleased(event -> {
-			moving = false;
-			pane.setCursor(Cursor.DEFAULT);
-		});
+        pane.setOnMouseReleased(event -> {
+            moving = false;
+            pane.setCursor(Cursor.DEFAULT);
+        });
 
     }
 }

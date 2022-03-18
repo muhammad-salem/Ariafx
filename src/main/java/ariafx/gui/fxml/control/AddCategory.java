@@ -93,8 +93,8 @@ public class AddCategory {
             return false;
         }
 
-		return !saveDir.getText().equals("");
-	}
+        return !saveDir.getText().equals("");
+    }
 
     @FXML
     void addNewCategoryAction(ActionEvent event) {

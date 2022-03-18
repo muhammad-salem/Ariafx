@@ -1,174 +1,175 @@
 package ariafx.core.url.type;
 
-import java.io.File;
-import java.time.LocalDate;
-
 import ariafx.opt.R;
 import ariafx.opt.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.File;
+import java.time.LocalDate;
+
 public class Queue extends Type {
 
-	public static final Queue Default = new Queue("Default");
-	public static final Queue Main = new Queue("Main");
-	public static final Queue Second = new Queue("Second");
+    public static final Queue Default = new Queue("Default");
+    public static final Queue Main = new Queue("Main");
+    public static final Queue Second = new Queue("Second");
 
-	private static final ObservableList<Queue> queues = FXCollections
-			.observableArrayList(Default, Main, Second);
-	
-	public static ObservableList<Queue> newQueues = FXCollections.observableArrayList();
-	
-	private int parallel;
-	private LocalDate start;
-	private LocalDate stop;
-	private boolean closeAPP;
-	private boolean shutDownOS;
+    private static final ObservableList<Queue> queues = FXCollections
+            .observableArrayList(Default, Main, Second);
 
-	public Queue() {
-		id = 2;
-	}
+    public static ObservableList<Queue> newQueues = FXCollections.observableArrayList();
 
-	public Queue(String queue) {
-		this();
-		name = queue;
-	}
-	
-	public Queue(String queue, int parallel, boolean closeAPP, boolean shutDownOS) {
-		this();
-		this.name = queue;
-		this.parallel = parallel;
-		this.closeAPP = closeAPP;
-		this.shutDownOS = shutDownOS;
-	}
+    private int parallel;
+    private LocalDate start;
+    private LocalDate stop;
+    private boolean closeAPP;
+    private boolean shutDownOS;
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    public Queue() {
+        id = 2;
+    }
 
-	@Override
-	public void setName(String str) {
-		name = str;
-	}
+    public Queue(String queue) {
+        this();
+        name = queue;
+    }
 
-	public int getParallel() {
-		return parallel;
-	}
+    public Queue(String queue, int parallel, boolean closeAPP, boolean shutDownOS) {
+        this();
+        this.name = queue;
+        this.parallel = parallel;
+        this.closeAPP = closeAPP;
+        this.shutDownOS = shutDownOS;
+    }
 
-	public void setParallel(int p) {
-		parallel = p;
-	}
+    public static boolean add(Queue e) {
+        return newQueues.add(e);
+    }
 
-	public LocalDate getStartDate() {
-		return start;
-	}
+    public static ObservableList<Queue> getQueues() {
+        ObservableList<Queue> q = FXCollections.observableArrayList();
+        for (Queue queue : queues) {
+            q.add(queue);
+        }
+        for (Queue queue : newQueues) {
+            q.add(queue);
+        }
+        return q;
+    }
 
-	public void setStartDate(LocalDate date) {
-		start = date;
-	}
+    public static Queue getQueue(String readUTF) {
+        for (Queue q : getQueues()) {
+            if (readUTF.equals(q.name)) {
+                return q;
+            }
+        }
+        return Main;
+    }
 
-	public LocalDate getStopDate() {
-		return stop;
-	}
+    public static Queue[] getQueuesArray() {
+        Queue[] qu = new Queue[queues.size()];
+        for (int i = 0; i < qu.length; i++) {
+            qu[i] = queues.get(i);
+        }
+        return qu;
+    }
 
-	public void setStopDate(LocalDate date) {
-		stop = date;
-	}
+    public static Queue[] getNewQueues() {
+        Queue[] list = new Queue[newQueues.size()];
+        return newQueues.toArray(list);
+    }
 
-	public boolean isCloseAPPAfterDownload() {
-		return closeAPP;
-	}
+    public static Queue get(int index) {
+        return queues.get(index);
+    }
 
-	public void setCloseAPPA(boolean bool) {
-		closeAPP = bool;
-	}
+    public static ObservableList<Queue> getQueuesTree() {
+        ObservableList<Queue> ll = FXCollections.observableArrayList();
+        for (Queue queue : queues) {
+            if (!queue.equals(Queue.Default))
+                ll.add(queue);
+        }
+        for (Queue queue : newQueues) {
+            ll.add(queue);
+        }
+        return ll;
+    }
 
-	public boolean isShutDownOSAfterDownload() {
-		return shutDownOS;
-	}
+    /**
+     * save only the new categories
+     *
+     * @return void
+     */
 
-	public void setShutDownOS(boolean bool) {
-		shutDownOS = bool;
-	}
+    public static void saveNewQueues() {
+        for (Queue queue : newQueues) {
+            queue.toJson();
+        }
+    }
 
+    public static Queue fromJson(String file) {
+        return Utils.fromJson(file, Queue.class);
+    }
 
-	public static boolean add(Queue e) {
-		return newQueues.add(e);
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	public static ObservableList<Queue> getQueues() {
-		ObservableList<Queue> q = FXCollections.observableArrayList();
-		for (Queue queue : queues) {
-			q.add(queue);
-		}
-		for (Queue queue : newQueues) {
-			q.add(queue);
-		}
-		return q;
-	}
+    @Override
+    public void setName(String str) {
+        name = str;
+    }
 
-	public static Queue getQueue(String readUTF) {
-		for (Queue q : getQueues()) {
-			if (readUTF.equals(q.name)) {
-				return q;
-			}
-		}
-		return Main;
-	}
+    public int getParallel() {
+        return parallel;
+    }
 
-	public static Queue[] getQueuesArray() {
-		Queue[] qu = new Queue[queues.size()];
-		for (int i = 0; i < qu.length; i++) {
-			qu[i] = queues.get(i);
-		}
-		return qu;
-	}
+    public void setParallel(int p) {
+        parallel = p;
+    }
 
-	public static Queue[] getNewQueues() {
-		Queue[] list = new Queue[newQueues.size()];
-		return newQueues.toArray(list);
-	}
+    public LocalDate getStartDate() {
+        return start;
+    }
 
-	public static Queue get(int index) {
-		return queues.get(index);
-	}
+    public void setStartDate(LocalDate date) {
+        start = date;
+    }
 
-	public static ObservableList<Queue> getQueuesTree() {
-		ObservableList<Queue>  ll = FXCollections.observableArrayList();
-		for (Queue queue : queues) {
-			if(!queue.equals(Queue.Default))
-				ll.add(queue);
-		}
-		for (Queue queue : newQueues) {
-				ll.add(queue);
-		}
-		return ll;
-	}
-	
+    public LocalDate getStopDate() {
+        return stop;
+    }
+
+    public void setStopDate(LocalDate date) {
+        stop = date;
+    }
+
+    public boolean isCloseAPPAfterDownload() {
+        return closeAPP;
+    }
+
+    public void setCloseAPPA(boolean bool) {
+        closeAPP = bool;
+    }
+
 /**------------------------------SAVE OPT-----------------------------------**/
-	
-	/**
-	 * save only the new categories
-     * @return void 
-	 */
-	
-	public static void saveNewQueues() {
-		for (Queue queue : newQueues) {
-			queue.toJson();
-		}
-	}
-	
-	public void toJson() {
-		toJson(R.OptQueuesDir+ File.separator + name + ".json");
-	}
-	public void toJson(String file) {
-		Utils.toJsonFile(file, this);
-	}
-	
-	public static Queue fromJson(String file) {
-		return Utils.fromJson(file, Queue.class);
-	}
-	
+
+    public boolean isShutDownOSAfterDownload() {
+        return shutDownOS;
+    }
+
+    public void setShutDownOS(boolean bool) {
+        shutDownOS = bool;
+    }
+
+    public void toJson() {
+        toJson(R.OptQueuesDir + File.separator + name + ".json");
+    }
+
+    public void toJson(String file) {
+        Utils.toJsonFile(file, this);
+    }
+
 
 }

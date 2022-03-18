@@ -19,7 +19,6 @@
 
 package ariafx.gui.fxml.imp;
 
-import com.sun.javafx.scene.NodeHelper;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -50,18 +49,18 @@ public class JFXSpinnerSkin extends SkinBase<JFXSpinner> {
 
     private final StackPane arcPane;
     private final Rectangle fillRect;
-    DecimalFormat dec = new DecimalFormat("0.000");
-    boolean wasIndeterminate = false;
-    private JFXSpinner control;
-    private boolean isValid = false;
     private final Color greenColor;
     private final Color redColor;
     private final Color yellowColor;
     private final Color blueColor;
+    private final Text text;
+    DecimalFormat dec = new DecimalFormat("0.000");
+    boolean wasIndeterminate = false;
+    private JFXSpinner control;
+    private boolean isValid = false;
     private Timeline timeline;
     private Arc arc;
     private double arcLength = -1;
-    private final Text text;
 
     public JFXSpinnerSkin(JFXSpinner control) {
         super(control);

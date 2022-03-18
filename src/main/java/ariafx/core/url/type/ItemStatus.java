@@ -5,5 +5,5 @@ public enum ItemStatus {
     DOWNLOADING,
     PAUSE,
     COMPLETE,
-    FAILED;
+    FAILED
 }

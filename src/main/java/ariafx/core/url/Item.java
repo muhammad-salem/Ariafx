@@ -173,8 +173,12 @@ public class Item {
     }
 
     public void setFilename(String filename) {
+        this.setFilename(filename, "UTF-8");
+    }
+
+    public void setFilename(String filename, String enc) {
         try {
-            this.filename = URLDecoder.decode(filename, "UTF-8");
+            this.filename = URLDecoder.decode(filename, enc);
         } catch (UnsupportedEncodingException e) {
             this.filename = filename;
         }

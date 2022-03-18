@@ -1,22 +1,5 @@
 package ariafx.core.download;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.Socket;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.net.ssl.SSLContext;
-
-
 import ariafx.core.download.ProxySetting.ProxyConfig;
 import ariafx.core.download.ProxySetting.ProxyType;
 import ariafx.core.url.Item;
@@ -39,300 +22,316 @@ import org.apache.hc.client5.http.protocol.HttpClientContext;
 import org.apache.hc.client5.http.socket.ConnectionSocketFactory;
 import org.apache.hc.client5.http.socket.PlainConnectionSocketFactory;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
-import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.HttpHeaders;
+import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.http.URIScheme;
 import org.apache.hc.core5.http.config.Registry;
 import org.apache.hc.core5.http.config.RegistryBuilder;
 import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.ssl.SSLContexts;
 
+import javax.net.ssl.SSLContext;
+import java.io.File;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.Socket;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class Link extends Download {
-	
-	public Link(Url url){
-		this(new Item(url));
-	}
-	
-	public Link(String url) throws Exception{
-		this(new Item(url));
-	}
-	
-	public Link(String url, String referrer) throws Exception{
-		this(new Item(url, referrer));
-	}
-	
-	public Link(Item item) {
-		super(item);
-	}
 
-	public int getChunksNum() {
-		return item.getChunksNum();
-	}
+    public Link(Url url) {
+        this(new Item(url));
+    }
 
-	public void setChunksNum(int chunksNum) {
-		item.setChunksNum(chunksNum);
-	}
+    public Link(String url) throws Exception {
+        this(new Item(url));
+    }
 
-	public String getFilename() {
-		return item.getFilename();
-	}
+    public Link(String url, String referrer) throws Exception {
+        this(new Item(url, referrer));
+    }
 
-	public void setFilename(String filename) {
-		item.setFilename(filename);
-	}
+    public Link(Item item) {
+        super(item);
+    }
 
-	public String getSaveto() {
-		return item.getSaveto();
-	}
+    public int getChunksNum() {
+        return item.getChunksNum();
+    }
 
-	public void setSaveto(String saveto) {
-		item.setSaveto(saveto);
-	}
+    public void setChunksNum(int chunksNum) {
+        item.setChunksNum(chunksNum);
+    }
 
-	@Override
-	public String getCacheFile() {
-		return item.getCacheFile();
-	}
+    public String getFilename() {
+        return item.getFilename();
+    }
 
-	@Override
-	public void setCacheFile(String cacheFile) {
-		item.setCacheFile(cacheFile);
-	}
+    public void setFilename(String filename) {
+        item.setFilename(filename);
+    }
 
-	public long getLength() {
-		return item.getLength();
-	}
+    public String getSaveto() {
+        return item.getSaveto();
+    }
 
-	public void setLength(long length) {
-		item.setLength(length);
-	}
+    public void setSaveto(String saveto) {
+        item.setSaveto(saveto);
+    }
 
-	public long getDownloaded() {
-		return item.getDownloaded();
-	}
+    @Override
+    public String getCacheFile() {
+        return item.getCacheFile();
+    }
 
-	public void setDownloaded(long downloaded) {
-		item.setDownloaded(downloaded);
-	}
+    @Override
+    public void setCacheFile(String cacheFile) {
+        item.setCacheFile(cacheFile);
+    }
 
-	public long getAdded() {
-		return item.getAdded();
-	}
+    public long getLength() {
+        return item.getLength();
+    }
 
-	public long getLastTry() {
-		return item.getLastTry();
-	}
+    public void setLength(long length) {
+        item.setLength(length);
+    }
 
-	public void setLastTry(long lastTry) {
-		item.setLastTry(lastTry);
-	}
+    public long getDownloaded() {
+        return item.getDownloaded();
+    }
 
-	public long getTimeLeft() {
-		return item.getTimeLeft();
-	}
+    public void setDownloaded(long downloaded) {
+        item.setDownloaded(downloaded);
+    }
 
-	public void setTimeLeft(long timeLeft) {
-		item.setTimeLeft(timeLeft);
-	}
+    public long getAdded() {
+        return item.getAdded();
+    }
 
-	public String getQueue() {
-		return item.getQueue();
-	}
+    public long getLastTry() {
+        return item.getLastTry();
+    }
 
-	public void setQueue(String queue) {
-		item.setQueue(queue);
-	}
+    public void setLastTry(long lastTry) {
+        item.setLastTry(lastTry);
+    }
 
-	public String getCategory() {
-		return item.getCategory();
-	}
+    public long getTimeLeft() {
+        return item.getTimeLeft();
+    }
 
-	public void setCategory(String category) {
-		item.setCategory(category);
-	}
-	public boolean isStreaming() {
-		return item.isStreaming;
-	}
+    public void setTimeLeft(long timeLeft) {
+        item.setTimeLeft(timeLeft);
+    }
 
-	public void setStreaming() {
-		item.isStreaming = true;
-	}
+    public String getQueue() {
+        return item.getQueue();
+    }
 
-	public void toJsonItem() {
-		item.toJson();
-	}
+    public void setQueue(String queue) {
+        item.setQueue(queue);
+    }
 
-	public void toJsonItem(String file) {
-		item.toJson(file);
-	}
+    public String getCategory() {
+        return item.getCategory();
+    }
 
-	public void retrieveInfo() {
-		HttpClientBuilder builder = HttpClients.custom();
-		CookieStore store = null;
-		HttpClientContext context = HttpClientContext.create();
-		store = getCookieStore();
-		if(store != null){
-			builder.setDefaultCookieStore(getCookieStore());
-			context.setCookieStore(getCookieStore());
-		}
-		
-			if(Setting.GetProxyConfig() == ProxyConfig.ManualProxy 
-					&& Setting.GetProxyType() == ProxyType.SOCKS){
-				// Client HTTP connection objects when fully initialized can be bound to
-		        // an arbitrary network socket. The process of network socket initialization,
-		        // its connection to a remote address and binding to a local one is controlled
-		        // by a connection socket factory.
+    public void setCategory(String category) {
+        item.setCategory(category);
+    }
 
-		        // SSL context for secure connections can be created either based on
-		        // system or application specific properties.
-		        SSLContext sslcontext = SSLContexts.createSystemDefault();
+    public boolean isStreaming() {
+        return item.isStreaming;
+    }
 
-		        // Create a registry of custom connection socket factories for supported
-		        // protocol schemes.	        
-		        class SocksPlainConnectionSocketFactory extends PlainConnectionSocketFactory {
+    public void setStreaming() {
+        item.isStreaming = true;
+    }
 
-		            public SocksPlainConnectionSocketFactory() {
-		                super();
-		            }
+    public void toJsonItem() {
+        item.toJson();
+    }
 
-		            @Override
-		            public Socket createSocket(final HttpContext context) throws IOException {
-		                InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
-		                Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
-		                return new Socket(proxy);
-		            }
+    public void toJsonItem(String file) {
+        item.toJson(file);
+    }
 
-		        }
-		        
-		        class SocksSSLConnectionSocketFactory extends SSLConnectionSocketFactory {
+    public void retrieveInfo() {
+        HttpClientBuilder builder = HttpClients.custom();
+        CookieStore store = null;
+        HttpClientContext context = HttpClientContext.create();
+        store = getCookieStore();
+        if (store != null) {
+            builder.setDefaultCookieStore(getCookieStore());
+            context.setCookieStore(getCookieStore());
+        }
 
-		            public SocksSSLConnectionSocketFactory(final SSLContext sslContext) {
-		                super(sslContext);
-		            }
+        if (Setting.GetProxyConfig() == ProxyConfig.ManualProxy
+                && Setting.GetProxyType() == ProxyType.SOCKS) {
+            // Client HTTP connection objects when fully initialized can be bound to
+            // an arbitrary network socket. The process of network socket initialization,
+            // its connection to a remote address and binding to a local one is controlled
+            // by a connection socket factory.
 
-		            @Override
-		            public Socket createSocket(final HttpContext context) throws IOException {
-		                InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
-		                Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
-		                return new Socket(proxy);
-		            }
+            // SSL context for secure connections can be created either based on
+            // system or application specific properties.
+            SSLContext sslcontext = SSLContexts.createSystemDefault();
 
-		        }
-		        
-				Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
-				            .register("http", new SocksPlainConnectionSocketFactory())
-				            .register("https", new SocksSSLConnectionSocketFactory(sslcontext))
-				            .build();
-				 
-				PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg);
-				builder.setConnectionManager(cm);
-			
-		}else{
-			HttpClientConnectionManager connMrg = new BasicHttpClientConnectionManager();
-			builder.setConnectionManager(connMrg);
-		}
-		
-		
-		builder.setRedirectStrategy(DefaultRedirectStrategy.INSTANCE);
-		
-		RequestConfig globalConfig = RequestConfig.custom()
-		        .setCookieSpec(StandardCookieSpec.RELAXED)
-		        .build();
-		builder.setDefaultRequestConfig(globalConfig);
-		builder.useSystemProperties();
-		
-		//proxy setting gos her
-		ProxySetting setting = Setting.getProxySetting();
-		if(setting.getProxyConfig() != ProxyConfig.NoProxy){
-			if(setting.getProxyConfig() == ProxyConfig.SystemProxy){
-				builder.useSystemProperties();
-			} else if(setting.getProxyConfig() == ProxyConfig.ManualProxy){
-				if (ProxyType.SOCKS.equals(setting.proxyType)){
-					InetSocketAddress socksAddress = new InetSocketAddress(setting.getRemoteAddress(), setting.getRemotePort());
-					context.setAttribute("socks.address", socksAddress);
-				} else {
-					URIScheme scheme = ProxyType.HTTPS.equals(setting.proxyType)
-							? URIScheme.HTTPS
-							: URIScheme.HTTP;
-					HttpHost proxy = new HttpHost(scheme.getId(), setting.getRemoteAddress(), setting.getRemotePort());
-					builder.setProxy(proxy);
-				}
-			} else if(setting.getProxyConfig() == ProxyConfig.AutoConfigProxy){
-				builder.setProxy(new HttpHost(setting.getUrlAutoConfig() ) );
-			}
-		}
-		
-		
-		builder.setUserAgent(item.getUserAgent());
-		
-		CloseableHttpClient httpClient = builder.build();
-		HttpGet httpGet = new HttpGet(getURL());
-		RequestConfig localConfig = RequestConfig.copy(globalConfig)
-		        .setCookieSpec(StandardCookieSpec.RELAXED)
-		        .build();
-		httpGet.setConfig(localConfig);
-		
-		if(getUserAgent() != null){
-			httpGet.addHeader(HttpHeaders.USER_AGENT, getUserAgent());
-		}
-		httpGet.addHeader(HttpHeaders.RANGE, "bytes=0-");
-		
-		try {
-			CloseableHttpResponse response = httpClient.execute(httpGet, context);
-			
-			if (response.getCode() / 100 != 2) {
-				R.info( " process canceled \"state code\":"+ response.getCode());
-				return;
-			}
+            // Create a registry of custom connection socket factories for supported
+            // protocol schemes.
+            class SocksPlainConnectionSocketFactory extends PlainConnectionSocketFactory {
 
-			Header content = response.getFirstHeader("Content-Disposition");
-			if(content != null){
-				Map<String, String> filenames = Stream.of(content.getValue().split("; "))
-						.filter(line -> line.contains("="))
-						.map(parameter -> parameter.split("="))
-						.collect(Collectors.toMap(strings -> strings[0], strings -> strings[1]));
-				Charset encode = StandardCharsets.UTF_8;
-				String name = null;
-				if (filenames.containsKey("filename*")){
-					String value = filenames.get("filename*");
-					String[] temp = value.split("''", 2);
-					if (temp.length == 2){
-						encode = Charset.forName(temp[0]);
-						name = temp[1];
-					} else {
-						name = value;
-					}
-				} else if (filenames.containsKey("filename")){
-					name = filenames.get("filename");
-					if (name.startsWith("\"")){
-						name = name.substring(1, name.length()-1);
-					}
-				}
-				if (Objects.nonNull(name)){
-					setFilename(new String(name.getBytes(), encode));
-					setSaveto(new File(item.getSaveto()).getParent().concat(File.separator).concat(name));
-					setCacheFile(new File(item.getCacheFile()).getParent().concat(File.separator).concat(name));
-				}
-			}
-			setLength(Long.valueOf(response.getHeader("Content-Length").getValue()));
-			R.info(response.toString());
-			if(getLength() == -1){
-				Header range = response.getFirstHeader(HttpHeaders.CONTENT_RANGE);
-				if(range != null){
-					String str = range.getValue();
-					long l = getContentLengthFromContentRange(str);
-					setLength(l);
-				}
-			}
-		} catch (Exception e) {
-			R.info(e.getMessage());
-		}
-	}
+                public SocksPlainConnectionSocketFactory() {
+                    super();
+                }
 
-	public CookieStore getCookieStore() {
-		return item.getCookieStore();
-	}
-	
-	public List<String> readCookieLines() {
-		return item.readCookieLines();
-	}
-	
+                @Override
+                public Socket createSocket(final HttpContext context) throws IOException {
+                    InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
+                    Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
+                    return new Socket(proxy);
+                }
+
+            }
+
+            class SocksSSLConnectionSocketFactory extends SSLConnectionSocketFactory {
+
+                public SocksSSLConnectionSocketFactory(final SSLContext sslContext) {
+                    super(sslContext);
+                }
+
+                @Override
+                public Socket createSocket(final HttpContext context) throws IOException {
+                    InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
+                    Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
+                    return new Socket(proxy);
+                }
+
+            }
+
+            Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
+                    .register("http", new SocksPlainConnectionSocketFactory())
+                    .register("https", new SocksSSLConnectionSocketFactory(sslcontext))
+                    .build();
+
+            PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg);
+            builder.setConnectionManager(cm);
+
+        } else {
+            HttpClientConnectionManager connMrg = new BasicHttpClientConnectionManager();
+            builder.setConnectionManager(connMrg);
+        }
+
+
+        builder.setRedirectStrategy(DefaultRedirectStrategy.INSTANCE);
+
+        RequestConfig globalConfig = RequestConfig.custom()
+                .setCookieSpec(StandardCookieSpec.RELAXED)
+                .build();
+        builder.setDefaultRequestConfig(globalConfig);
+        builder.useSystemProperties();
+
+        //proxy setting gos her
+        ProxySetting setting = Setting.getProxySetting();
+        if (setting.getProxyConfig() != ProxyConfig.NoProxy) {
+            if (setting.getProxyConfig() == ProxyConfig.SystemProxy) {
+                builder.useSystemProperties();
+            } else if (setting.getProxyConfig() == ProxyConfig.ManualProxy) {
+                if (ProxyType.SOCKS.equals(setting.proxyType)) {
+                    InetSocketAddress socksAddress = new InetSocketAddress(setting.getRemoteAddress(), setting.getRemotePort());
+                    context.setAttribute("socks.address", socksAddress);
+                } else {
+                    URIScheme scheme = ProxyType.HTTPS.equals(setting.proxyType)
+                            ? URIScheme.HTTPS
+                            : URIScheme.HTTP;
+                    HttpHost proxy = new HttpHost(scheme.getId(), setting.getRemoteAddress(), setting.getRemotePort());
+                    builder.setProxy(proxy);
+                }
+            } else if (setting.getProxyConfig() == ProxyConfig.AutoConfigProxy) {
+                builder.setProxy(new HttpHost(setting.getUrlAutoConfig()));
+            }
+        }
+
+
+        builder.setUserAgent(item.getUserAgent());
+
+        CloseableHttpClient httpClient = builder.build();
+        HttpGet httpGet = new HttpGet(getURL());
+        RequestConfig localConfig = RequestConfig.copy(globalConfig)
+                .setCookieSpec(StandardCookieSpec.RELAXED)
+                .build();
+        httpGet.setConfig(localConfig);
+
+        if (getUserAgent() != null) {
+            httpGet.addHeader(HttpHeaders.USER_AGENT, getUserAgent());
+        }
+        httpGet.addHeader(HttpHeaders.RANGE, "bytes=0-");
+
+        try {
+            CloseableHttpResponse response = httpClient.execute(httpGet, context);
+
+            if (response.getCode() / 100 != 2) {
+                R.info(" process canceled \"state code\":" + response.getCode());
+                return;
+            }
+
+            Header content = response.getFirstHeader("Content-Disposition");
+            if (content != null) {
+                Map<String, String> filenames = Stream.of(content.getValue().split("; "))
+                        .filter(line -> line.contains("="))
+                        .map(parameter -> parameter.split("="))
+                        .collect(Collectors.toMap(strings -> strings[0], strings -> strings[1]));
+                String encode = "UTF-8";
+                String name = null;
+                if (filenames.containsKey("filename*")) {
+                    String value = filenames.get("filename*");
+                    String[] temp = value.split("''", 2);
+                    if (temp.length == 2) {
+                        encode = temp[0];
+                        name = temp[1];
+                    } else {
+                        name = value;
+                    }
+                } else if (filenames.containsKey("filename")) {
+                    name = filenames.get("filename");
+                    if (name.startsWith("\"")) {
+                        name = name.substring(1, name.length() - 1);
+                    }
+                }
+                if (Objects.nonNull(name)) {
+                    item.setFilename(name, encode);
+                    item.setSaveto(new File(item.getSaveto()).getParent().concat(File.separator).concat(name));
+                    item.setCacheFile(new File(item.getCacheFile()).getParent().concat(File.separator).concat(name));
+                }
+            }
+            setLength(Long.valueOf(response.getHeader("Content-Length").getValue()));
+            R.info(response.toString());
+            if (getLength() == -1) {
+                Header range = response.getFirstHeader(HttpHeaders.CONTENT_RANGE);
+                if (range != null) {
+                    String str = range.getValue();
+                    long l = getContentLengthFromContentRange(str);
+                    setLength(l);
+                }
+            }
+        } catch (Exception e) {
+            R.info(e.getMessage());
+        }
+    }
+
+    public CookieStore getCookieStore() {
+        return item.getCookieStore();
+    }
+
+    public List<String> readCookieLines() {
+        return item.readCookieLines();
+    }
+
 }

@@ -37,7 +37,7 @@ public class SimpleStageCtrl extends StageCtrl {
 
     @Override
     public void setFullScreen(ActionEvent event) {
-		stage.setFullScreen(!stage.isFullScreen());
+        stage.setFullScreen(!stage.isFullScreen());
     }
 
     @Override

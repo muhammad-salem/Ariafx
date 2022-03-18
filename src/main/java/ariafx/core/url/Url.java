@@ -60,7 +60,7 @@ public class Url {
         } catch (IOException e) {
             return new ArrayList<Url>();
         }
-		list.removeIf(str -> str.contains(">") || str.contains("<"));
+        list.removeIf(str -> str.contains(">") || str.contains("<"));
 
         int i = 0;
         do {
