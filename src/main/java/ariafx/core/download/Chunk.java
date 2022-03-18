@@ -311,7 +311,6 @@ public class Chunk extends Service<Number> implements ChunkUI {
                     }
                     file.close();
                     inputStream.close();
-                    response.close();
 
                     if (!isCancelled() && !stop) {
                         setStateCode("Done");

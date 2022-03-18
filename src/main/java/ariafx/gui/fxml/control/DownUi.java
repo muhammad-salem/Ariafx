@@ -141,7 +141,6 @@ public class DownUi implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         progress.setDoneText("Download");
-
         link.runningProperty().addListener((obv, old, value) -> {
             if (!link.isInitState()) {
                 if (value || link.getState() == State.CANCELLED) {
@@ -149,7 +148,6 @@ public class DownUi implements Initializable {
                 } else {
                     cancel(null);
                 }
-
             }
         });
 

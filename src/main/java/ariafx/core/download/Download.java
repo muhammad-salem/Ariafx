@@ -1,11 +1,5 @@
 package ariafx.core.download;
 
-import java.io.File;
-import java.util.Arrays;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-
 import ariafx.core.url.Item;
 import ariafx.core.url.Url;
 import ariafx.core.url.type.ItemStatus;
@@ -20,676 +14,612 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.util.Duration;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.File;
+import java.util.Arrays;
 
 public class Download extends Service<Number> {
 
-	public Item item;
-	public Chunk[] chunks;
-	public boolean[] chunkState;
-	
-	public static int ParallelChunks = 4;
-	
-	public Download(Item item) {
-		super();
-		this.item = item;
-		initStateLine();
-		timeline.setCycleCount(Animation.INDEFINITE);
-		timeline.statusProperty().addListener(new ChangeListener<Animation.Status>() {
+    public static int ParallelChunks = 4;
+    public static int MAX_RETRY = 99;
 
-			@Override
-			public void changed(ObservableValue<? extends Animation.Status> observable,
-					Animation.Status oldValue, Animation.Status newValue) {
-				
-				if(newValue.equals(Animation.Status.STOPPED)){
-					sTime = 0;
-					setCurrentTime("");
-				}
-			}
+    public Item item;
+    public Chunk[] chunks;
+    public boolean[] chunkState;
+    public Series<Integer, Double> series;
+    public int upperBound = 60;
+    public SimpleStringProperty lefttimeProperty = new SimpleStringProperty(this, "lefttimeProperty", "");
+    protected boolean init = false;
+    private int retry = 0;
+    private ObjectProperty<ItemStatus> downState;
+    private StringProperty transferRate;
+    private double transfer = 0;
+    private StringProperty remaining;
+    private StringProperty currentTime;
+    private int sTime = 0;
+    private boolean collectData = false;
+    private int xSeries = 0;
+    private double downedLength = -1;
+    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), (e) -> {
+        calculateSpeed();
+        setCurrentTime(++sTime);
+    }));
 
-			
-		});
-		
-	}
+    public Download(Item item) {
+        super();
+        this.item = item;
+        initStateLine();
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.statusProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.equals(Animation.Status.STOPPED)) {
+                sTime = 0;
+                setCurrentTime("");
+            }
+        });
+    }
 
-	/***
-	 * Override control state method
-	 */
+    /***
+     * Override control state method
+     */
 
-	@Override
-	public boolean cancel() {
-		stopChunks();
-		return super.cancel();
-	}
+    @Override
+    public boolean cancel() {
+        stopChunks();
+        return super.cancel();
+    }
 
-	@Override
-	protected void failed() {
-		stopChunks();
-	}
+    @Override
+    protected void failed() {
+        stopChunks();
+    }
 
-	protected boolean init = false;
+    public void updateProgressShow() {
+        init = true;
+        if (!isRunning())
+            start();
+        // init = false;
+    }
 
-	public void updateProgressShow() {
-		init = true;
-		if (!isRunning())
-			start();
-		// init = false;
-	}
+    public boolean isInitState() {
+        return init;
+    }
 
-	public boolean isInitState() {
-		return init;
-	}
+    @Override
+    protected Task<Number> createTask() {
+        Task<Number> taskInit = new Task<Number>() {
 
-	@Override
-	protected Task<Number> createTask() {
-		Task<Number> taskInit = new Task<Number>() {
+            @Override
+            protected Number call() throws Exception {
+                updateProgress(item.downloaded,
+                        (item.length == -1) ? item.downloaded : item.length);
+                updateValue(item.downloaded);
+                updateMessage("Updated.");
+                //init = false;
+                return 1;
+            }
+        };
 
-			@Override
-			protected Number call() throws Exception {
-				updateProgress(item.downloaded,
-						(item.length == -1) ? item.downloaded : item.length);
-				updateValue(item.downloaded);
-				updateMessage("Updated.");
-				//init = false;
-				return 1;
-			}
-		};
-		
-		taskInit.setOnSucceeded((e)->{
-			init = false;
-		});
+        taskInit.setOnSucceeded((e) -> {
+            init = false;
+        });
 
-		Task<Number> taskDown = new Task<Number>() {
+        Task<Number> taskDown = new Task<Number>() {
 
-			@Override
-			protected Number call() throws Exception {
-				item.setLastTry(System.currentTimeMillis());
-				// check item length so can callRange layer
-				if (item.isUnknowLength()) {
-					// item = new ReadyItem(item).initItem();
-					if (chunks != null) {
-						chunks = null;
-					}
-					chunks = new Chunk[item.getChunksNum()];
-					chunkState = new boolean[item.getChunksNum()];
-					chunks[0] = new Chunk(0, item);
+            @Override
+            protected Number call() throws Exception {
+                item.setLastTry(System.currentTimeMillis());
+                // check item length so can callRange layer
+                if (item.isUnknowLength()) {
+                    // item = new ReadyItem(item).initItem();
+                    if (chunks != null) {
+                        chunks = null;
+                    }
+                    chunks = new Chunk[item.getChunksNum()];
+                    chunkState = new boolean[item.getChunksNum()];
+                    chunks[0] = new Chunk(0, item);
 
-					if (item.ranges == null) {
-						item.ranges = new long[item.getChunksNum()][3];
-						item.ranges[0][0] = 0;
-						item.ranges[0][1] = 0;
-						item.ranges[0][2] = 0;
-					}
-				} else {
-					callRange();
-					creatChunks();
-					
-				}
-				
-				boolean[] temp = new boolean[item.getChunksNum()];
-				Arrays.fill(temp, true);
+                    if (item.ranges == null) {
+                        item.ranges = new long[item.getChunksNum()][3];
+                        item.ranges[0][0] = 0;
+                        item.ranges[0][1] = 0;
+                        item.ranges[0][2] = 0;
+                    }
+                } else {
+                    callRange();
+                    creatChunks();
 
-				for (int i = 0; i < chunks.length; i++) {
-					chunks[i].start();
-				}
+                }
 
-				while (!isCancelled()) {
-					long down = 0;
-					for (int i = 0; i < item.getChunksNum(); i++) {
-						down += item.ranges[i][2];
-						chunkState[i] = chunks[i].isStop();
-					}
+                boolean[] temp = new boolean[item.getChunksNum()];
+                Arrays.fill(temp, true);
 
-					boolean equalsTrue = Arrays.equals(chunkState, temp);
-					item.downloaded = down;
-					updateProgress(item.downloaded,
-							item.length == -1 ? item.downloaded : item.length);
-					updateValue(item.downloaded);
-					// System.out.println(equalsTrue);
-					if (equalsTrue)
-						break;
-					Thread.sleep(300);
-					
-					for (int i = 0; i < item.getChunksNum(); i++) {
-						
-						if(chunks[i].getIntStateCode()/100 == 5){
-							chunks[i].cancel();
-							chunks[i].start();
-							System.out.println("restat chunk "+ i 
-									+ " chunks[i].httpStateCode "+ chunks[i].getIntStateCode());
-						}
-						Thread.sleep(300);
-						
-					}
-					
-				}
+                for (int i = 0; i < chunks.length; i++) {
+                    chunks[i].start();
+                }
 
-				updateProgress(item.downloaded,
-						item.length == -1 ? item.downloaded : item.length);
-				updateValue(item.downloaded);
-				return 1;
-			}
-		};
-		if (init)
-			return taskInit;
-		return taskDown;
-	}
+                while (!isCancelled()) {
+                    long down = 0;
+                    for (int i = 0; i < item.getChunksNum(); i++) {
+                        down += item.ranges[i][2];
+                        chunkState[i] = chunks[i].isStop();
+                    }
 
-	void stopAndPause() {
-		timeline.stop();
-		setDownState(ItemStatus.PAUSE);
-		
-	}
+                    boolean equalsTrue = Arrays.equals(chunkState, temp);
+                    item.downloaded = down;
+                    updateProgress(item.downloaded,
+                            item.length == -1 ? item.downloaded : item.length);
+                    updateValue(item.downloaded);
+                    // System.out.println(equalsTrue);
+                    if (equalsTrue)
+                        break;
+                    Thread.sleep(300);
 
-	public void initStateLine() {
-		setOnSucceeded((e) -> {
-			
-			timeline.stop();
-			if (item.downloaded == item.length) {
-				setDownState(ItemStatus.COMPLETE);
-				if (!item.isCopied){
-					moveFileAfterDownload();
-					Notifier.NotifyUser(item.getFilename(), "Download Complete");
-				}
-				
-			} else if (item.downloaded > item.length) {
-				if (item.isUnknowLength()) {
-					setDownState(ItemStatus.PAUSE);
-				} else {
-					// in case of somthig wrong
-					setDownState(ItemStatus.COMPLETE);
-					moveFileAfterDownload();
-				}
-			} else {
-				setDownState(ItemStatus.PAUSE);
-				checkRetry();
-			}
+                    for (int i = 0; i < item.getChunksNum(); i++) {
 
-		});
-		setOnCancelled((e) -> {
-			stopChunks();
-			stopAndPause();
-			resetRetry();
-		});
-		setOnReady((e) -> {
-			stopAndPause();
-		});
-		setOnScheduled((e) -> {
-			stopAndPause();
-		});
-		setOnRunning((e) -> {
-			timeline.play();
-			if(isInitState()){
-				setDownState(ItemStatus.PAUSE);
-			}else{
-				setDownState(ItemStatus.DOWNLOADING);
-			}
-			
-		});
-		
-		setOnFailed((e) -> {
-			timeline.stop();
+                        if (chunks[i].getIntStateCode() / 100 == 5) {
+                            chunks[i].cancel();
+                            chunks[i].start();
+                            System.out.println("restart chunk " + i + " chunks[i].httpStateCode " + chunks[i].getIntStateCode());
+                        }
+                        Thread.sleep(300);
+                    }
+                }
+                updateProgress(item.downloaded, item.length == -1 ? item.downloaded : item.length);
+                updateValue(item.downloaded);
+                return 1;
+            }
+        };
+        if (init)
+            return taskInit;
+        return taskDown;
+    }
+
+    void stopAndPause() {
+        timeline.stop();
+        setDownState(ItemStatus.PAUSE);
+
+    }
+
+    public void initStateLine() {
+        setOnSucceeded((e) -> {
+
+            timeline.stop();
+            if (item.downloaded == item.length) {
+                setDownState(ItemStatus.COMPLETE);
+                if (!item.isCopied) {
+                    moveFileAfterDownload();
+                    Notifier.NotifyUser(item.getFilename(), "Download Complete");
+                }
+
+            } else if (item.downloaded > item.length) {
+                if (item.isUnknowLength()) {
+                    setDownState(ItemStatus.PAUSE);
+                } else {
+                    // in case of somthig wrong
+                    setDownState(ItemStatus.COMPLETE);
+                    moveFileAfterDownload();
+                }
+            } else {
+                setDownState(ItemStatus.PAUSE);
+                checkRetry();
+            }
+
+        });
+        setOnCancelled((e) -> {
+            stopChunks();
+            stopAndPause();
+            resetRetry();
+        });
+        setOnReady((e) -> {
+            stopAndPause();
+        });
+        setOnScheduled((e) -> {
+            stopAndPause();
+        });
+        setOnRunning((e) -> {
+            timeline.play();
+            if (isInitState()) {
+                setDownState(ItemStatus.PAUSE);
+            } else {
+                setDownState(ItemStatus.DOWNLOADING);
+            }
+
+        });
+
+        setOnFailed((e) -> {
+            timeline.stop();
 //			setDownState(DownState.Failed);
-			if (item.isUnknowLength()) {
-				setDownState(ItemStatus.COMPLETE);
-				moveFileAfterDownload();
-				
-			} else {
-				setDownState(ItemStatus.FAILED);
-				checkRetry();
-			}
-			
-		});
+            if (item.isUnknowLength()) {
+                setDownState(ItemStatus.COMPLETE);
+                moveFileAfterDownload();
 
-	}
-	
-	private int retry = 0;
-	public static int MAX_Retry = 99;
-	public void checkRetry(){
-		if(isInitState()){
-			return;
-		}
-		if(!Utils.isAnyNetWorkInterfaceUp()){
-			return;
-		}
-		if(++retry < MAX_Retry){
-			restart();
-//			System.out.println("retry:"+ retry);
-		}
-	}
-	
-	public void resetRetry(){
-		retry = 0;
-	}
-	
-	public int getRetry(){
-		return retry;
-	}
-	
-	public StringExpression retryProperty() {
-		return Bindings.concat(retry);
-				
-	}
+            } else {
+                setDownState(ItemStatus.FAILED);
+                checkRetry();
+            }
+        });
 
-	private void moveFileAfterDownload() {
+    }
 
-		new Thread(new Task<Void>() {
-			@Override
-			protected Void call() throws Exception {
-				File srcFile = new File(item.getCacheFile());
-				File destFile = new File(item.getSaveto());
-				if (destFile.exists()) {
-					if (checkConfliectName()) {
-						destFile = new File(item.getSaveto());
-					}
+    public void checkRetry() {
+        if (isInitState()) {
+            return;
+        }
+        if (!Utils.isAnyNetWorkInterfaceUp()) {
+            return;
+        }
+        if (++retry < MAX_RETRY) {
+            restart();
+        }
+    }
 
-				}
-				FileUtils.moveFile(srcFile, destFile);
-				item.setSaveto(destFile.getAbsolutePath());
-				item.setFilename(FilenameUtils.getName(item.getSaveto()));
-				item.clearCache();
-				return null;
-			}
-		}).run();
-		item.setCopied();
+    public void resetRetry() {
+        retry = 0;
+    }
 
-	}
+    public int getRetry() {
+        return retry;
+    }
 
-	public File getConflicetFileNameFor(File destFile) {
-		return getNewName(destFile, 0);
-	}
+    public StringExpression retryProperty() {
+        return Bindings.concat(retry);
 
-	public File getNewName(File file, int x) {
-		String name = FilenameUtils.getBaseName(file.getAbsolutePath());
-		String exe = FilenameUtils.getExtension(file.getAbsolutePath());
-		File newFile = new File(file.getParent() + File.separator + name + "_"
-				+ x + exe);
-		if (newFile.exists()) {
-			return getNewName(file, ++x);
-		}
-		return newFile;
-	}
+    }
 
-	private ObjectProperty<ItemStatus> downState;
+    private void moveFileAfterDownload() {
 
-	public void setDownState(ItemStatus state) {
-		downStateProperty().set(state);
-		item.setState(state);
-	}
+        new Thread(new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                File srcFile = new File(item.getCacheFile());
+                File destFile = new File(item.getSaveto());
+                if (destFile.exists()) {
+                    if (checkConfliectName()) {
+                        destFile = new File(item.getSaveto());
+                    }
 
-	public ItemStatus getDownState() {
-		return downStateProperty().get();
-	}
+                }
+                FileUtils.moveFile(srcFile, destFile);
+                item.setSaveto(destFile.getAbsolutePath());
+                item.setFilename(FilenameUtils.getName(item.getSaveto()));
+                item.clearCache();
+                return null;
+            }
+        }).run();
+        item.setCopied();
 
-	public String getDown_State() {
-		return getDownState().toString();
-	}
+    }
 
-	public ObjectProperty<ItemStatus> downStateProperty() {
-		if (downState == null)
-			return downState = new SimpleObjectProperty<ItemStatus>(this,
-					"downState", item.getState());
-		return downState;
-	}
+    public File getConflictFileNameFor(File destFile) {
+        return getNewName(destFile, 0);
+    }
 
-	private StringProperty transferRate;
-	private double transfer = 0;
+    public File getNewName(File file, int x) {
+        String name = FilenameUtils.getBaseName(file.getAbsolutePath());
+        String exe = FilenameUtils.getExtension(file.getAbsolutePath());
+        File newFile = new File(file.getParent() + File.separator + name + "_"
+                + x + exe);
+        if (newFile.exists()) {
+            return getNewName(file, ++x);
+        }
+        return newFile;
+    }
 
-	public double getTransferRate() {
-		return transfer;
-	}
+    public ItemStatus getDownState() {
+        return downStateProperty().get();
+    }
 
-	public void setTransferRate(double rate) {
-		transfer = rate;
+    public void setDownState(ItemStatus state) {
+        downStateProperty().set(state);
+        item.setState(state);
+    }
+
+    public String getDown_State() {
+        return getDownState().toString();
+    }
+
+    public ObjectProperty<ItemStatus> downStateProperty() {
+        if (downState == null)
+            return downState = new SimpleObjectProperty<ItemStatus>(this, "downState", item.getState());
+        return downState;
+    }
+
+    public double getTransferRate() {
+        return transfer;
+    }
+
+    public void setTransferRate(double rate) {
+        transfer = rate;
 //		transferRateProperty().set(Utils.fileLengthUnite(rate).concat("/sec"));
-		transferRateProperty().set(Utils.sizeLengthFormate0_0( rate).concat("/sec"));
-	}
+        transferRateProperty().set(Utils.sizeLengthFormate0_0(rate).concat("/sec"));
+    }
 
-	public StringProperty transferRateProperty() {
-		if (transferRate == null)
-			transferRate = new SimpleStringProperty(this, "transferRate");
-		return transferRate;
-	}
-	
-	private StringProperty remaining;
-	
-	public String getRemaining() {
-		return remainingProperty().get();
-	}
-	
-	public void setRemaining(long value) {
-		item.timeLeft = value;
-		setRemaining(Utils.fileLengthUnite(value));
-	}
+    public StringProperty transferRateProperty() {
+        if (transferRate == null)
+            transferRate = new SimpleStringProperty(this, "transferRate");
+        return transferRate;
+    }
 
-	public void setRemaining(String value) {
-		remainingProperty().set(value);
-	}
-	
-	public StringProperty remainingProperty() {
-		if (remaining == null)
-			remaining = new SimpleStringProperty(this, "remaining");
-		return remaining;
-	}
-	
-	
-	private StringProperty currentTime;
-	private int sTime = 0;
-	
-	public String getCurrentTime() {
-		return currentTimeProperty().get();
-	}
-	
-	public void setCurrentTime(long value) {
-		setCurrentTime(Utils.getTime(value));
-	}
+    public String getRemaining() {
+        return remainingProperty().get();
+    }
 
-	public void setCurrentTime(String value) {
-		currentTimeProperty().set(value);
-	}
-	
-	public StringProperty currentTimeProperty() {
-		if (currentTime == null)
-			currentTime = new SimpleStringProperty(this, "currentTime");
-		return currentTime;
-	}
-	
+    public void setRemaining(long value) {
+        item.timeLeft = value;
+        setRemaining(Utils.fileLengthUnite(value));
+    }
 
-	Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), (e) -> {
-		calculateSpeed();
-		setCurrentTime( ++sTime);
-	}));
-	
-	
+    public void setRemaining(String value) {
+        remainingProperty().set(value);
+    }
 
-	private boolean collectData = false;
+    public StringProperty remainingProperty() {
+        if (remaining == null)
+            remaining = new SimpleStringProperty(this, "remaining");
+        return remaining;
+    }
 
-	public void canCollectSpeedData() {
-		collectData = true;
-	}
+    public String getCurrentTime() {
+        return currentTimeProperty().get();
+    }
 
-	public void stopCollectSpeedData() {
-		collectData = false;
-	}
+    public void setCurrentTime(long value) {
+        setCurrentTime(Utils.getTime(value));
+    }
 
-	private int xSeries = 0;
-	public Series<Integer, Double> series;
-	public int upperBound = 60;
+    public void setCurrentTime(String value) {
+        currentTimeProperty().set(value);
+    }
 
-	public synchronized void addData(Double num) {
-		if (series != null) {
-			/*
-			 * Data<Integer, Double> e = new Data<>(xSeries++, num);
-			 * series.getData().add(e); Tooltip.install(e.getNode(), new
-			 * Tooltip(Utils.fileLengthUnite(num)));
-			 */
-			series.getData().add(new Data<>(xSeries++, num));
-		} else {
-			series = new Series<>();
-			series.getData().add(new Data<>(xSeries++, num));
-		}
-		if (series.getData().size() > 60) {
-			series.getData().remove(0, series.getData().size() - 60);
-			upperBound = xSeries; // start series from left to right
-		}
-		upperBound = xSeries; // start series from right to left
-	}
+    public StringProperty currentTimeProperty() {
+        if (currentTime == null)
+            currentTime = new SimpleStringProperty(this, "currentTime");
+        return currentTime;
+    }
 
-	private double downedLength = -1;
+    public void canCollectSpeedData() {
+        collectData = true;
+    }
 
-	private double getDownedLength() {
-		if (downedLength != -1)
-			return downedLength;
-		return downedLength = item.downloaded;
-	}
+    public void stopCollectSpeedData() {
+        collectData = false;
+    }
 
-	public SimpleStringProperty lefttimeProperty = new SimpleStringProperty(
-			this, "lefttimeProperty", "");
+    public synchronized void addData(Double num) {
+        if (series != null) {
+            /*
+             * Data<Integer, Double> e = new Data<>(xSeries++, num);
+             * series.getData().add(e); Tooltip.install(e.getNode(), new
+             * Tooltip(Utils.fileLengthUnite(num)));
+             */
+            series.getData().add(new Data<>(xSeries++, num));
+        } else {
+            series = new Series<>();
+            series.getData().add(new Data<>(xSeries++, num));
+        }
+        if (series.getData().size() > 60) {
+            series.getData().remove(0, series.getData().size() - 60);
+            upperBound = xSeries; // start series from left to right
+        }
+        upperBound = xSeries; // start series from right to left
+    }
 
-	public void calculateSpeed() {
-		//
-		double newDownLength = 0;
-		for (int i = 0; i < item.getChunksNum(); i++) {
-			newDownLength += item.ranges[i][2];
-		}
-		
-		// calc speed
-		downedLength = newDownLength - getDownedLength();
-		
-		setTransferRate(downedLength);
-		if (collectData)
-			addData(downedLength / 1024);
-		// collectData = !collectData;
+    private double getDownedLength() {
+        if (downedLength != -1)
+            return downedLength;
+        return downedLength = item.downloaded;
+    }
 
-		// calc time left
-		item.timeLeft = (long) ((item.length - newDownLength) / downedLength);
-		lefttimeProperty.set(Utils.getTime(item.timeLeft));
+    public void calculateSpeed() {
+        //
+        double newDownLength = 0;
+        for (int i = 0; i < item.getChunksNum(); i++) {
+            newDownLength += item.ranges[i][2];
+        }
 
-		// calc remaining
-		if(!item.isUnknowLength()){
-			setRemaining(item.length - item.downloaded);
-		}
+        // calc speed
+        downedLength = newDownLength - getDownedLength();
 
-		// make downedLength equal to downloaded from 1 sec ago.
-		downedLength = newDownLength;
-	}
+        setTransferRate(downedLength);
+        if (collectData)
+            addData(downedLength / 1024);
+        // collectData = !collectData;
 
-	public void bindState() {
+        // calc time left
+        item.timeLeft = (long) ((item.length - newDownLength) / downedLength);
+        lefttimeProperty.set(Utils.getTime(item.timeLeft));
 
-		if (getState() == State.SUCCEEDED) {
-			if (item.downloaded == item.length) {
-				setDownState(ItemStatus.COMPLETE);
-			} else if (item.downloaded > item.length) {
-				if (item.isUnknowLength()) {
-					setDownState(ItemStatus.PAUSE);
-				} else {
-					setDownState(ItemStatus.FAILED);
-				}
-			} else {
-				setDownState(ItemStatus.PAUSE);
-			}
-		} else if (getState() == State.CANCELLED || getState() == State.READY) {
-			setDownState(ItemStatus.PAUSE);
-		} else if (getState() == State.RUNNING) {
-			setDownState(ItemStatus.DOWNLOADING);
-		} else if (getState() == State.FAILED) {
-			setDownState(ItemStatus.FAILED);
-		}
-	}
+        // calc remaining
+        if (!item.isUnknowLength()) {
+            setRemaining(item.length - item.downloaded);
+        }
 
-	public Item getItem() {
-		return item;
-	}
+        // make downedLength equal to downloaded from 1 sec ago.
+        downedLength = newDownLength;
+    }
 
-	public void setItem(Item item) {
-		this.item = item;
-	}
+    public void bindState() {
 
-	public Url getUrl() {
-		return item.getUrl();
-	}
+        if (getState() == State.SUCCEEDED) {
+            if (item.downloaded == item.length) {
+                setDownState(ItemStatus.COMPLETE);
+            } else if (item.downloaded > item.length) {
+                if (item.isUnknowLength()) {
+                    setDownState(ItemStatus.PAUSE);
+                } else {
+                    setDownState(ItemStatus.FAILED);
+                }
+            } else {
+                setDownState(ItemStatus.PAUSE);
+            }
+        } else if (getState() == State.CANCELLED || getState() == State.READY) {
+            setDownState(ItemStatus.PAUSE);
+        } else if (getState() == State.RUNNING) {
+            setDownState(ItemStatus.DOWNLOADING);
+        } else if (getState() == State.FAILED) {
+            setDownState(ItemStatus.FAILED);
+        }
+    }
 
-	public void setUrl(Url url) {
-		item.setUrl(url);
-	}
+    public Item getItem() {
+        return item;
+    }
 
-	public String getURL() {
-		return item.getURL();
-	}
+    public void setItem(Item item) {
+        this.item = item;
+    }
 
-	public String getReferer() {
-		return item.getReferer();
-	}
+    public Url getUrl() {
+        return item.getUrl();
+    }
 
-	public void setURL(String url) {
-		item.setURL(url);
-	}
+    public void setUrl(Url url) {
+        item.setUrl(url);
+    }
 
-	public void setReferer(String ref) {
-		item.setReferer(ref);
-	}
+    public String getURL() {
+        return item.getURL();
+    }
 
-	/**
-	 * check if the file exists, true will change the file name of the file
-	 * false keep unchanged
-	 * 
-	 * @return true if file name had been changed
-	 */
-	public boolean checkConfliectName() {
-		return item.checkConfliectName();
-	}
+    public void setURL(String url) {
+        item.setURL(url);
+    }
 
-	public String getCacheFile() {
-		return item.getCacheFile();
-	}
+    public String getReferer() {
+        return item.getReferer();
+    }
 
-	public String getCookieFile() {
-		return item.getCookieFile();
-	}
+    public void setReferer(String ref) {
+        item.setReferer(ref);
+    }
 
-	public void setCacheFile(String cacheFile) {
-		item.setCacheFile(cacheFile);
-	}
+    /**
+     * check if the file exists, true will change the file name of the file
+     * false keep unchanged
+     *
+     * @return true if file name had been changed
+     */
+    public boolean checkConfliectName() {
+        return item.checkConfliectName();
+    }
 
-	public void setCookieFile(String cookieFile) {
-		item.setCookieFile(cookieFile);
-	}
+    public String getCacheFile() {
+        return item.getCacheFile();
+    }
 
-	public void setHasCookie() {
-		item.setHasCookie();
-	}
+    public void setCacheFile(String cacheFile) {
+        item.setCacheFile(cacheFile);
+    }
 
-	public boolean haveCookie() {
-		return item.haveCookie();
-	}
+    public String getCookieFile() {
+        return item.getCookieFile();
+    }
 
-	public String getUserAgent() {
-		return item.getUserAgent();
-	}
+    public void setCookieFile(String cookieFile) {
+        item.setCookieFile(cookieFile);
+    }
 
-	public void setUserAgent(String agent) {
-		item.setUserAgent(agent);
-	}
+    public void setHasCookie() {
+        item.setHasCookie();
+    }
 
-	public void callRange() {
-		if (item.ranges == null) {
-			item.ranges = new long[1][3];
-			if (item.isUnknowLength()) {
-				
-				item.ranges[0][0] = 0;
-				item.ranges[0][1] = item.downloaded;
-				item.ranges[0][2] = item.downloaded;
-				
-			} else {
-				
-//				item.ranges = new long[item.getChunksNum()][3];
-//				
-//				item.ranges[item.getChunksNum() - 1][1] = item.getLength();
-//				item.ranges[item.getChunksNum() - 1][0] = item.getLength() - (1024*1024) ;
-//				item.ranges[item.getChunksNum() - 1][2] = 0;
-//				long sub =  item.getLength() - (1024*1024) / (int)item.getChunksNum() - 1;
-//				
-//				for (int i = 0; i < item.getChunksNum() -1; i++) {
-//					item.ranges[i][0] = sub * i;
-//					item.ranges[i][1] = sub * (i + 1) - 1;
-//					
-//				}
-				
-				item.ranges = new long[item.getChunksNum()][3];
-				
-				long sub =  item.getLength() / item.getChunksNum();
-				
-				for (int i = 0; i < item.getChunksNum(); i++) {
-					item.ranges[i][0] = i * sub;
-					item.ranges[i][1] = (i + 1) * sub - 1;
-					item.ranges[i][2] = 0;
-				}
-				item.ranges[item.getChunksNum()-1][1] = item.getLength()-1;
-			}
-		}
-		
-//		for (int i = 0; i < item.ranges.length; i++) {
-//			System.out.println(Arrays.toString(item.ranges[i]));
-//		}
-	}
-	
-	public void callRangeForStreaming() {
-		if (item.ranges == null) {
-			item.ranges = new long[1][3];
-			if (item.isUnknowLength()) {
-				
-				item.ranges[0][0] = 0;
-				item.ranges[0][1] = item.downloaded;
-				item.ranges[0][2] = 0;
-				
-			} else {
-				
-				item.ranges = new long[item.getChunksNum()][3];
-				
-				long sub =  item.getLength() / item.getChunksNum();
-				
-				for (int i = 0; i < item.getChunksNum(); i++) {
-					item.ranges[i][0] = sub * i;
-					item.ranges[i][1] = sub * (i + 1) - 1;
-					
-				}
-				// set last 2 chunk 
-				item.ranges[item.getChunksNum()-2][1] = item.ranges[item.getChunksNum()-1][1]- (2*1024*1024);
-				item.ranges[item.getChunksNum()-1][0] = item.ranges[item.getChunksNum()-2][1]+1;
-				item.ranges[item.getChunksNum()-1][1] = item.getLength()-1;
-				
-			}
-		}
-		
-//		for (int i = 0; i < item.ranges.length; i++) {
-//			System.out.println(Arrays.toString(item.ranges[i]));
-//		}
-	}
+    public boolean haveCookie() {
+        return item.haveCookie();
+    }
 
-	public void creatChunks() {
-		if (chunks != null) {
-			for (int i = 0; i < chunks.length; i++) {
-				if (chunks[i].isRunning()) {
-					chunks[i].cancel();
-				}
-				chunks[i] = null;
-			}
-			chunks = null;
-		}
-		chunks = new Chunk[item.getChunksNum()];
-		chunkState = new boolean[item.getChunksNum()];
-		for (int i = 0; i < chunks.length; i++) {
-			chunks[i] = new Chunk(i, item);
-		}
-	}
+    public String getUserAgent() {
+        return item.getUserAgent();
+    }
 
-	// stop chunks
-	public void stopChunks() {
-		if (chunks != null) {
-			for (int i = 0; i < chunks.length; i++) {
-				chunks[i].cancel();
-				chunks[i] = null;
-			}
-			chunks = null;
-		} else {
-			// System.err.println("chunks == null");
+    public void setUserAgent(String agent) {
+        item.setUserAgent(agent);
+    }
 
-		}
+    public void callRange() {
+        if (item.ranges == null) {
+            item.ranges = new long[1][3];
+            if (item.isUnknowLength()) {
 
-	}
+                item.ranges[0][0] = 0;
+                item.ranges[0][1] = item.downloaded;
+                item.ranges[0][2] = item.downloaded;
 
-	public long getContentLengthFromContentRange(String range) {
-		return item.getContentLengthFromContentRange(range);
-	}
-	
-	public Chunk[] getChunks(){
-		return chunks;
-	}
-	
+            } else {
+                item.ranges = new long[item.getChunksNum()][3];
+                long sub = item.getLength() / item.getChunksNum();
+                for (int i = 0; i < item.getChunksNum(); i++) {
+                    item.ranges[i][0] = i * sub;
+                    item.ranges[i][1] = (i + 1) * sub - 1;
+                    item.ranges[i][2] = 0;
+                }
+                item.ranges[item.getChunksNum() - 1][1] = item.getLength() - 1;
+            }
+        }
+    }
+
+    public void callRangeForStreaming() {
+        if (item.ranges == null) {
+            item.ranges = new long[1][3];
+            if (item.isUnknowLength()) {
+                item.ranges[0][0] = 0;
+                item.ranges[0][1] = item.downloaded;
+                item.ranges[0][2] = 0;
+            } else {
+                item.ranges = new long[item.getChunksNum()][3];
+                long sub = item.getLength() / item.getChunksNum();
+                for (int i = 0; i < item.getChunksNum(); i++) {
+                    item.ranges[i][0] = sub * i;
+                    item.ranges[i][1] = sub * (i + 1) - 1;
+                }
+                // set last 2 chunk
+                item.ranges[item.getChunksNum() - 2][1] = item.ranges[item.getChunksNum() - 1][1] - (2 * 1024 * 1024);
+                item.ranges[item.getChunksNum() - 1][0] = item.ranges[item.getChunksNum() - 2][1] + 1;
+                item.ranges[item.getChunksNum() - 1][1] = item.getLength() - 1;
+            }
+        }
+    }
+
+    public void creatChunks() {
+        if (chunks != null) {
+            for (int i = 0; i < chunks.length; i++) {
+                if (chunks[i].isRunning()) {
+                    chunks[i].cancel();
+                }
+                chunks[i] = null;
+            }
+            chunks = null;
+        }
+        chunks = new Chunk[item.getChunksNum()];
+        chunkState = new boolean[item.getChunksNum()];
+        for (int i = 0; i < chunks.length; i++) {
+            chunks[i] = new Chunk(i, item);
+        }
+    }
+
+    // stop chunks
+    public void stopChunks() {
+        if (chunks != null) {
+            for (int i = 0; i < chunks.length; i++) {
+                chunks[i].cancel();
+                chunks[i] = null;
+            }
+            chunks = null;
+        }
+    }
+
+    public long getContentLengthFromContentRange(String range) {
+        return item.getContentLengthFromContentRange(range);
+    }
+
+    public Chunk[] getChunks() {
+        return chunks;
+    }
+
 }

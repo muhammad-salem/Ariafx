@@ -55,7 +55,7 @@ public class PreLoader extends Application {
             loader.setController(pre);
             anchor = loader.load();
         } catch (Exception e) {
-            System.err.println("error loading preloaded.xml");
+            System.err.println("error loading pre-loader.xml");
         }
 
         stage.setScene(new Scene(anchor));
@@ -75,7 +75,7 @@ public class PreLoader extends Application {
                     protected Void call() throws Exception {
                         R.InitiDirs();
                         pre.setProgress(0.2);
-                        pre.sendMessage("Creating Directorys");
+                        pre.sendMessage("Creating Directories");
                         Thread.sleep(350);
 
                         R.ReadSetting();
@@ -93,7 +93,7 @@ public class PreLoader extends Application {
                         R.InitNewCategores();
                         R.InitLogger();
                         pre.setProgress(0.55);
-                        pre.sendMessage("Adding new Categoryes");
+                        pre.sendMessage("Adding new Categories");
                         pre.sendMessage("Init Logger");
                         Thread.sleep(450);
 

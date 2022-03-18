@@ -5,9 +5,13 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Socket;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.net.ssl.SSLContext;
@@ -281,39 +285,32 @@ public class Link extends Download {
 
 			Header content = response.getFirstHeader("Content-Disposition");
 			if(content != null){
-				String name = content.getValue();
-
-				String[] parts = name.split(";");
-				if (parts.length > 1){
-					Optional<String> prefer =  Stream.of(parts).filter(s -> s.contains("filename*=")).findAny();
-					if (prefer.isPresent()){
-						name = prefer.get();
-						name = name.substring(name.indexOf("''") + 2);
-					}
-				}
-
-				int x;
-				if( (x = name.indexOf("=\"")) == -1){
-					if( (x = name.indexOf("=")) == -1){
-						x = 0;
+				Map<String, String> filenames = Stream.of(content.getValue().split("; "))
+						.filter(line -> line.contains("="))
+						.map(parameter -> parameter.split("="))
+						.collect(Collectors.toMap(strings -> strings[0], strings -> strings[1]));
+				Charset encode = StandardCharsets.UTF_8;
+				String name = null;
+				if (filenames.containsKey("filename*")){
+					String value = filenames.get("filename*");
+					String[] temp = value.split("''", 2);
+					if (temp.length == 2){
+						encode = Charset.forName(temp[0]);
+						name = temp[1];
 					} else {
-						x++;
+						name = value;
 					}
-				} else {
-					x += 2;
+				} else if (filenames.containsKey("filename")){
+					name = filenames.get("filename");
+					if (name.startsWith("\"")){
+						name = name.substring(1, name.length()-1);
+					}
 				}
-				
-				int y = name.indexOf("\";");
-				if( y == -1){
-					y = name.length();
+				if (Objects.nonNull(name)){
+					setFilename(new String(name.getBytes(), encode));
+					setSaveto(new File(item.getSaveto()).getParent().concat(File.separator).concat(name));
+					setCacheFile(new File(item.getCacheFile()).getParent().concat(File.separator).concat(name));
 				}
-				name = name.substring(x, y);
-
-				R.info(name);
-				setFilename(new String(name.getBytes(), StandardCharsets.UTF_8));
-				R.info(this.getFilename());
-				setSaveto(new File(item.getSaveto()).getParent().concat(File.separator).concat(name));
-				setCacheFile(new File(item.getCacheFile()).getParent().concat(File.separator).concat(name));
 			}
 			setLength(Long.valueOf(response.getHeader("Content-Length").getValue()));
 			R.info(response.toString());
@@ -325,7 +322,6 @@ public class Link extends Download {
 					setLength(l);
 				}
 			}
-			response.close();
 		} catch (Exception e) {
 			R.info(e.getMessage());
 		}
