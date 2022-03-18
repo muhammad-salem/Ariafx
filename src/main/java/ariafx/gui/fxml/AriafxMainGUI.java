@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javafx.animation.Transition;
@@ -48,7 +49,7 @@ import ariafx.core.download.Download;
 import ariafx.core.download.Link;
 import ariafx.core.url.Item;
 import ariafx.core.url.Url;
-import ariafx.core.url.type.DownState;
+import ariafx.core.url.type.ItemStatus;
 import ariafx.core.url.type.GState;
 import ariafx.core.url.type.Type;
 import ariafx.gui.control.Control;
@@ -289,8 +290,8 @@ public class AriafxMainGUI implements Initializable {
 		treeState.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		treeState.selectionModelProperty().get().selectedIndexProperty()
 				.addListener((ob, ol, nw) -> {
-					DownState st = DownState.values()[nw.intValue()];
-					if (st.equals(DownState.InitDown)) {
+					ItemStatus st = ItemStatus.values()[nw.intValue()];
+					if (st.equals(ItemStatus.INIT_DOWNLOAD)) {
 						list.setItems(DownList.AnchorList);
 						return;
 					}
@@ -336,11 +337,9 @@ public class AriafxMainGUI implements Initializable {
 		ObservableList<AnchorPane> list = getSelectedItems();
 		if (list.isEmpty())
 			return;
-
 		chooser.setInitialDirectory(new File(R.UserHome));
 		chooser.setInitialFileName("links.ariafx");
-		chooser.setSelectedExtensionFilter(new ExtensionFilter("Ariafx File",
-				".json", ".ariafx"));
+		chooser.setSelectedExtensionFilter(new ExtensionFilter("Ariafx File", ".json", ".ariafx"));
 		chooser.setTitle("Export Links to file");
 		File file = chooser.showSaveDialog(stage);
 		if (file != null) {
@@ -349,8 +348,6 @@ public class AriafxMainGUI implements Initializable {
 			for (AnchorPane anchorPane : list) {
 				int i = DownList.AnchorList.indexOf(anchorPane);
 				Link link = DownList.DownloadList.get(i);
-				// link.toJsonItem(file.getPath() + File.separator
-				// + link.getFilename() + "-"+ link.getAdded() + ".ariafx");
 				data[j++] = link.getItem();
 			}
 			TempItems tempItems = new TempItems(data);
@@ -358,22 +355,6 @@ public class AriafxMainGUI implements Initializable {
 		}
 	}
 
-	/*
-	 * @FXML void exportToJsonFile(ActionEvent event) {
-	 * ObservableList<AnchorPane> list = getSelectedItems(); if(list.isEmpty())
-	 * return;
-	 * 
-	 * dirChooser.setInitialDirectory(new File(R.UserHome));
-	 * dirChooser.setTitle("Export Links to file"); File file =
-	 * dirChooser.showDialog(stage); if(file != null) { // Link[] data = new
-	 * Link[list.size()]; // int j = 0; for (AnchorPane anchorPane : list) { int
-	 * i = DownList.AnchorList.indexOf(anchorPane); Link link =
-	 * DownList.DownloadList.get(i); link.toJsonItem(file.getPath() +
-	 * File.separator + link.getFilename() + "-"+ link.getAdded() + ".ariafx"); //
-	 * data[j++] = link; } // Utils.toJsonFile(file.getPath(), data); }
-	 * 
-	 * }
-	 */
 
 	@FXML
 	void exportToTextFile(ActionEvent event) {
@@ -426,7 +407,7 @@ public class AriafxMainGUI implements Initializable {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					link.setDownState(DownState.InitDown);
+					link.setDownState(ItemStatus.INIT_DOWNLOAD);
 					link.retrieveInfo();
 					DownList.initGUI(link);
 					link.updateProgressShow();
@@ -443,34 +424,28 @@ public class AriafxMainGUI implements Initializable {
 	void importFromJsonFile(ActionEvent event) {
 		chooser.setInitialDirectory(new File(R.UserHome));
 		chooser.setInitialFileName("links.txt");
-		chooser.setSelectedExtensionFilter(new ExtensionFilter("Ariafx File",
-				".json", ".ariafx"));
+		chooser.setSelectedExtensionFilter(new ExtensionFilter("Ariafx File", ".json", ".ariafx"));
 		chooser.setTitle("Open Links from Ariafx (.json/.ariafx) file");
 		File file = chooser.showOpenDialog(null);
 		if (file == null)
 			return;
-		Platform.runLater(new Task<Void>() {
-
-			@Override
-			protected Void call() throws Exception {
-				TempItems items = Utils.fromJson(file.getPath(),
-						TempItems.class);
-				for (Item item : items.items) {
-					Download download = new Download(item);
-					DownList.initGUI(download);
-				}
-				return null;
+		Platform.runLater(() ->{
+			TempItems items = Utils.fromJson(file.getPath(), TempItems.class);
+			if (Objects.isNull(items) || Objects.isNull(items.getItems()) || items.getItems().length == 0){
+				return;
+			}
+			for (Item item : items.getItems()) {
+				Download download = new Download(item);
+				DownList.initGUI(download);
 			}
 		});
-
 	}
 
 	@FXML
 	void importFromTextFile(ActionEvent event) {
 		chooser.setInitialDirectory(new File(R.UserHome));
 		chooser.setInitialFileName("links.txt");
-		chooser.setSelectedExtensionFilter(new ExtensionFilter("Text file",
-				".txt"));
+		chooser.setSelectedExtensionFilter(new ExtensionFilter("Text file", ".txt"));
 		chooser.setTitle("Open Links from Text file");
 		File file = chooser.showOpenDialog(null);
 		if (file == null)
@@ -523,7 +498,7 @@ public class AriafxMainGUI implements Initializable {
 			} else if (link.getState() == State.SUCCEEDED) {
 				if (link.getDownloaded() < link.getLength())
 					link.restart();
-				 else if(link.getDownState() == DownState.Failed){
+				 else if(link.getDownState() == ItemStatus.FAILED){
 					 link.restart();
 				 }
 
@@ -561,7 +536,7 @@ public class AriafxMainGUI implements Initializable {
 	void deleteAllComplete(ActionEvent event) {
 		for (int i = DownList.DownloadList.size() - 1; i >= 0; i--) {
 			Link link = DownList.DownloadList.get(i);
-			if (link.getDownState().equals(DownState.Complete)) {
+			if (link.getDownState().equals(ItemStatus.COMPLETE)) {
 				// if (download.isRunning()) {
 				// download.cancel();
 				// }
@@ -706,12 +681,12 @@ public class AriafxMainGUI implements Initializable {
 	}
 
 	@FXML
-	void minimizePrograme(ActionEvent event) {
+	void minimizeProgram(ActionEvent event) {
 		stage.setIconified(true);
 	}
 
 	@FXML
-	void closePrograme(ActionEvent event) {
+	void closeProgram(ActionEvent event) {
 		stage.close();
 	}
 	
@@ -761,7 +736,7 @@ public class AriafxMainGUI implements Initializable {
 			if(file.exists()){
 				R.openInProcess(file.getAbsolutePath());
 			}else{
-				R.cout("file not exists yet.");
+				R.info("file not exists yet.");
 				// show message for user
 			}
 		}

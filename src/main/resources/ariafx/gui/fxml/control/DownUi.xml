@@ -82,7 +82,7 @@
                               <VBox layoutX="55.0" layoutY="80.0" spacing="10.0">
                                  <children>
                                     <CheckBox fx:id="checkHangUpModem" disable="true" layoutX="55.0" layoutY="68.0" mnemonicParsing="false" onAction="#hangUpModem" text="Hang up modem when complete." />
-                                    <CheckBox fx:id="checkExitProgram" disable="true" layoutX="55.0" layoutY="95.0" mnemonicParsing="false" onAction="#CloseProgrameAfterDone" text="Close Program when Complete.." wrapText="true" />
+                                    <CheckBox fx:id="checkExitProgram" disable="true" layoutX="55.0" layoutY="95.0" mnemonicParsing="false" onAction="#closeProgramAfterDone" text="Close Program when Complete.." wrapText="true" />
                                     <CheckBox fx:id="checkTurnOff" disable="true" layoutX="55.0" layoutY="125.0" mnemonicParsing="false" onAction="#shutDownOS" text="Turn Off Computer when Complete." />
                                  </children>
                               </VBox>

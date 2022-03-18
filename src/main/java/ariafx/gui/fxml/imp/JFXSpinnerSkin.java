@@ -19,8 +19,6 @@
 
 package ariafx.gui.fxml.imp;
 
-import java.text.DecimalFormat;
-
 import com.sun.javafx.scene.NodeHelper;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -39,6 +37,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import java.text.DecimalFormat;
+
 /**
  * JFXSpinner material design skin
  *
@@ -48,19 +48,20 @@ import javafx.util.Duration;
  */
 public class JFXSpinnerSkin extends SkinBase<JFXSpinner> {
 
-    private JFXSpinner control;
-    private boolean isValid = false;
-
-    private Color greenColor;
-    private Color redColor;
-    private Color yellowColor;
-    private Color blueColor;
-    private Timeline timeline;
-    private Arc arc;
     private final StackPane arcPane;
     private final Rectangle fillRect;
+    DecimalFormat dec = new DecimalFormat("0.000");
+    boolean wasIndeterminate = false;
+    private JFXSpinner control;
+    private boolean isValid = false;
+    private final Color greenColor;
+    private final Color redColor;
+    private final Color yellowColor;
+    private final Color blueColor;
+    private Timeline timeline;
+    private Arc arc;
     private double arcLength = -1;
-    private Text text;
+    private final Text text;
 
     public JFXSpinnerSkin(JFXSpinner control) {
         super(control);
@@ -91,20 +92,20 @@ public class JFXSpinnerSkin extends SkinBase<JFXSpinner> {
         getChildren().setAll(arcPane);
 
         // register listeners
-        registerChangeListener(control.indeterminateProperty(), obs -> initialize());
-        registerChangeListener(control.progressProperty(), obs -> updateProgress());
-        registerChangeListener(control.visibleProperty(), obs->updateAnimation());
-        registerChangeListener(control.parentProperty(), obs->updateAnimation());
-        registerChangeListener(control.sceneProperty(), obs->updateAnimation());
+//        registerChangeListener(control.indeterminateProperty(), obs -> initialize());
+//        registerChangeListener(control.progressProperty(), obs -> updateProgress());
+//        registerChangeListener(control.visibleProperty(), obs -> updateAnimation());
+//        registerChangeListener(control.parentProperty(), obs -> updateAnimation());
+//        registerChangeListener(control.sceneProperty(), obs -> updateAnimation());
     }
 
     private void initialize() {
         if (getSkinnable().isIndeterminate()) {
             if (timeline == null) {
                 createTransition();
-                if (NodeHelper.isTreeShowing(getSkinnable())) {
-                    timeline.play();
-                }
+//                if (NodeHelper.isTreeShowing(getSkinnable())) {
+//                    timeline.play();
+//                }
             }
         } else {
             clearAnimation();
@@ -116,26 +117,30 @@ public class JFXSpinnerSkin extends SkinBase<JFXSpinner> {
     private KeyFrame[] getKeyFrames(double angle, double duration, Paint color) {
         KeyFrame[] frames = new KeyFrame[4];
         frames[0] = new KeyFrame(Duration.seconds(duration),
-            new KeyValue(arc.lengthProperty(), 5, Interpolator.LINEAR),
-            new KeyValue(arc.startAngleProperty(),
-                angle + 45 + control.getStartingAngle(),
-                Interpolator.LINEAR));
+                new KeyValue(arc.lengthProperty(), 5, Interpolator.LINEAR),
+                new KeyValue(arc.startAngleProperty(),
+                        angle + 45 + control.getStartingAngle(),
+                        Interpolator.LINEAR))
+        ;
         frames[1] = new KeyFrame(Duration.seconds(duration + 0.4),
-            new KeyValue(arc.lengthProperty(), 250, Interpolator.LINEAR),
-            new KeyValue(arc.startAngleProperty(),
-                angle + 90 + control.getStartingAngle(),
-                Interpolator.LINEAR));
+                new KeyValue(arc.lengthProperty(), 250, Interpolator.LINEAR),
+                new KeyValue(arc.startAngleProperty(),
+                        angle + 90 + control.getStartingAngle(),
+                        Interpolator.LINEAR)
+        );
         frames[2] = new KeyFrame(Duration.seconds(duration + 0.7),
-            new KeyValue(arc.lengthProperty(), 250, Interpolator.LINEAR),
-            new KeyValue(arc.startAngleProperty(),
-                angle + 135 + control.getStartingAngle(),
-                Interpolator.LINEAR));
+                new KeyValue(arc.lengthProperty(), 250, Interpolator.LINEAR),
+                new KeyValue(arc.startAngleProperty(),
+                        angle + 135 + control.getStartingAngle(),
+                        Interpolator.LINEAR)
+        );
         frames[3] = new KeyFrame(Duration.seconds(duration + 1.1),
-            new KeyValue(arc.lengthProperty(), 5, Interpolator.LINEAR),
-            new KeyValue(arc.startAngleProperty(),
-                angle + 435 + control.getStartingAngle(),
-                Interpolator.LINEAR),
-            new KeyValue(arc.strokeProperty(), color, Interpolator.EASE_BOTH));
+                new KeyValue(arc.lengthProperty(), 5, Interpolator.LINEAR),
+                new KeyValue(arc.startAngleProperty(),
+                        angle + 435 + control.getStartingAngle(),
+                        Interpolator.LINEAR),
+                new KeyValue(arc.strokeProperty(), color, Interpolator.EASE_BOTH))
+        ;
         return frames;
     }
 
@@ -155,8 +160,8 @@ public class JFXSpinnerSkin extends SkinBase<JFXSpinner> {
     private void updateAnimation() {
         ProgressIndicator control = getSkinnable();
         final boolean isTreeVisible = control.isVisible() &&
-                                      control.getParent() != null &&
-                                      control.getScene() != null;
+                control.getParent() != null &&
+                control.getScene() != null;
         if (timeline != null) {
             pauseTimeline(!isTreeVisible);
         } else if (isTreeVisible) {
@@ -220,7 +225,6 @@ public class JFXSpinnerSkin extends SkinBase<JFXSpinner> {
             if (text.isVisible()) {
                 final double progress = control.getProgress();
                 String intProgress = dec.format(progress * 100.0);
-//                long intProgress =  Math.round(progress * 100.0);
                 Font font = text.getFont();
                 text.setFont(Font.font(font.getFamily(), radius / 5.6/*1.7*/));
                 text.setText((progress > 1 ? 100 : intProgress) + "%");
@@ -230,9 +234,6 @@ public class JFXSpinnerSkin extends SkinBase<JFXSpinner> {
         }
     }
 
-    DecimalFormat dec = new DecimalFormat("0.000");
-    boolean wasIndeterminate = false;
-
     protected void updateProgress() {
         final ProgressIndicator control = getSkinnable();
         final boolean isIndeterminate = control.isIndeterminate();
@@ -241,8 +242,6 @@ public class JFXSpinnerSkin extends SkinBase<JFXSpinner> {
             control.requestLayout();
         }
         wasIndeterminate = isIndeterminate;
-        
-        
     }
 
     private void createTransition() {
@@ -257,32 +256,32 @@ public class JFXSpinnerSkin extends SkinBase<JFXSpinner> {
         KeyFrame[] greenFrame = getKeyFrames(1350, 4.2, initialColor == null ? greenColor : initialColor);
 
         KeyFrame endingFrame = new KeyFrame(Duration.seconds(5.6),
-            new KeyValue(arc.lengthProperty(), 5, Interpolator.LINEAR),
-            new KeyValue(arc.startAngleProperty(),
-                1845 + control.getStartingAngle(),
-                Interpolator.LINEAR));
+                new KeyValue(arc.lengthProperty(), 5, Interpolator.LINEAR),
+                new KeyValue(arc.startAngleProperty(),
+                        1845 + control.getStartingAngle(),
+                        Interpolator.LINEAR));
 
         if (timeline != null) {
             timeline.stop();
             timeline.getKeyFrames().clear();
         }
         timeline = new Timeline(blueFrame[0],
-            blueFrame[1],
-            blueFrame[2],
-            blueFrame[3],
-            redFrame[0],
-            redFrame[1],
-            redFrame[2],
-            redFrame[3],
-            yellowFrame[0],
-            yellowFrame[1],
-            yellowFrame[2],
-            yellowFrame[3],
-            greenFrame[0],
-            greenFrame[1],
-            greenFrame[2],
-            greenFrame[3],
-            endingFrame);
+                blueFrame[1],
+                blueFrame[2],
+                blueFrame[3],
+                redFrame[0],
+                redFrame[1],
+                redFrame[2],
+                redFrame[3],
+                yellowFrame[0],
+                yellowFrame[1],
+                yellowFrame[2],
+                yellowFrame[3],
+                greenFrame[0],
+                greenFrame[1],
+                greenFrame[2],
+                greenFrame[3],
+                endingFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.setDelay(Duration.ZERO);
     }

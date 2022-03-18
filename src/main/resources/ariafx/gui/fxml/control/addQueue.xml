@@ -27,7 +27,7 @@
 		<Button cancelButton="true" layoutX="54.0" layoutY="253.0" mnemonicParsing="false" onAction="#cancelAction" prefHeight="25.0" prefWidth="139.0" text="Cancel" />
       <HBox layoutX="935.0" layoutY="9.0" spacing="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button layoutX="925.0" layoutY="-1.0" mnemonicParsing="false" onAction="#minimizePrograme" prefHeight="32.0" prefWidth="32.0" styleClass="minimize" />
+            <Button layoutX="925.0" layoutY="-1.0" mnemonicParsing="false" onAction="#minimizeProgram" prefHeight="32.0" prefWidth="32.0" styleClass="minimize" />
             <Button cancelButton="true" layoutX="994.0" layoutY="-1.0" mnemonicParsing="false" onAction="#cancelAction" prefHeight="32.0" prefWidth="32.0" styleClass="close" />
          </children>
       </HBox> 

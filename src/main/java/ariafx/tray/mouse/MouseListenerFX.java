@@ -12,87 +12,56 @@ public interface MouseListenerFX extends MouseListener {
 	 * 
 	 * @param e {@link MouseEvent} awt object.
 	 */
-	public void mouseReleasedFX(MouseEvent e);
+	default void mouseReleasedFX(MouseEvent e){}
 	
 	/**
 	 * Invoked when a mouse button has been pressed on a component.
 	 * @param e {@link MouseEvent} awt object.
 	 */
-	public void mousePressedFX(MouseEvent e);
+	default void mousePressedFX(MouseEvent e){}
 	
 	/**
 	 * Invoked when the mouse exits a component.
 	 * @param e {@link MouseEvent} awt object.
 	 */
-	public void mouseExitedFX(MouseEvent e);
+	default void mouseExitedFX(MouseEvent e){}
 	
 	/**
 	 * Invoked when the mouse enters a component.
 	 * @param e {@link MouseEvent} awt object.
 	 */
-	public void mouseEnteredFX(MouseEvent e);
+	default void mouseEnteredFX(MouseEvent e){}
 	
 	/**
 	 * Invoked when the mouse button has been clicked (pressed and released) on a component.
 	 * @param e {@link MouseEvent} awt object.
 	 */
-	public void mouseClickedFX(MouseEvent e);
+	default void mouseClickedFX(MouseEvent e){}
 	
 	
 	@Override
-	public default void mouseReleased(MouseEvent e) {
-		Platform.runLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				mouseReleasedFX(e);
-			}
-		});
+	default void mouseReleased(MouseEvent e) {
+		Platform.runLater(() -> mouseReleasedFX(e));
 	}
 
 	@Override
-	public default void mousePressed(MouseEvent e) {
-		Platform.runLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				mousePressedFX(e);
-			}
-		});
-
+	default void mousePressed(MouseEvent e) {
+		Platform.runLater(() -> mousePressedFX(e));
 	}
 
 	@Override
-	public default void mouseExited(MouseEvent e) {
-		Platform.runLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				mouseExitedFX(e);
-			}
-		});
+	default void mouseExited(MouseEvent e) {
+		Platform.runLater(() -> mouseExitedFX(e));
 	}
 
 	@Override
-	public default void mouseEntered(MouseEvent e) {
-		Platform.runLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				mouseEnteredFX(e);
-			}
-		});
+	default void mouseEntered(MouseEvent e) {
+		Platform.runLater(() -> mouseEnteredFX(e));
 	}
 
 	@Override
-	public default void mouseClicked(MouseEvent e) {
-		Platform.runLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				mouseClickedFX(e);
-			}
-		});
+	default void mouseClicked(MouseEvent e) {
+		Platform.runLater(() -> mouseClickedFX(e));
 	}
 
 }

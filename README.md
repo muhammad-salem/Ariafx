@@ -1,4 +1,4 @@
-Ariafx  (0.28.9)
+Ariafx  (0.30.0)
 ======
 A Smart Download Manager based on java (JavaFX), with support of HttpClient, GSON.
 

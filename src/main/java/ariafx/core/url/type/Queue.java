@@ -19,7 +19,7 @@ public class Queue extends Type {
 	
 	public static ObservableList<Queue> newQueues = FXCollections.observableArrayList();
 	
-	private int paralle;
+	private int parallel;
 	private LocalDate start;
 	private LocalDate stop;
 	private boolean closeAPP;
@@ -34,10 +34,10 @@ public class Queue extends Type {
 		name = queue;
 	}
 	
-	public Queue(String queue, int paralle, boolean closeAPP, boolean shutDownOS) {
+	public Queue(String queue, int parallel, boolean closeAPP, boolean shutDownOS) {
 		this();
 		this.name = queue;
-		this.paralle = paralle;
+		this.parallel = parallel;
 		this.closeAPP = closeAPP;
 		this.shutDownOS = shutDownOS;
 	}
@@ -52,12 +52,12 @@ public class Queue extends Type {
 		name = str;
 	}
 
-	public int getParalle() {
-		return paralle;
+	public int getParallel() {
+		return parallel;
 	}
 
-	public void setParalle(int p) {
-		paralle = p;
+	public void setParallel(int p) {
+		parallel = p;
 	}
 
 	public LocalDate getStartDate() {
@@ -84,7 +84,7 @@ public class Queue extends Type {
 		closeAPP = bool;
 	}
 
-	public boolean isShutDownOSfterDownload() {
+	public boolean isShutDownOSAfterDownload() {
 		return shutDownOS;
 	}
 

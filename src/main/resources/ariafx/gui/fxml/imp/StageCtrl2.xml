@@ -10,9 +10,9 @@
 <children>
       <HBox fx:id="hBoxStgCtrl" layoutX="925.0" layoutY="-1.0" spacing="3.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button fx:id="fullScreenButton" mnemonicParsing="false" onAction="#setFullSCreen" prefHeight="32.0" prefWidth="32.0" styleClass="full-Screen" />
-            <Button fx:id="minmizeButton" layoutX="925.0" layoutY="-1.0" mnemonicParsing="false" onAction="#setMinimize" prefHeight="32.0" prefWidth="32.0" styleClass="minimize" />
-            <Button fx:id="maxmizeButton" layoutX="960.0" layoutY="-1.0" mnemonicParsing="false" onAction="#setMaximize" prefHeight="32.0" prefWidth="32.0" styleClass="maximize" />
+            <Button fx:id="fullScreenButton" mnemonicParsing="false" onAction="#setFullScreen" prefHeight="32.0" prefWidth="32.0" styleClass="full-Screen" />
+            <Button fx:id="minimizeButton" layoutX="925.0" layoutY="-1.0" mnemonicParsing="false" onAction="#setMinimize" prefHeight="32.0" prefWidth="32.0" styleClass="minimize" />
+            <Button fx:id="maximizeButton" layoutX="960.0" layoutY="-1.0" mnemonicParsing="false" onAction="#setMaximize" prefHeight="32.0" prefWidth="32.0" styleClass="maximize" />
             <Button fx:id="closeButton" layoutX="994.0" layoutY="-1.0" mnemonicParsing="false" onAction="#close" prefHeight="32.0" prefWidth="32.0" styleClass="close" />
          </children>
       </HBox>

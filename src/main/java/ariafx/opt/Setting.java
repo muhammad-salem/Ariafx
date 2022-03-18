@@ -3,8 +3,6 @@
  */
 package ariafx.opt;
 
-import java.util.Arrays;
-
 import ariafx.core.download.Download;
 import ariafx.core.download.ProxySetting;
 import ariafx.core.download.ProxySetting.ProxyConfig;
@@ -15,6 +13,8 @@ import ariafx.core.url.type.Queue;
 import ariafx.gui.fxml.AriafxMainGUI;
 import ariafx.gui.manager.DownList;
 
+import java.util.Arrays;
+
 /**
  * @author salem
  *
@@ -24,8 +24,6 @@ public class Setting {
 	/**
 	 * save the default setting her
 	 */
-	
-
 	double time_to_save_in_minutes  = 1;
 	boolean isMinimal;
 	int ParallelChunks = Download.ParallelChunks;
@@ -36,9 +34,7 @@ public class Setting {
 
 	Item[] items;
 	
-	
 	private static Setting setting;
-
 
 	public Setting() {
 		paths = R.getPaths();
@@ -50,13 +46,11 @@ public class Setting {
 		ParallelChunks = Download.ParallelChunks;
 		proxySetting = ProxySetting.createDefalutProxySetting();
 	}
-	
-	
+
 	@Override
 	public String toString() {
 		String str  = Arrays.toString(paths)+ "\n";
 			   str += Arrays.toString(categories)+ "\n";
-//			   str += Arrays.toString(queues)+ "\n";
 			   str += Arrays.toString(items)+ "\n";
 		return str;
 	}

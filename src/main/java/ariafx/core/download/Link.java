@@ -5,33 +5,13 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.net.ssl.SSLContext;
 
-import org.apache.http.Header;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.config.CookieSpecs;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.config.Registry;
-import org.apache.http.config.RegistryBuilder;
-import org.apache.http.conn.HttpClientConnectionManager;
-import org.apache.http.conn.socket.ConnectionSocketFactory;
-import org.apache.http.conn.socket.PlainConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.client.LaxRedirectStrategy;
-import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.ssl.SSLContexts;
 
 import ariafx.core.download.ProxySetting.ProxyConfig;
 import ariafx.core.download.ProxySetting.ProxyType;
@@ -39,6 +19,27 @@ import ariafx.core.url.Item;
 import ariafx.core.url.Url;
 import ariafx.opt.R;
 import ariafx.opt.Setting;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.cookie.CookieStore;
+import org.apache.hc.client5.http.cookie.StandardCookieSpec;
+import org.apache.hc.client5.http.impl.DefaultRedirectStrategy;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.BasicHttpClientConnectionManager;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.client5.http.protocol.HttpClientContext;
+import org.apache.hc.client5.http.socket.ConnectionSocketFactory;
+import org.apache.hc.client5.http.socket.PlainConnectionSocketFactory;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.config.Registry;
+import org.apache.hc.core5.http.config.RegistryBuilder;
+import org.apache.hc.core5.http.protocol.HttpContext;
+import org.apache.hc.core5.ssl.SSLContexts;
 
 public class Link extends Download {
 	
@@ -56,20 +57,6 @@ public class Link extends Download {
 	
 	public Link(Item item) {
 		super(item);
-	}
-	
-	
-	
-	public void setAuthrized(String user, String pass) {
-		item.setAuthrized(user, pass);
-	}
-
-	public void removeAuthrized() {
-		item.removeAuthrized();
-	}
-
-	public String getAuthorization() {
-		return item.getAuthorization();
 	}
 
 	public int getChunksNum() {
@@ -164,32 +151,6 @@ public class Link extends Download {
 	public void setStreaming() {
 		item.isStreaming = true;
 	}
-	
-	/*
-	
-	public void removeStreaming() {
-		item.isStreaming = false;
-		//implement of changes in ranges
-		{
-			/ **
-			 *  start new download from item.downloaded,
-			 *  conquer and div the rest for item.chunksNum
-			 * /
-			item.setChunksNum(4);
-			item.ranges = new long[item.getChunksNum()][3];
-			long remaning = item.length - item.downloaded;
-			long sub = remaning / item.getChunksNum();
-			
-			for (int i = 0; i < item.getChunksNum(); i++) {
-				item.ranges[i][0] = remaning + (sub * i);
-				item.ranges[i][1] = remaning + (sub * (i + 1) - 1);
-				item.ranges[i][2] = 0;
-			}
-			item.ranges[item.getChunksNum() - 1][1] = item.getLength();
-		}
-	}
-	
-	*/
 
 	public void toJsonItem() {
 		item.toJson();
@@ -200,20 +161,14 @@ public class Link extends Download {
 	}
 
 	public void retrieveInfo() {
-		//initLodgger();
-		
-		HttpClientBuilder  builder = HttpClients.custom();
+		HttpClientBuilder builder = HttpClients.custom();
 		CookieStore store = null;
 		HttpClientContext context = HttpClientContext.create();
-		
-//		if (haveCookie()) {
-			store = getCookieStore();
-			if(store != null){
-				builder.setDefaultCookieStore(getCookieStore());
-				context.setCookieStore(getCookieStore());
-			}
-				
-//		}
+		store = getCookieStore();
+		if(store != null){
+			builder.setDefaultCookieStore(getCookieStore());
+			context.setCookieStore(getCookieStore());
+		}
 		
 			if(Setting.GetProxyConfig() == ProxyConfig.ManualProxy 
 					&& Setting.GetProxyType() == ProxyType.SOCKS){
@@ -272,10 +227,10 @@ public class Link extends Download {
 		}
 		
 		
-		builder.setRedirectStrategy(new LaxRedirectStrategy());
+		builder.setRedirectStrategy(DefaultRedirectStrategy.INSTANCE);
 		
 		RequestConfig globalConfig = RequestConfig.custom()
-		        .setCookieSpec(CookieSpecs.DEFAULT)
+		        .setCookieSpec(StandardCookieSpec.RELAXED)
 		        .build();
 		builder.setDefaultRequestConfig(globalConfig);
 		builder.useSystemProperties();
@@ -286,95 +241,82 @@ public class Link extends Download {
 			if(setting.getProxyConfig() == ProxyConfig.SystemProxy){
 				builder.useSystemProperties();
 			} else if(setting.getProxyConfig() == ProxyConfig.ManualProxy){
-				HttpHost proxy = new HttpHost(setting.getRemoteAddress(), setting.getRemotePort());
-				if(setting.getProxyType() == ProxyType.HTTPS){
+				if (ProxyType.SOCKS.equals(setting.proxyType)){
+					InetSocketAddress socksAddress = new InetSocketAddress(setting.getRemoteAddress(), setting.getRemotePort());
+					context.setAttribute("socks.address", socksAddress);
+				} else {
+					URIScheme scheme = ProxyType.HTTPS.equals(setting.proxyType)
+							? URIScheme.HTTPS
+							: URIScheme.HTTP;
+					HttpHost proxy = new HttpHost(scheme.getId(), setting.getRemoteAddress(), setting.getRemotePort());
 					builder.setProxy(proxy);
-				} 
-				else if(setting.getProxyType() == ProxyType.HTTPS){
-						proxy = new HttpHost(setting.getRemoteAddress(), setting.getRemotePort(), "https");
-						builder.setProxy(proxy);
-				} 
-				else if(setting.getProxyType() == ProxyType.SOCKS){
-					 InetSocketAddress socksaddr = new InetSocketAddress(setting.getRemoteAddress(), setting.getRemotePort());
-					 context.setAttribute("socks.address", socksaddr);
 				}
-						
-				
-				
 			} else if(setting.getProxyConfig() == ProxyConfig.AutoConfigProxy){
-//						HttpHost proxy = new HttpHost(ProxySetting.HTTPRemoteAddress, ProxySetting.HTTPRemotePort);
-				builder.setProxy(new HttpHost( setting.getUrlAutoConfig() ) );
+				builder.setProxy(new HttpHost(setting.getUrlAutoConfig() ) );
 			}
 		}
 		
 		
 		builder.setUserAgent(item.getUserAgent());
 		
-		CloseableHttpClient  httpClient = builder.build();
+		CloseableHttpClient httpClient = builder.build();
 		HttpGet httpGet = new HttpGet(getURL());
 		RequestConfig localConfig = RequestConfig.copy(globalConfig)
-		        .setCookieSpec(CookieSpecs.STANDARD_STRICT)
+		        .setCookieSpec(StandardCookieSpec.RELAXED)
 		        .build();
 		httpGet.setConfig(localConfig);
 		
 		if(getUserAgent() != null){
 			httpGet.addHeader(HttpHeaders.USER_AGENT, getUserAgent());
 		}
-		if (item.isAuthorized) {
-			httpGet.addHeader(HttpHeaders.AUTHORIZATION,
-					"Besic " + item.getAuthorization());
-		}
 		httpGet.addHeader(HttpHeaders.RANGE, "bytes=0-");
 		
-		
-		
-		
-		
 		try {
-			HttpResponse response = httpClient.execute(httpGet, context);
+			CloseableHttpResponse response = httpClient.execute(httpGet, context);
 			
-			if (response.getStatusLine().getStatusCode() / 100 != 2) {
-				//System.out.println( " process canceld \"state code\":"
-				//		+ response.getStatusLine().getStatusCode());
-				R.cout( " process canceld \"state code\":"
-						+ response.getStatusLine().getStatusCode());
+			if (response.getCode() / 100 != 2) {
+				R.info( " process canceled \"state code\":"+ response.getCode());
 				return;
 			}
-			
+
 			Header content = response.getFirstHeader("Content-Disposition");
-			
 			if(content != null){
-				//System.out.printf("%s %s\n", content.getName(), content.getValue());
 				String name = content.getValue();
-				int x = 0;
+
+				String[] parts = name.split(";");
+				if (parts.length > 1){
+					Optional<String> prefer =  Stream.of(parts).filter(s -> s.contains("filename*=")).findAny();
+					if (prefer.isPresent()){
+						name = prefer.get();
+						name = name.substring(name.indexOf("''") + 2);
+					}
+				}
+
+				int x;
 				if( (x = name.indexOf("=\"")) == -1){
 					if( (x = name.indexOf("=")) == -1){
 						x = 0;
-					}else{
+					} else {
 						x++;
 					}
-				}else{
+				} else {
 					x += 2;
 				}
 				
-				int y = 0;
-				if( (y = name.indexOf("\";")) == -1){
+				int y = name.indexOf("\";");
+				if( y == -1){
 					y = name.length();
-				}else{
-//					y += 2;
 				}
-					
 				name = name.substring(x, y);
 
-				setFilename(name);
-				setSaveto(new File(item.getSaveto()).getParent()
-						.concat(File.separator).concat(name));
-				setCacheFile(new File(item.getCacheFile()).getParent()
-						.concat(File.separator).concat(name));
+				R.info(name);
+				setFilename(new String(name.getBytes(), StandardCharsets.UTF_8));
+				R.info(this.getFilename());
+				setSaveto(new File(item.getSaveto()).getParent().concat(File.separator).concat(name));
+				setCacheFile(new File(item.getCacheFile()).getParent().concat(File.separator).concat(name));
 			}
-			setLength(response.getEntity().getContentLength());
-//			System.out.println(response.toString());
-			R.cout(response.toString());
+			setLength(Long.valueOf(response.getHeader("Content-Length").getValue()));
+			R.info(response.toString());
 			if(getLength() == -1){
 				Header range = response.getFirstHeader(HttpHeaders.CONTENT_RANGE);
 				if(range != null){
@@ -383,15 +325,10 @@ public class Link extends Download {
 					setLength(l);
 				}
 			}
-			
+			response.close();
 		} catch (Exception e) {
-			R.cout(e.getMessage());
-			//e.printStackTrace();
-		}finally{
-			httpGet.releaseConnection();
+			R.info(e.getMessage());
 		}
-		
-//		R.cout(item);
 	}
 
 	public CookieStore getCookieStore() {

@@ -6,11 +6,11 @@ import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.List;
 
+import ariafx.opt.R;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.http.client.CookieStore;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.cookie.BasicClientCookie;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
+import org.apache.hc.client5.http.cookie.CookieStore;
 
 import ariafx.core.download.Link;
 import ariafx.core.url.Item;
@@ -18,6 +18,7 @@ import ariafx.gui.fxml.control.DisplayUrlInfo;
 import ariafx.opt.Parameter;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import org.apache.hc.client5.http.impl.cookie.BasicClientCookie;
 
 public class ParameterToLink extends Service<Void>{
 	Parameter param;
@@ -38,45 +39,31 @@ public class ParameterToLink extends Service<Void>{
 					List<String> urls = FileUtils.readLines(new File(path), Charset.defaultCharset());
 //					List<String> urls = FileUtils.readLines(new File(path));
 					for (String string : urls) {
-						System.out.println(string);
+						R.info(string);
 					}
-					
-					
 				} catch (Exception e) {
 					
 				}
-				
 			}
-		}else{
+		} else{
 			try {
 				link = new Link(url);
 				if(ref != null){
 					link.setReferer(ref);
 				}
-				
 				if(param.getFileName() != null){
 					link.setFilename(param.getFileName());
-				}else {
-					link.setFilename(Item.removeParamterMark(FilenameUtils.getName(url)));
+				} else {
+					link.setFilename(Item.removeParameterMark(FilenameUtils.getName(url)));
 				}
-				
 				if(param.getUserAgent() != null){
 					link.setUserAgent(param.getUserAgent());
 				}
-				
-				
 				if(param.haveCookieFile()){
 					link.setCookieFile(copyCookieFile());
 				}
-				
-				
-//				Retrieve info from Internet 
 				link.retrieveInfo();
-				
-//				link.readCookieLines();
-				
 				DisplayUrlInfo.AddLink(link);
-				
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -85,7 +72,6 @@ public class ParameterToLink extends Service<Void>{
 				param.clear();
 			}
 		}
-		
 	}
 	
 	private String copyCookieFile() {
@@ -116,14 +102,10 @@ public class ParameterToLink extends Service<Void>{
 		return destFile.getPath();
 	}
 	
-	
 	private String getSaveFileFor(String name){
 		File file = new File(link.getCacheFile()).getParentFile();
 		return  file.getPath() + File.separator + name;
 	}
-	
-	
-	
 
 	public CookieStore getCookieStore() {
 		List<String> lines = readCookieLines();
@@ -136,16 +118,10 @@ public class ParameterToLink extends Service<Void>{
 			//     0		1		2	3		4			5		6   
 			// .domain.com	TRUE	/	TRUE	ExpiryDate	name	value
 			//
-			
 			BasicClientCookie cookie = new BasicClientCookie(str[5], str[6]);
 			cookie.setDomain(str[0]);
 			cookie.setPath(str[2]);
 			cookie.setExpiryDate(new Date(Long.valueOf(str[4])));
-			
-//			// str[1] str[3] don't know what is that
-//			cookie.setSecure(Boolean.valueOf(str[1]));
-//			cookie.setSecure(Boolean.valueOf(str[3]));
-			
 			store.addCookie(cookie);
 		}
 		
@@ -157,14 +133,6 @@ public class ParameterToLink extends Service<Void>{
 		List<String> lines;
 		try {
 			lines = FileUtils.readLines(new File(link.getCookieFile()), Charset.defaultCharset());
-//			lines = FileUtils.readLines(new File(link.getCookieFile()));
-//			for (String string : lines) {
-//				System.out.println(string);
-////				String[] str = string.split("\t");
-////				for (String s : str) {
-////					System.out.println(s);
-////				}
-//			}
 		} catch (IOException e) {
 			return null;
 		}
@@ -180,16 +148,6 @@ public class ParameterToLink extends Service<Void>{
 	public static void initLink(Parameter param) {
 		ParameterToLink toLink = new ParameterToLink(param);
 		toLink.start();
-		
-//		Platform.runLater(new Task<Void>() {
-//			@Override
-//			protected Void call() throws Exception {
-//				toLink.initLink();
-//				return null;
-//			}
-//		});
-		
-		
 	}
 
 	@Override

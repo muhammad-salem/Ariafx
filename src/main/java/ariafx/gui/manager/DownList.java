@@ -12,7 +12,7 @@ import ariafx.core.download.Link;
 import ariafx.core.url.Item;
 import ariafx.core.url.Url;
 import ariafx.core.url.type.Category;
-import ariafx.core.url.type.DownState;
+import ariafx.core.url.type.ItemStatus;
 import ariafx.core.url.type.Queue;
 import ariafx.core.url.type.Type;
 import ariafx.gui.fxml.Item2Gui;
@@ -180,7 +180,7 @@ public final class DownList {
 		return DownloadList.filtered(predicate);
 	}
 
-	public static ObservableList<Link> downState(DownState state) {
+	public static ObservableList<Link> downState(ItemStatus state) {
 		Predicate<Link> predicate = new Predicate<Link>() {
 			@Override
 			public boolean test(Link l) {
@@ -242,7 +242,7 @@ public final class DownList {
 
 	public static void runAllPausedDownloads() {
 		for (Download download : DownloadList) {
-			if (download.getDownState().equals(DownState.Pause)) {
+			if (download.getDownState().equals(ItemStatus.PAUSE)) {
 				download.reset();
 				download.start();
 			}

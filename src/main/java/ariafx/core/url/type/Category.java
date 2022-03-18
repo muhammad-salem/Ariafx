@@ -225,7 +225,7 @@ public class Category extends Type{
 	}
 	
 	public void toJson() {
-		toJson(R.OptCategoresDir+ File.separator + name + ".json");
+		toJson(R.OptCategoriesDir + File.separator + name + ".json");
 	}
 	public void toJson(String file) {
 		Utils.toJsonFile(file, this);

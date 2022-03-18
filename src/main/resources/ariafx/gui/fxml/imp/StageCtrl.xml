@@ -9,9 +9,9 @@
 
 <HBox fx:id="hBoxStgCtrl" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="1.0" stylesheets="@../res/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="fullScreenButton" mnemonicParsing="false" onAction="#setFullSCreen" prefHeight="32.0" prefWidth="32.0" styleClass="full-Screen" />
-      <Button fx:id="minmizeButton" mnemonicParsing="false" onAction="#setMinimize" prefHeight="32.0" prefWidth="32.0" styleClass="minimize" />
-      <Button fx:id="maxmizeButton" mnemonicParsing="false" onAction="#setMaximize" prefHeight="32.0" prefWidth="32.0" styleClass="maximize" />
+      <Button fx:id="fullScreenButton" mnemonicParsing="false" onAction="#setFullScreen" prefHeight="32.0" prefWidth="32.0" styleClass="full-Screen" />
+      <Button fx:id="minimizeButton" mnemonicParsing="false" onAction="#setMinimize" prefHeight="32.0" prefWidth="32.0" styleClass="minimize" />
+      <Button fx:id="maximizeButton" mnemonicParsing="false" onAction="#setMaximize" prefHeight="32.0" prefWidth="32.0" styleClass="maximize" />
       <Button fx:id="closeButton" mnemonicParsing="false" onAction="#close" prefHeight="32.0" prefWidth="32.0" styleClass="close" />
    </children>
 </HBox>

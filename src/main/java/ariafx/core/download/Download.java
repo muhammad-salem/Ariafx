@@ -8,7 +8,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import ariafx.core.url.Item;
 import ariafx.core.url.Url;
-import ariafx.core.url.type.DownState;
+import ariafx.core.url.type.ItemStatus;
 import ariafx.notify.Notifier;
 import ariafx.opt.Utils;
 import javafx.animation.Animation;
@@ -183,7 +183,7 @@ public class Download extends Service<Number> {
 
 	void stopAndPause() {
 		timeline.stop();
-		setDownState(DownState.Pause);
+		setDownState(ItemStatus.PAUSE);
 		
 	}
 
@@ -192,7 +192,7 @@ public class Download extends Service<Number> {
 			
 			timeline.stop();
 			if (item.downloaded == item.length) {
-				setDownState(DownState.Complete);
+				setDownState(ItemStatus.COMPLETE);
 				if (!item.isCopied){
 					moveFileAfterDownload();
 					Notifier.NotifyUser(item.getFilename(), "Download Complete");
@@ -200,14 +200,14 @@ public class Download extends Service<Number> {
 				
 			} else if (item.downloaded > item.length) {
 				if (item.isUnknowLength()) {
-					setDownState(DownState.Pause);
+					setDownState(ItemStatus.PAUSE);
 				} else {
 					// in case of somthig wrong
-					setDownState(DownState.Complete);
+					setDownState(ItemStatus.COMPLETE);
 					moveFileAfterDownload();
 				}
 			} else {
-				setDownState(DownState.Pause);
+				setDownState(ItemStatus.PAUSE);
 				checkRetry();
 			}
 
@@ -226,9 +226,9 @@ public class Download extends Service<Number> {
 		setOnRunning((e) -> {
 			timeline.play();
 			if(isInitState()){
-				setDownState(DownState.Pause);
+				setDownState(ItemStatus.PAUSE);
 			}else{
-				setDownState(DownState.Downloading);
+				setDownState(ItemStatus.DOWNLOADING);
 			}
 			
 		});
@@ -237,11 +237,11 @@ public class Download extends Service<Number> {
 			timeline.stop();
 //			setDownState(DownState.Failed);
 			if (item.isUnknowLength()) {
-				setDownState(DownState.Complete);
+				setDownState(ItemStatus.COMPLETE);
 				moveFileAfterDownload();
 				
 			} else {
-				setDownState(DownState.Failed);
+				setDownState(ItemStatus.FAILED);
 				checkRetry();
 			}
 			
@@ -316,14 +316,14 @@ public class Download extends Service<Number> {
 		return newFile;
 	}
 
-	private ObjectProperty<DownState> downState;
+	private ObjectProperty<ItemStatus> downState;
 
-	public void setDownState(DownState state) {
+	public void setDownState(ItemStatus state) {
 		downStateProperty().set(state);
 		item.setState(state);
 	}
 
-	public DownState getDownState() {
+	public ItemStatus getDownState() {
 		return downStateProperty().get();
 	}
 
@@ -331,9 +331,9 @@ public class Download extends Service<Number> {
 		return getDownState().toString();
 	}
 
-	public ObjectProperty<DownState> downStateProperty() {
+	public ObjectProperty<ItemStatus> downStateProperty() {
 		if (downState == null)
-			return downState = new SimpleObjectProperty<DownState>(this,
+			return downState = new SimpleObjectProperty<ItemStatus>(this,
 					"downState", item.getState());
 		return downState;
 	}
@@ -484,22 +484,22 @@ public class Download extends Service<Number> {
 
 		if (getState() == State.SUCCEEDED) {
 			if (item.downloaded == item.length) {
-				setDownState(DownState.Complete);
+				setDownState(ItemStatus.COMPLETE);
 			} else if (item.downloaded > item.length) {
 				if (item.isUnknowLength()) {
-					setDownState(DownState.Pause);
+					setDownState(ItemStatus.PAUSE);
 				} else {
-					setDownState(DownState.Failed);
+					setDownState(ItemStatus.FAILED);
 				}
 			} else {
-				setDownState(DownState.Pause);
+				setDownState(ItemStatus.PAUSE);
 			}
 		} else if (getState() == State.CANCELLED || getState() == State.READY) {
-			setDownState(DownState.Pause);
+			setDownState(ItemStatus.PAUSE);
 		} else if (getState() == State.RUNNING) {
-			setDownState(DownState.Downloading);
+			setDownState(ItemStatus.DOWNLOADING);
 		} else if (getState() == State.FAILED) {
-			setDownState(DownState.Failed);
+			setDownState(ItemStatus.FAILED);
 		}
 	}
 

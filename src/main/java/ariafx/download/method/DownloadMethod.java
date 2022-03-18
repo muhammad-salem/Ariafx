@@ -23,13 +23,11 @@ public abstract class DownloadMethod extends Link {
 		super(item);
 	}
 	
-	public Task<Number> getDefalutUpdateTask(){
+	public Task<Number> getDefaultUpdateTask(){
 		Task<Number> taskInit = new Task<Number>() {
-
 			@Override
 			protected Number call() throws Exception {
-				updateProgress(item.downloaded,
-						(item.length == -1) ? item.downloaded : item.length);
+				updateProgress(item.downloaded, (item.length == -1) ? item.downloaded : item.length);
 				updateValue(item.downloaded);
 				updateMessage("Updated.");
 				//init = false;
@@ -47,16 +45,13 @@ public abstract class DownloadMethod extends Link {
 		System.out.println("createTask");
 		Task<Number> task = null;
 		if(init){
-			task = getDefalutUpdateTask();
+			task = getDefaultUpdateTask();
 			task.setOnSucceeded((e)->{
 				init = false;
 			});
-		}else{
+		} else{
 			task = createDownloadTask();
 		}
-		
-
-		
 		return task;
 	}
 	
