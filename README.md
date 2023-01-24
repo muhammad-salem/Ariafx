@@ -2,6 +2,12 @@ Ariafx  (0.30.0)
 ======
 A Smart Download Manager based on java (JavaFX), with support of HttpClient, GSON.
 
+
+What is Next?
+=============
+
+Give a try to [ariia](https://github.com/muhammad-salem/ariia)
+
 Used lib:
 ====== 
 	HttpClient v5.1.3
